@@ -24,9 +24,9 @@ export const Catalog: React.FC<Props> = ({
   getFiltered,
   setPaintings,
 }) => {
-  const [height, setHeight] = useState([0, 499]);
-  const [width, setWidth] = useState([0, 499]);
-  const [price, setPrice] = useState([10, 4999]);
+  const [height, setHeight] = useState([0, 500]);
+  const [width, setWidth] = useState([0, 500]);
+  const [price, setPrice] = useState([0, 5000]);
   const [stylesParams, setStylesParams] = useState<string[]>([]);
   const [mediumParams, setMediumParams] = useState<string[]>([]);
   const [supportParams, setSupportParams] = useState<string[]>([]);
@@ -36,8 +36,8 @@ export const Catalog: React.FC<Props> = ({
   const sortByPriceAsc = 'sortBy=price:ASC';
   const sortByPriceDesc = 'sortBy=price:DESC';
   const priceBetween = `priceBetween=${price[0]},${price[1]}`;
-  const widthBetween = `widthBetween=0,${width[1]}`;
-  const heightBetween = `heightBetween=0,${height[1]}`;
+  const widthBetween = `widthBetween=${width[0]},${width[1]}`;
+  const heightBetween = `heightBetween=${height[0]},${height[1]}`;
   const styleIn = `styleIn=${stylesParams.join(',')}`;
   const supportIn = `supportIn=${supportParams.join(',')}`;
   const mediumIn = `mediumIn=${mediumParams.join(',')}`;
@@ -315,7 +315,7 @@ export const Catalog: React.FC<Props> = ({
 
           <div className="filter filter-container">
             <div className="subtitle filter-subtitle is-6">
-              {`Width: 0 - ${width[1]} cm`}
+              {`Width: ${width[0]} - ${width[1]} cm`}
             </div>
 
             <RangeSlider
@@ -326,13 +326,12 @@ export const Catalog: React.FC<Props> = ({
               onInput={(value: number[]) => {
                 setWidth(value);
               }}
-              thumbsDisabled={[true, false]}
             />
           </div>
 
           <div className="filter filter-container">
             <div className="subtitle filter-subtitle is-6">
-              {`Height: 0 - ${height[1]} cm`}
+              {`Height: ${height[0]} - ${height[1]} cm`}
             </div>
 
             <RangeSlider
@@ -343,7 +342,6 @@ export const Catalog: React.FC<Props> = ({
                 onInput={(value: number[]) => {
                   setHeight(value);
                 }}
-                thumbsDisabled={[true, false]}
               />
           </div>
 
