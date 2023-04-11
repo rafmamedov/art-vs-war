@@ -100,21 +100,16 @@ export const App: React.FC= () => {
         <Route
           path="/"
           element={
-            <MainPage getAll={getAllPaintingsFromServer} paintings={paintings} />
+            <MainPage
+              getAll={getAllPaintingsFromServer}
+            />
           }
         />
 
         <Route
-          path="home" 
+          path="home"
           element={
             <Navigate to="/" replace />
-          }
-        />
-
-        <Route
-          path="*"
-          element={
-            <h1 className="title">Page not found</h1>
           }
         />
 
@@ -132,10 +127,36 @@ export const App: React.FC= () => {
           }
         />
 
-        <Route path="authors" element={<JoinUs />} />
-        <Route path="united24" element={<Fund getAll={getAllPaintingsFromServer} />} />
-        <Route path="about" element={<AboutUs getAll={getAllPaintingsFromServer} />} />
-        <Route path="painting" element={<PaintingPage />} />
+        <Route
+          path="authors"
+          element={<JoinUs />}
+        />
+
+        <Route
+          path="united24"
+          element={
+            <Fund getAll={getAllPaintingsFromServer} />
+          }
+        />
+
+        <Route
+          path="about"
+          element={
+            <AboutUs getAll={getAllPaintingsFromServer} />
+          }
+        />
+
+        <Route path="painting">
+          <Route index element={<PaintingPage />} />
+          <Route path=":paintingId" element={<PaintingPage />} />
+        </Route>
+
+        <Route
+          path="*"
+          element={
+            <h1 className="title">Page not found</h1>
+          }
+        />
       </Routes>
       <Footer />
     </>

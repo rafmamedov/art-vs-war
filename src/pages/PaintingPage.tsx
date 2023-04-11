@@ -1,16 +1,18 @@
 import React from 'react';
-import { Carousel } from '../components/Carousel';
 import '../styles.scss';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 
 const element = <FontAwesomeIcon className="icon-cross" icon={faXmark} size="xl" />;
 
 export const PaintingPage = () => {
+  const location = useLocation();
+  const { paintingId = '' } = useParams();
+
   return (
     <section className="section painting">
-      <div className="icon-container"><Link to="/">{element}</Link></div>
+      <div className="icon-container"><Link to={location.pathname}>{element}</Link></div>
 
       <div className="container painting-card">
         <div className="painting-image"></div>

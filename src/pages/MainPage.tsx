@@ -11,15 +11,14 @@ import { Results } from '../components/Results';
 
 type Props = {
   getAll: () => void;
-  paintings: Painting[];
 };
 
-export const MainPage: React.FC<Props>= ({ getAll, paintings }) => {
+export const MainPage: React.FC<Props>= ({ getAll }) => {
   return (
     <>
       <Header getAll={getAll} />
       <AboutUs getAll={getAll} />
-      <Carousel paintings={paintings} />
+      <Carousel />
       <Fund getAll={getAll} />
       <Results />
       <JoinUs />

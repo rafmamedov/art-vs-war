@@ -4,12 +4,28 @@ import 'swiper/scss';
 import "swiper/scss/navigation";
 import { Painting } from '../types/painting';
 import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
-type Props = {
-  paintings: Painting[];
-};
+const URL = 'https://www.albedosunrise.com/paintings';
 
-export const Carousel: React.FC<Props> = ({ paintings }) => {
+export const Carousel: React.FC = () => {
+  const [paintings, setPaintings] = useState<Painting[]>([]);
+
+  const getAllPaintingsFromServer = async () => {
+    axios.get(URL)
+      .then((response) => {
+        setPaintings(response.data.paintings);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+  };
+
+  useEffect(() => {
+    getAllPaintingsFromServer();
+  }, []);
+
   const breakpoints = {
     1024: {
       slidesPerView: 3,
@@ -38,7 +54,7 @@ export const Carousel: React.FC<Props> = ({ paintings }) => {
                   <div className="card-image">
                     <figure className="image is-4by3">
                       <img
-                        className="painting"
+                        className="painting-image"
                         src={painting.imageUrl}
                         alt="painting"
                       />
