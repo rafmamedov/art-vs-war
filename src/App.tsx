@@ -22,39 +22,11 @@ export const App: React.FC= () => {
   const [selectedImage, setSelectedImage] = useState<FileList | null>(null);
   const [sortBy, setSortBy] = useState('');
 
-  // const imageData: Picture = {
-  //   id: 0,
-  //   title: 'Test Image',
-  //   price: 1000,
-  //   author: {
-  //     id: 0,
-  //     name: 'Taras Shevchenko',
-  //     country: 'Ukraine',
-  //     city: 'Kyiv',
-  //     shortStory: 'Super cool picture',
-  //   },
-  //   description: 'Picture',
-  //   style: {
-  //     id: 0,
-  //     name: 'Contemporary',
-  //   },
-  //   medium: {
-  //     id: 0,
-  //     name: 'Acryl',
-  //   },
-  //   support: {
-  //     id: 0,
-  //     name: 'Paper',
-  //   },
-  //   height: 100,
-  //   width: 50,
-  //   imageUrl: 'https://dwlkukrr7iwjb.cloudfront.net/Flowers.jpg',
-  // }
-
   const getAllPaintingsFromServer = async () => {
     axios.get(URL)
       .then((response) => {
-        setPaintings(response.data);
+        console.log(response);
+        setPaintings(response.data.paintings);
       })
       .catch((error) => {
         console.log(error);
@@ -66,21 +38,13 @@ export const App: React.FC= () => {
   }, []);
 
   const getFilteredPaintings = async (filters: string = '') => {
-    sortBy.length > 0
-      ? await axios.get(SEARCH + filters + '&' + sortBy)
-          .then((response) => {
-            setPaintings(response.data);
-          })
-          .catch((error) => {
-            console.log(error);
-          })
-      : await axios.get(SEARCH + filters)
-          .then((response) => {
-            setPaintings(response.data);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+    await axios.get(SEARCH + filters + '&' + sortBy)
+      .then((response) => {
+        setPaintings(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
   };
 
   const onFileUpload = async () => {
@@ -124,7 +88,6 @@ export const App: React.FC= () => {
     })
   }
 
-
   const onFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSelectedImage(event.target.files);
   }
@@ -154,6 +117,7 @@ export const App: React.FC= () => {
               setSortBy={setSortBy}
               paintings={paintings}
               setPaintings={setPaintings}
+              getAll={getAllPaintingsFromServer}
               getFiltered={getFilteredPaintings}
             />
           }

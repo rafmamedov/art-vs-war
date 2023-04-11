@@ -1,16 +1,17 @@
-import React, { SetStateAction, useCallback, useEffect, useState } from 'react';
+import React, { SetStateAction, useCallback, useState } from 'react';
 import RangeSlider from 'react-range-slider-input';
 import 'react-range-slider-input/dist/style.css';
 import './Catalog.scss';
 import 'bulma/css/bulma.css';
 import { Painting } from "../types/painting";
 import { Gallery } from "./Gallery";
-import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 type Props = {
   sortBy: string;
   search: string;
   paintings: Painting[];
+  getAll: () => void;
   getFiltered: (filters: string) => void;
   setSortBy: React.Dispatch<SetStateAction<string>>;
   setPaintings: React.Dispatch<SetStateAction<Painting[]>>;
@@ -21,12 +22,13 @@ export const Catalog: React.FC<Props> = ({
   search,
   setSortBy,
   paintings,
+  getAll,
   getFiltered,
   setPaintings,
 }) => {
+  const [price, setPrice] = useState([100, 1500]);
   const [height, setHeight] = useState([0, 500]);
   const [width, setWidth] = useState([0, 500]);
-  const [price, setPrice] = useState([0, 5000]);
   const [stylesParams, setStylesParams] = useState<string[]>([]);
   const [mediumParams, setMediumParams] = useState<string[]>([]);
   const [supportParams, setSupportParams] = useState<string[]>([]);
@@ -117,23 +119,19 @@ export const Catalog: React.FC<Props> = ({
     supportIn,
   );
 
-  const getSortedPaintings = useCallback(async (sortBy: string = '') => {
-    await axios.get(search + sortBy)
-        .then((response) => {
-          setPaintings(response.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        })
-  }, [search, setPaintings]);
+  // const getSortedPaintings = useCallback(async (sortBy: string = '') => {
+  //   await axios.get(search + filterParams + '&' + sortBy)
+  //       .then((response) => {
+  //         setPaintings(response.data);
+  //       })
+  //       .catch((error) => {
+  //         console.log(error);
+  //       })
+  // }, [filterParams, search, setPaintings]);
 
   const handleApplyFilters = () => {
     getFiltered(filterParams);
   };
-
-  useEffect(() => {
-    getSortedPaintings(sortBy);
-  }, [getSortedPaintings, sortBy])
 
   const handleClearFilters = () => {
     setHeight([0, 499]);
@@ -304,7 +302,7 @@ export const Catalog: React.FC<Props> = ({
 
             <RangeSlider
               min={0}
-              max={5000}
+              max={1500}
               defaultValue={price}
               value={price}
               onInput={(value: number[]) => {
@@ -436,10 +434,10 @@ export const Catalog: React.FC<Props> = ({
 
               <select
                 className="sortby dropdown"
-                onChange={(event: React.ChangeEvent<HTMLSelectElement>) => setSortBy(event.target.value)}
+                onChange={(event) => setSortBy(event.target.value)}
                 value={sortBy}
+                defaultValue={sortByYearAsc}
               >
-                <option value="">No sorting</option>
                 <option value={sortByYearAsc}>Newest</option>
                 <option value={sortByYearDesc}>Oldest</option>
                 <option value={sortByPriceAsc}>Cheapest</option>
@@ -461,6 +459,20 @@ export const Catalog: React.FC<Props> = ({
           <Gallery paintings={paintings} />
         </div>
       </div>
+
+      <nav className="pagination is-centered" role="navigation" aria-label="pagination">
+        <Link to="/" className="pagination-previous">Previous</Link>
+        <Link to="/" className="pagination-next">Next page</Link>
+        <ul className="pagination-list">
+          <li><Link to="/" className="pagination-link" aria-label="Goto page 1">1</Link></li>
+          <li><span className="pagination-ellipsis">&hellip;</span></li>
+          <li><Link to="/" className="pagination-link" aria-label="Goto page 45">45</Link></li>
+          <li><Link to="/" className="pagination-link is-current" aria-label="Page 46" aria-current="page">46</Link></li>
+          <li><Link to="/" className="pagination-link" aria-label="Goto page 47">47</Link></li>
+          <li><span className="pagination-ellipsis">&hellip;</span></li>
+          <li><Link to="/" className="pagination-link" aria-label="Goto page 86">86</Link></li>
+        </ul>
+      </nav>
     </section>
   );
 };
