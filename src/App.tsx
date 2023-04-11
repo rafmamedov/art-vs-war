@@ -146,7 +146,7 @@ export const App: React.FC= () => {
           }
         />
 
-        <Route path="painting">
+        <Route path="paintings">
           <Route index element={<PaintingPage />} />
           <Route path=":paintingId" element={<PaintingPage />} />
         </Route>

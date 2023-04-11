@@ -1,72 +1,92 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import '../styles.scss';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import axios from 'axios';
+import { Painting } from '../types/painting';
 
 const element = <FontAwesomeIcon className="icon-cross" icon={faXmark} size="xl" />;
+const URL = 'https://www.albedosunrise.com/paintings/';
 
-export const PaintingPage = () => {
-  const location = useLocation();
+export const PaintingPage: React.FC = () => {
+  const [painting, setPainting] = useState<Painting | null>(null);
   const { paintingId = '' } = useParams();
+
+  const getPaintingById = async () => {
+    await axios.get(URL + paintingId)
+      .then((response) => {
+        setPainting(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+  };
+
+  useEffect(() => {
+    getPaintingById();
+  }, [paintingId]);
 
   return (
     <section className="section painting">
-      <div className="icon-container"><Link to={location.pathname}>{element}</Link></div>
+      <div className="icon-container"><Link to="/">{element}</Link></div>
 
       <div className="container painting-card">
-        <div className="painting-image"></div>
+        <img
+          src={painting?.imageUrl}
+          className="painting-image"
+          alt="painting"
+        />
 
         <div className="painting-info">
           <div className="painting-title-container">
             <div className="painting-title">Title:</div>
-            <div className="painting-title"><strong>Flag of Bravery</strong></div>
+            <div className="painting-title"><strong>{painting?.title}</strong></div>
           </div>
 
           <div className="painting-title-container">
             <div className="painting-title">Author:</div>
-            <div className="painting-title">Marina Leganowska</div>
+            <div className="painting-title">{painting?.author.name}</div>
           </div>
 
           <div className="painting-title-container">
           <div className="painting-title">Year:</div>
-          <div className="painting-title">2022</div>
+          <div className="painting-title">{painting?.entityCreatedAt.split('.')[2]}</div>
           </div>
 
           <div className="painting-title-container">
             <div className="painting-title">Style:</div>
-            <div className="painting-title">Expressionism</div>
+            <div className="painting-title">{painting?.style.name}</div>
           </div>
 
           <div className="painting-title-container">
             <div className="painting-title">Medium:</div>
-            <div className="painting-title">Oil</div>
+            <div className="painting-title">{painting?.medium.name}</div>
           </div>
 
           <div className="painting-title-container">
             <div className="painting-title">Support:</div>
-            <div className="painting-title">Canvas</div>
+            <div className="painting-title">{painting?.support.name}</div>
           </div>
 
           <div className="painting-title-container">
-            <div className="painting-title">Height x Width (cm):</div>
-            <div className="painting-title">70 x 50</div>
+            <div className="painting-title">Height x width:</div>
+            <div className="painting-title">{painting?.height} x {painting?.width} cm</div>
           </div>
 
           <div className="painting-title-container">
             <div className="painting-title">Cost:</div>
-            <div className="painting-title"><strong>$25</strong></div>
+            <div className="painting-title"><strong>${painting?.price}</strong></div>
           </div>
 
           <div className="painting-title-container painting-title-container-last">
-            <div className="painting-title">Date of aading to database:</div>
-            <div className="painting-title">12.04.2023</div>
+            <div className="painting-title">Date of ading to database:</div>
+            <div className="painting-title">{painting?.entityCreatedAt}</div>
           </div>
 
           <div className="painting-description">
-            <span><strong>Short story:</strong></span> As I set out to create this painting, my goal was to capture the essence of Ukraine's 
-            rich cultural heritage and its close relationship with nature. I wanted to represent 
-            the country's agricultural roots and its strong sense of national pride, all within a single image.
+            <span><strong>Description: </strong></span>
+            {painting?.description}
           </div>
 
           <button className="button-get-all">

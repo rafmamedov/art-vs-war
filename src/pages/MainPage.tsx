@@ -1,5 +1,4 @@
 import React from 'react';
-import { Painting } from '../types/painting';
 import '../styles.scss'
 import 'bulma/css/bulma.css';
 import { Header } from '../components/Header';
