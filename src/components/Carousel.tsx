@@ -49,7 +49,7 @@ export const Carousel: React.FC = () => {
         >
           {paintings.map(painting => (
             <SwiperSlide key={painting.id}>
-              <Link to={`/paintings/${painting.id}`}>
+              <Link to={`/gallery/${painting.id}`}>
                 <div className="card collection-card swiper-card">
                   <div className="card-image">
                     <figure className="image is-4by3">

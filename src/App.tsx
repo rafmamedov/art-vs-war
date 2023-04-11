@@ -114,20 +114,6 @@ export const App: React.FC= () => {
         />
 
         <Route
-          path="gallery"
-          element={
-            <Catalog
-              sortBy={sortBy}
-              setSortBy={setSortBy}
-              paintings={paintings}
-              perPage={perPage}
-              setPerPage={setPerPage}
-              getFiltered={getFilteredPaintings}
-            />
-          }
-        />
-
-        <Route
           path="authors"
           element={<JoinUs />}
         />
@@ -146,8 +132,20 @@ export const App: React.FC= () => {
           }
         />
 
-        <Route path="paintings">
-          <Route index element={<PaintingPage />} />
+        <Route path="gallery">
+          <Route
+            index
+            element={
+              <Catalog
+                sortBy={sortBy}
+                setSortBy={setSortBy}
+                paintings={paintings}
+                perPage={perPage}
+                setPerPage={setPerPage}
+                getFiltered={getFilteredPaintings}
+              />
+            }
+          />
           <Route path=":paintingId" element={<PaintingPage />} />
         </Route>
 

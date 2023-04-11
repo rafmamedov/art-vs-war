@@ -29,7 +29,7 @@ export const PaintingPage: React.FC = () => {
 
   return (
     <section className="section painting">
-      <div className="icon-container"><Link to="/">{element}</Link></div>
+      <div className="icon-container"><Link to="/gallery">{element}</Link></div>
 
       <div className="container painting-card">
         <img
