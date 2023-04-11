@@ -13,7 +13,7 @@ import { Fund } from './components/Fund';
 import { AboutUs } from './components/AboutUs';
 import { PaintingPage } from './pages/PaintingPage';
 
-const URL = 'https://www.albedosunrise.com/paintings';
+const URL = 'https://www.albedosunrise.com/paintings?';
 const UPLOAD = 'https://www.albedosunrise.com/images/getUrl?extension=jpeg';
 const SEARCH = 'https://www.albedosunrise.com/paintings/search?';
 
@@ -21,26 +21,27 @@ export const App: React.FC= () => {
   const [paintings, setPaintings] = useState<Painting[]>([]);
   const [selectedImage, setSelectedImage] = useState<FileList | null>(null);
   const [sortBy, setSortBy] = useState('');
+  const [perPage, setPerPage] = useState('2');
+  const defaultPerPage = `page=0&pageSize=${perPage}`;
 
   const getAllPaintingsFromServer = async () => {
-    axios.get(URL)
+    axios.get(URL + defaultPerPage)
       .then((response) => {
-        console.log(response);
         setPaintings(response.data.paintings);
       })
       .catch((error) => {
         console.log(error);
       })
-  }
+  };
 
   useEffect(() => {
     getAllPaintingsFromServer();
   }, []);
 
-  const getFilteredPaintings = async (filters: string = '') => {
-    await axios.get(SEARCH + filters + '&' + sortBy)
+  const getFilteredPaintings = async (filters: string) => {
+    await axios.get(SEARCH + filters + '&' + sortBy + '&' + defaultPerPage)
       .then((response) => {
-        setPaintings(response.data);
+        setPaintings(response.data.paintings);
       })
       .catch((error) => {
         console.log(error);
@@ -98,14 +99,23 @@ export const App: React.FC= () => {
       <Routes>
         <Route
           path="/"
-          element={<MainPage getAll={getAllPaintingsFromServer} paintings={paintings} />}
+          element={
+            <MainPage getAll={getAllPaintingsFromServer} paintings={paintings} />
+          }
         />
 
-        <Route path="home" element={<Navigate to="/" replace />} />
+        <Route
+          path="home" 
+          element={
+            <Navigate to="/" replace />
+          }
+        />
 
         <Route
           path="*"
-          element={<h1 className="title">Page not found</h1>}
+          element={
+            <h1 className="title">Page not found</h1>
+          }
         />
 
         <Route
@@ -113,11 +123,10 @@ export const App: React.FC= () => {
           element={
             <Catalog
               sortBy={sortBy}
-              search={SEARCH}
               setSortBy={setSortBy}
               paintings={paintings}
-              setPaintings={setPaintings}
-              getAll={getAllPaintingsFromServer}
+              perPage={perPage}
+              setPerPage={setPerPage}
               getFiltered={getFilteredPaintings}
             />
           }

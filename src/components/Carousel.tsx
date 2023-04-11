@@ -3,7 +3,6 @@ import { Navigation } from 'swiper';
 import 'swiper/scss';
 import "swiper/scss/navigation";
 import { Painting } from '../types/painting';
-import { PaintingCard } from './PaintingCard';
 import { Link } from 'react-router-dom';
 
 type Props = {
@@ -33,15 +32,15 @@ export const Carousel: React.FC<Props> = ({ paintings }) => {
           breakpoints={breakpoints}
         >
           {paintings.map(painting => (
-            <SwiperSlide>
+            <SwiperSlide key={painting.id}>
               <Link to={`/painting`}>
                 <div className="card collection-card swiper-card">
                   <div className="card-image">
                     <figure className="image is-4by3">
                       <img
-                        className="painting-image"
+                        className="painting"
                         src={painting.imageUrl}
-                        alt="Painting image"
+                        alt="painting"
                       />
                     </figure>
                   </div>

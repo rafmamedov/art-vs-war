@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import Logo from '../images/LOGO.svg'
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
@@ -61,7 +61,7 @@ export const NavBar: React.FC = () => {
           })}
         >
           <Link to="gallery" className="navlink" onClick={handleLinkClick}>Gallery</Link>
-          <Link to="authors" className="navlink" onClick={handleLinkClick}>Authors</Link>
+          <Link to="/authors" className="navlink" onClick={handleLinkClick}>Authors</Link>
           <a href="https://u24.gov.ua/" target="blank" className="navlink" onClick={handleLinkClick}>United24</a>
           <Link to="about" className="navlink" onClick={handleLinkClick}>About</Link>
           <button className="button is-light button-auth">Log in</button>

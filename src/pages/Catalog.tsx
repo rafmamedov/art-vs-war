@@ -1,4 +1,4 @@
-import React, { SetStateAction, useCallback, useState } from 'react';
+import React, { SetStateAction, useEffect, useState } from 'react';
 import RangeSlider from 'react-range-slider-input';
 import 'react-range-slider-input/dist/style.css';
 import './Catalog.scss';
@@ -9,22 +9,20 @@ import { Link } from 'react-router-dom';
 
 type Props = {
   sortBy: string;
-  search: string;
   paintings: Painting[];
-  getAll: () => void;
+  perPage: string;
   getFiltered: (filters: string) => void;
+  setPerPage: React.Dispatch<SetStateAction<string>>;
   setSortBy: React.Dispatch<SetStateAction<string>>;
-  setPaintings: React.Dispatch<SetStateAction<Painting[]>>;
 };
 
 export const Catalog: React.FC<Props> = ({
   sortBy,
-  search,
-  setSortBy,
+  perPage,
   paintings,
-  getAll,
+  setSortBy,
+  setPerPage,
   getFiltered,
-  setPaintings,
 }) => {
   const [price, setPrice] = useState([100, 1500]);
   const [height, setHeight] = useState([0, 500]);
@@ -52,22 +50,13 @@ export const Catalog: React.FC<Props> = ({
     mediumIn: string,
     supportIn: string,
   ) => {
-    // const params = [
-    //   priceBetween,
-    //   widthBetween,
-    //   heightBetween,
-    //   styleIn,
-    //   mediumIn,
-    //   supportIn,
-    // ];
-
     const params = [priceBetween];
 
-    if (width[1] !== 499) {
+    if (width[1] !== 500) {
       params.push(widthBetween);
     }
 
-    if (height[1] !== 499) {
+    if (height[1] !== 500) {
       params.push(heightBetween);
     }
 
@@ -119,24 +108,18 @@ export const Catalog: React.FC<Props> = ({
     supportIn,
   );
 
-  // const getSortedPaintings = useCallback(async (sortBy: string = '') => {
-  //   await axios.get(search + filterParams + '&' + sortBy)
-  //       .then((response) => {
-  //         setPaintings(response.data);
-  //       })
-  //       .catch((error) => {
-  //         console.log(error);
-  //       })
-  // }, [filterParams, search, setPaintings]);
+  useEffect(() => {
+    getFiltered(filterParams);
+  }, [sortBy, perPage]);
 
   const handleApplyFilters = () => {
     getFiltered(filterParams);
   };
 
   const handleClearFilters = () => {
-    setHeight([0, 499]);
-    setWidth([0, 499]);
-    setPrice([0, 4999]);
+    setHeight([0, 500]);
+    setWidth([0, 500]);
+    setPrice([0, 5000]);
     setStylesParams([]);
     setMediumParams([]);
     setSupportParams([]);
@@ -144,7 +127,7 @@ export const Catalog: React.FC<Props> = ({
     setCheckedMediums(new Array(styles.length).fill(false));
     setCheckedSupports(new Array(styles.length).fill(false));
     setSortBy('');
-    getFiltered('');
+    setPerPage('2');
   }
 
   const styles = [
@@ -436,7 +419,6 @@ export const Catalog: React.FC<Props> = ({
                 className="sortby dropdown"
                 onChange={(event) => setSortBy(event.target.value)}
                 value={sortBy}
-                defaultValue={sortByYearAsc}
               >
                 <option value={sortByYearAsc}>Newest</option>
                 <option value={sortByYearDesc}>Oldest</option>
@@ -448,10 +430,14 @@ export const Catalog: React.FC<Props> = ({
             <div className="sorting-container">
               <div className="sorting-title">Per page:</div>
 
-              <select className="perpage dropdown">
-                <option value="24">24</option>
-                <option value="48">48</option>
-                <option value="72">72</option>
+              <select
+                className="perpage dropdown"
+                onChange={(event) => setPerPage(event.target.value)}
+                value={perPage}
+              >
+                <option value="2">2</option>
+                <option value="4">4</option>
+                <option value="6">6</option>
               </select>
             </div>
           </div>
@@ -459,20 +445,6 @@ export const Catalog: React.FC<Props> = ({
           <Gallery paintings={paintings} />
         </div>
       </div>
-
-      <nav className="pagination is-centered" role="navigation" aria-label="pagination">
-        <Link to="/" className="pagination-previous">Previous</Link>
-        <Link to="/" className="pagination-next">Next page</Link>
-        <ul className="pagination-list">
-          <li><Link to="/" className="pagination-link" aria-label="Goto page 1">1</Link></li>
-          <li><span className="pagination-ellipsis">&hellip;</span></li>
-          <li><Link to="/" className="pagination-link" aria-label="Goto page 45">45</Link></li>
-          <li><Link to="/" className="pagination-link is-current" aria-label="Page 46" aria-current="page">46</Link></li>
-          <li><Link to="/" className="pagination-link" aria-label="Goto page 47">47</Link></li>
-          <li><span className="pagination-ellipsis">&hellip;</span></li>
-          <li><Link to="/" className="pagination-link" aria-label="Goto page 86">86</Link></li>
-        </ul>
-      </nav>
     </section>
   );
 };

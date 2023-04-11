@@ -456,10 +456,6 @@ body {
 }
 
 .painting {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-
   &-card {
     max-width: 1200px;
     margin: 0 auto 20px;
@@ -476,7 +472,6 @@ body {
   }
 
   &-image {
-    background-image: url("https://i.etsystatic.com/17358183/r/il/67b2ee/3879584352/il_fullxfull.3879584352_drkw.jpg");
     background-position: center;
     background-size: cover;
     width: 300px;
