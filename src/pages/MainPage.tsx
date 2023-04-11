@@ -1,7 +1,5 @@
-import React, { ChangeEvent, useState } from 'react';
+import React from 'react';
 import { Painting } from '../types/painting';
-import axios from 'axios';
-
 import '../styles.scss'
 import 'bulma/css/bulma.css';
 import { Header } from '../components/Header';

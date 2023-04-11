@@ -1,12 +1,10 @@
 import React, { SetStateAction, useCallback, useEffect, useState } from 'react';
-import InputRange from 'react-input-range';
-import 'react-input-range/lib/css/index.css';
+import RangeSlider from 'react-range-slider-input';
+import 'react-range-slider-input/dist/style.css';
 import './Catalog.scss';
 import 'bulma/css/bulma.css';
 import { Painting } from "../types/painting";
 import { Gallery } from "./Gallery";
-import { Range } from 'react-input-range';
-import { Link, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 
 type Props = {
@@ -26,9 +24,9 @@ export const Catalog: React.FC<Props> = ({
   getFiltered,
   setPaintings,
 }) => {
-  const [height, setHeight] = useState(0);
-  const [width, setWidth] = useState(0);
-  const [price, setPrice] = useState<Range>({ max: 5000, min: 10 });
+  const [height, setHeight] = useState([0, 499]);
+  const [width, setWidth] = useState([0, 499]);
+  const [price, setPrice] = useState([10, 4999]);
   const [stylesParams, setStylesParams] = useState<string[]>([]);
   const [mediumParams, setMediumParams] = useState<string[]>([]);
   const [supportParams, setSupportParams] = useState<string[]>([]);
@@ -37,9 +35,9 @@ export const Catalog: React.FC<Props> = ({
   const sortByYearDesc = 'sortBy=yearOfCreation:DESC';
   const sortByPriceAsc = 'sortBy=price:ASC';
   const sortByPriceDesc = 'sortBy=price:DESC';
-  const priceBetween = `priceBetween=${price.min},${price.max}`;
-  const widthBetween = `widthBetween=0,${width}`;
-  const heightBetween = `heightBetween=0,${height}`;
+  const priceBetween = `priceBetween=${price[0]},${price[1]}`;
+  const widthBetween = `widthBetween=0,${width[1]}`;
+  const heightBetween = `heightBetween=0,${height[1]}`;
   const styleIn = `styleIn=${stylesParams.join(',')}`;
   const supportIn = `supportIn=${supportParams.join(',')}`;
   const mediumIn = `mediumIn=${mediumParams.join(',')}`;
@@ -63,11 +61,11 @@ export const Catalog: React.FC<Props> = ({
 
     const params = [priceBetween];
 
-    if (width !== 0) {
+    if (width[1] !== 499) {
       params.push(widthBetween);
     }
 
-    if (height !== 0) {
+    if (height[1] !== 499) {
       params.push(heightBetween);
     }
 
@@ -92,22 +90,21 @@ export const Catalog: React.FC<Props> = ({
     event: React.ChangeEvent<HTMLInputElement>,
     ) => {
     if (isNumber.test(event.target.value)) {
-        setPrice({
-          min: +event.target.value,
-          max: price.max,
-        });
+        setPrice([
+          +event.target.value,
+          price[1],
+        ]);
     }
   };
 
   const changeMaxPrice = (
     event: React.ChangeEvent<HTMLInputElement>,
     ) => {
-    if (isNumber.test(event.target.value)
-      || event.target.value === '') {
-        setPrice({
-          max: +event.target.value,
-          min: price.min
-        });
+    if (isNumber.test(event.target.value)) {
+        setPrice([
+          price[0],
+          +event.target.value,
+        ]);
     }
   };
 
@@ -120,51 +117,28 @@ export const Catalog: React.FC<Props> = ({
     supportIn,
   );
 
-  const getSortedPaintings = async (sortBy: string = '') => {
-    console.log(search + sortBy);
-    if (filterParams.length > 0 && sortBy.length > 0) {
-      await axios.get(search + filterParams +'&' + sortBy)
+  const getSortedPaintings = useCallback(async (sortBy: string = '') => {
+    await axios.get(search + sortBy)
         .then((response) => {
           setPaintings(response.data);
         })
         .catch((error) => {
           console.log(error);
         })
-    }
-
-    if (!filterParams && sortBy.length > 0) {
-      await axios.get(search + sortBy)
-        .then((response) => {
-          setPaintings(response.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        })
-    }
-
-    if (filterParams.length > 0 && sortBy === '') {
-      await axios.get(search + filterParams)
-        .then((response) => {
-          setPaintings(response.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        })
-    }
-  }
-
-  useEffect(() => {
-    getSortedPaintings(sortBy);
-  }, [sortBy])
+  }, [search, setPaintings]);
 
   const handleApplyFilters = () => {
     getFiltered(filterParams);
   };
 
+  useEffect(() => {
+    getSortedPaintings(sortBy);
+  }, [getSortedPaintings, sortBy])
+
   const handleClearFilters = () => {
-    setHeight(0);
-    setWidth(0);
-    setPrice({max: 5000, min: 10});
+    setHeight([0, 499]);
+    setWidth([0, 499]);
+    setPrice([0, 4999]);
     setStylesParams([]);
     setMediumParams([]);
     setSupportParams([]);
@@ -307,11 +281,12 @@ export const Catalog: React.FC<Props> = ({
 
             <div className="filter-inputs">
               <div className="filter-inputs">
-                <div className="filter-subtitle">from:</div>
+                <label htmlFor="minPrice" className="filter-subtitle">from:</label>
                 <input
+                  id="minPrice"
                   type="text"
                   className="filter-input subtitle filter-subtitle is-6"
-                  value={`${price.min}`}
+                  value={`${price[0]}`}
                   onChange={changeMinPrice}
                 />
               </div>
@@ -321,20 +296,19 @@ export const Catalog: React.FC<Props> = ({
                 <input
                   type="text"
                   className="filter-input subtitle filter-subtitle is-6"
-                  value={`${price.max}`}
+                  value={`${price[1]}`}
                   onChange={changeMaxPrice}
                 />
               </div>
             </div>
 
-            <InputRange
-              formatLabel={value => `€ ${value}`}
-              minValue={10}
-              maxValue={5000}
+            <RangeSlider
+              min={0}
+              max={5000}
+              defaultValue={price}
               value={price}
-              onChange={(value) => {
-                if (typeof value === 'object')
-                setPrice(value);
+              onInput={(value: number[]) => {
+                setPrice(value)
               }}
             />
           </div>
@@ -344,16 +318,15 @@ export const Catalog: React.FC<Props> = ({
               Height (cm)
             </div>
 
-            <InputRange
-                formatLabel={value => `${value} cm`}
-                minValue={10}
-                maxValue={500}
+            <RangeSlider
+                min={0}
+                max={500}
+                defaultValue={height}
                 value={height}
-                onChange={(value) => {
-                  if (typeof value === 'number') {
-                    setHeight(value);
-                  }
+                onInput={(value: number[]) => {
+                  setHeight(value);
                 }}
+                thumbsDisabled={[true, false]}
               />
           </div>
 
@@ -362,16 +335,15 @@ export const Catalog: React.FC<Props> = ({
               Width (cm)
             </div>
 
-            <InputRange
-              formatLabel={value => `${value} cm`}
-              minValue={10}
-              maxValue={500}
+            <RangeSlider
+              min={0}
+              max={500}
+              defaultValue={width}
               value={width}
-              onChange={value => {
-                if (typeof value === 'number') {
-                  setWidth(value);
-                }
+              onInput={(value: number[]) => {
+                setWidth(value);
               }}
+              thumbsDisabled={[true, false]}
             />
           </div>
 
@@ -466,7 +438,7 @@ export const Catalog: React.FC<Props> = ({
 
               <select
                 className="sortby dropdown"
-                onChange={(event) => setSortBy(event.target.value)}
+                onChange={(event: React.ChangeEvent<HTMLSelectElement>) => setSortBy(event.target.value)}
                 value={sortBy}
               >
                 <option value="">No sorting</option>

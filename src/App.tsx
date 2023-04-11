@@ -12,7 +12,6 @@ import { JoinUs } from './components/JoinUs';
 import { Fund } from './components/Fund';
 import { AboutUs } from './components/AboutUs';
 import { PaintingPage } from './pages/PaintingPage';
-import { error } from 'console';
 
 const URL = 'https://www.albedosunrise.com/paintings';
 const UPLOAD = 'https://www.albedosunrise.com/images/getUrl?extension=jpeg';
@@ -67,7 +66,6 @@ export const App: React.FC= () => {
   }, []);
 
   const getFilteredPaintings = async (filters: string = '') => {
-    console.log(SEARCH + filters);
     sortBy.length > 0
       ? await axios.get(SEARCH + filters + '&' + sortBy)
           .then((response) => {
@@ -104,7 +102,7 @@ export const App: React.FC= () => {
             authorId: 1,
             description: 'Picture',
             yearOfCreation: 2020,
-            createdAt: new Date,
+            createdAt: new Date(),
             height: 100,
             width: 50,
             styleId: 1,
@@ -130,6 +128,7 @@ export const App: React.FC= () => {
   const onFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSelectedImage(event.target.files);
   }
+
   return (
     <>
       <NavBar />
