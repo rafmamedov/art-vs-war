@@ -271,7 +271,7 @@ export const Catalog: React.FC<Props> = ({
   return (
     <section className="section catalog">
       <div className="catalog-header title is-3">
-        Paintings (number)
+        {`Paintings ${paintings.length}`}
       </div>
 
       <div className="catalog-info">
@@ -315,24 +315,7 @@ export const Catalog: React.FC<Props> = ({
 
           <div className="filter filter-container">
             <div className="subtitle filter-subtitle is-6">
-              Height (cm)
-            </div>
-
-            <RangeSlider
-                min={0}
-                max={500}
-                defaultValue={height}
-                value={height}
-                onInput={(value: number[]) => {
-                  setHeight(value);
-                }}
-                thumbsDisabled={[true, false]}
-              />
-          </div>
-
-          <div className="filter filter-container">
-            <div className="subtitle filter-subtitle is-6">
-              Width (cm)
+              {`Width: 0 - ${width[1]} cm`}
             </div>
 
             <RangeSlider
@@ -345,6 +328,23 @@ export const Catalog: React.FC<Props> = ({
               }}
               thumbsDisabled={[true, false]}
             />
+          </div>
+
+          <div className="filter filter-container">
+            <div className="subtitle filter-subtitle is-6">
+              {`Height: 0 - ${height[1]} cm`}
+            </div>
+
+            <RangeSlider
+                min={0}
+                max={500}
+                defaultValue={height}
+                value={height}
+                onInput={(value: number[]) => {
+                  setHeight(value);
+                }}
+                thumbsDisabled={[true, false]}
+              />
           </div>
 
           <div className="filter filter-container">
