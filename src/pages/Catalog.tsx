@@ -431,82 +431,37 @@ export const Catalog: React.FC = () => {
         <div className="container paintinglist">
           <div className="painting-container">
             <div className="sorting">
-              <nav
-                className="pagination is-centered is-small"
-                aria-label="pagination"
-                role="navigation"
-              >
-                <button
-                  className="pagination-previous"
-                  onClick={() => setCurrentPage(
-                    (prevPage) => prevPage === 0 ? prevPage : prevPage - 1
-                  )}
-                  disabled={currentPage === 1}
-                >
-                    Previous
-                </button>
-
-                <button
-                  className="pagination-next"
-                  onClick={() => setCurrentPage(
-                    (prevPage) => prevPage === pageCount ? prevPage : prevPage + 1
-                  )}
-                  disabled={currentPage === pageCount}
-                >
-                  Next page
-                </button>
-
-                <ul className="pagination-list">
-                  {getArrayFromNumber(pageCount).map(page => (
-                    <li key={page}>
-                      <Link
-                        to={`/gallery/${page}`}
-                        onClick={() => setCurrentPage(page)}
-                        aria-label="Goto page 1"
-                        className={classNames('pagination-link', {
-                          'is-current': currentPage === page,
-                        })}
-                      >
-                        {page}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </nav>
-
               <div className="sorting-container">
-                <div className="sorting-container">
-                  <div className="sorting-title">Sorting:</div>
-                  <select
-                    className="sortby dropdown"
-                    onChange={(event) => setSortBy(event.target.value)}
-                    value={sortBy}
-                  >
-                    <option value={sortByYearAsc}>Newest</option>
-                    <option value={sortByYearDesc}>Oldest</option>
-                    <option value={sortByPriceAsc}>Cheapest</option>
-                    <option value={sortByPriceDesc}>Most expensive</option>
-                  </select>
-                </div>
-                <div className="sorting-container">
-                  <div className="sorting-title">Per page:</div>
-                  <select
-                    className="perpage dropdown"
-                    onChange={(event) => setPerPage(+event.target.value)}
-                    value={perPage}
-                  >
-                    <option value="2">2</option>
-                    <option value="4">4</option>
-                    <option value="6">6</option>
-                  </select>
-                </div>
+                <div className="sorting-title">Sorting:</div>
+                <select
+                  className="sortby dropdown"
+                  onChange={(event) => setSortBy(event.target.value)}
+                  value={sortBy}
+                >
+                  <option value={sortByYearAsc}>Newest</option>
+                  <option value={sortByYearDesc}>Oldest</option>
+                  <option value={sortByPriceAsc}>Cheapest</option>
+                  <option value={sortByPriceDesc}>Most expensive</option>
+                </select>
+              </div>
+              <div className="sorting-container">
+                <div className="sorting-title">Per page:</div>
+                <select
+                  className="perpage dropdown"
+                  onChange={(event) => setPerPage(+event.target.value)}
+                  value={perPage}
+                >
+                  <option value="2">2</option>
+                  <option value="4">4</option>
+                  <option value="6">6</option>
+                </select>
               </div>
             </div>
 
             <Gallery paintings={currentPaintings} />
           </div>
 
-          <nav className="pagination pagination-lower is-centered">
+          <nav className="pagination is-centered">
             <button
               className="pagination-previous"
               onClick={() => setCurrentPage(
