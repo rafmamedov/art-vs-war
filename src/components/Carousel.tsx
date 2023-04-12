@@ -39,7 +39,7 @@ export const Carousel: React.FC = () => {
   return (
     <section
       id="gallery"
-      className="section collection"
+      className="section collection collection-main-page"
     >
         <Swiper
           modules={[Navigation]}

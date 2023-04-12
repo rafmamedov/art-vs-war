@@ -165,12 +165,16 @@ body {
 }
 
 .collection {
-  margin: 0 auto 120px;
+  margin: 0 auto;
   max-width: 1200px;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
+
+  &-main-page {
+    margin-bottom: 120px;
+  }
 
   &-list {
     margin: 0 10px;
