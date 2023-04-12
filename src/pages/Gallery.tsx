@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { PaintingPage } from './PaintingPage';
+import React from 'react';
 import { Painting } from '../types/painting';
 import { PaintingList } from '../components/PaintingList';
 

@@ -1,10 +1,6 @@
 import React from 'react';
 
-type Props = {
-  getAll: () => void;
-};
-
-export const Fund: React.FC<Props> = ({ getAll }) => {
+export const Fund: React.FC = () => {
   return (
     <section id="united24" className="section fund">
       <div className="container fund-content">
@@ -49,7 +45,6 @@ export const Fund: React.FC<Props> = ({ getAll }) => {
           <a href="https://u24.gov.ua/" target="blank">
             <button
               className="button-get-all"
-              onClick={getAll}
             >
                 Learn More
             </button>

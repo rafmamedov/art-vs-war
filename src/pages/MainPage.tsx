@@ -8,17 +8,13 @@ import { Fund } from '../components/Fund';
 import { JoinUs } from '../components/JoinUs';
 import { Results } from '../components/Results';
 
-type Props = {
-  getAll: () => void;
-};
-
-export const MainPage: React.FC<Props>= ({ getAll }) => {
+export const MainPage: React.FC = () => {
   return (
     <>
-      <Header getAll={getAll} />
-      <AboutUs getAll={getAll} />
+      <Header />
+      <AboutUs />
       <Carousel />
-      <Fund getAll={getAll} />
+      <Fund />
       <Results />
       <JoinUs />
     </>

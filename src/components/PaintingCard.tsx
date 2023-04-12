@@ -21,7 +21,7 @@ export const PaintingCard: React.FC<Props> = ({ painting }) => {
   } = painting;
 
   return (
-    <Link to={`/gallery/${painting.id}`}>
+    <Link to={`/${painting.id}`}>
       <div className="card collection-card">
         <div className="card-image">
           <figure className="image is-4by3">

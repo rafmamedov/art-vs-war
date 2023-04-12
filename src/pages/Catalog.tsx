@@ -1,4 +1,4 @@
-import React, { SetStateAction, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import RangeSlider from 'react-range-slider-input';
 import 'react-range-slider-input/dist/style.css';
 import './Catalog.scss';
@@ -6,30 +6,24 @@ import 'bulma/css/bulma.css';
 import { Painting } from "../types/painting";
 import { Gallery } from "./Gallery";
 import { Link } from 'react-router-dom';
+import classNames from 'classnames';
+import axios from 'axios';
 
-type Props = {
-  sortBy: string;
-  paintings: Painting[];
-  perPage: string;
-  getFiltered: (filters: string) => void;
-  setPerPage: React.Dispatch<SetStateAction<string>>;
-  setSortBy: React.Dispatch<SetStateAction<string>>;
-};
+const SEARCH = 'https://www.albedosunrise.com/paintings/search?';
 
-export const Catalog: React.FC<Props> = ({
-  sortBy,
-  perPage,
-  paintings,
-  setSortBy,
-  setPerPage,
-  getFiltered,
-}) => {
-  const [price, setPrice] = useState([100, 1500]);
-  const [height, setHeight] = useState([0, 500]);
-  const [width, setWidth] = useState([0, 500]);
+export const Catalog: React.FC = () => {
+  const [sortBy, setSortBy] = useState('');
+  const [perPage, setPerPage] = useState(2);
+  const [pageCount, setPageCount] = useState(0);
+  const [width, setWidth] = useState([0, 150]);
+  const [height, setHeight] = useState([0, 150]);
+  const [price, setPrice] = useState([0, 1500]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPaintings, setTotalPaintings] = useState(0);
   const [stylesParams, setStylesParams] = useState<string[]>([]);
   const [mediumParams, setMediumParams] = useState<string[]>([]);
   const [supportParams, setSupportParams] = useState<string[]>([]);
+  const [currentPaintings, setCurrentPaintings] = useState<Painting[]>([]);
 
   const sortByYearAsc = 'sortBy=yearOfCreation:ASC';
   const sortByYearDesc = 'sortBy=yearOfCreation:DESC';
@@ -41,6 +35,30 @@ export const Catalog: React.FC<Props> = ({
   const styleIn = `styleIn=${stylesParams.join(',')}`;
   const supportIn = `supportIn=${supportParams.join(',')}`;
   const mediumIn = `mediumIn=${mediumParams.join(',')}`;
+  const defaultPerPage = `page=${currentPage - 1}&pageSize=${perPage}`;
+
+  const getFilteredPaintingsFromServer = async (filters: string) => {
+    await axios.get(SEARCH + filters + '&' + sortBy + '&' + defaultPerPage)
+    .then((response) => {
+      setCurrentPaintings(response.data.paintings);
+      setTotalPaintings(response.data.page.totalElements);
+      setPageCount(response.data.page.totalPages);
+      console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+  };
+
+  const getArrayFromNumber = (num: number) => {
+    const result = [];
+
+    for (let i = 1; i <= pageCount; i++ ) {
+      result.push(i);
+    }
+
+    return result;
+  }
 
   const getFilterParams = (
     priceBetween: string,
@@ -108,26 +126,26 @@ export const Catalog: React.FC<Props> = ({
     supportIn,
   );
 
-  useEffect(() => {
-    getFiltered(filterParams);
-  }, [sortBy, perPage]);
-
   const handleApplyFilters = () => {
-    getFiltered(filterParams);
+    getFilteredPaintingsFromServer(filterParams);
   };
 
+  useEffect(() => {
+    getFilteredPaintingsFromServer(filterParams);
+  }, [sortBy, currentPage, perPage]);
+
   const handleClearFilters = () => {
-    setHeight([0, 500]);
-    setWidth([0, 500]);
-    setPrice([0, 5000]);
+    setPerPage(2);
+    setWidth([0, 150]);
+    setHeight([0, 150]);
+    setPrice([0, 1500]);
     setStylesParams([]);
     setMediumParams([]);
     setSupportParams([]);
+    setSortBy(sortByYearAsc);
     setCheckedStyles(new Array(styles.length).fill(false));
     setCheckedMediums(new Array(styles.length).fill(false));
     setCheckedSupports(new Array(styles.length).fill(false));
-    setSortBy('');
-    setPerPage('2');
   }
 
   const styles = [
@@ -252,7 +270,7 @@ export const Catalog: React.FC<Props> = ({
   return (
     <section className="section catalog">
       <div className="catalog-header title is-3">
-        {`Paintings ${paintings.length}`}
+        {`Paintings: ${currentPaintings.length} from ${totalPaintings}`}
       </div>
 
       <div className="catalog-info">
@@ -301,7 +319,7 @@ export const Catalog: React.FC<Props> = ({
 
             <RangeSlider
               min={0}
-              max={500}
+              max={150}
               defaultValue={width}
               value={width}
               onInput={(value: number[]) => {
@@ -317,7 +335,7 @@ export const Catalog: React.FC<Props> = ({
 
             <RangeSlider
                 min={0}
-                max={500}
+                max={150}
                 defaultValue={height}
                 value={height}
                 onInput={(value: number[]) => {
@@ -411,38 +429,119 @@ export const Catalog: React.FC<Props> = ({
         </div>
 
         <div className="container paintinglist">
-          <div className="sorting">
-            <div className="sorting-container">
-              <div className="sorting-title">Sorting:</div>
-
-              <select
-                className="sortby dropdown"
-                onChange={(event) => setSortBy(event.target.value)}
-                value={sortBy}
+          <div className="painting-container">
+            <div className="sorting">
+              <nav
+                className="pagination is-centered is-small"
+                aria-label="pagination"
+                role="navigation"
               >
-                <option value={sortByYearAsc}>Newest</option>
-                <option value={sortByYearDesc}>Oldest</option>
-                <option value={sortByPriceAsc}>Cheapest</option>
-                <option value={sortByPriceDesc}>Most expensive</option>
-              </select>
+                <button
+                  className="pagination-previous"
+                  onClick={() => setCurrentPage(
+                    (prevPage) => prevPage === 0 ? prevPage : prevPage - 1
+                  )}
+                  disabled={currentPage === 1}
+                >
+                    Previous
+                </button>
+
+                <button
+                  className="pagination-next"
+                  onClick={() => setCurrentPage(
+                    (prevPage) => prevPage === pageCount ? prevPage : prevPage + 1
+                  )}
+                  disabled={currentPage === pageCount}
+                >
+                  Next page
+                </button>
+
+                <ul className="pagination-list">
+                  {getArrayFromNumber(pageCount).map(page => (
+                    <li key={page}>
+                      <Link
+                        to={`/gallery/${page}`}
+                        onClick={() => setCurrentPage(page)}
+                        aria-label="Goto page 1"
+                        className={classNames('pagination-link', {
+                          'is-current': currentPage === page,
+                        })}
+                      >
+                        {page}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+
+              <div className="sorting-container">
+                <div className="sorting-container">
+                  <div className="sorting-title">Sorting:</div>
+                  <select
+                    className="sortby dropdown"
+                    onChange={(event) => setSortBy(event.target.value)}
+                    value={sortBy}
+                  >
+                    <option value={sortByYearAsc}>Newest</option>
+                    <option value={sortByYearDesc}>Oldest</option>
+                    <option value={sortByPriceAsc}>Cheapest</option>
+                    <option value={sortByPriceDesc}>Most expensive</option>
+                  </select>
+                </div>
+                <div className="sorting-container">
+                  <div className="sorting-title">Per page:</div>
+                  <select
+                    className="perpage dropdown"
+                    onChange={(event) => setPerPage(+event.target.value)}
+                    value={perPage}
+                  >
+                    <option value="2">2</option>
+                    <option value="4">4</option>
+                    <option value="6">6</option>
+                  </select>
+                </div>
+              </div>
             </div>
 
-            <div className="sorting-container">
-              <div className="sorting-title">Per page:</div>
-
-              <select
-                className="perpage dropdown"
-                onChange={(event) => setPerPage(event.target.value)}
-                value={perPage}
-              >
-                <option value="2">2</option>
-                <option value="4">4</option>
-                <option value="6">6</option>
-              </select>
-            </div>
+            <Gallery paintings={currentPaintings} />
           </div>
 
-          <Gallery paintings={paintings} />
+          <nav className="pagination pagination-lower is-centered">
+            <button
+              className="pagination-previous"
+              onClick={() => setCurrentPage(
+                (prevPage) => prevPage === 0 ? prevPage : prevPage - 1
+                )}
+              disabled={currentPage === 1}
+            >
+                Previous
+            </button>
+            <button
+              className="pagination-next"
+              onClick={() => setCurrentPage(
+                (prevPage) => prevPage === pageCount ? prevPage : prevPage + 1
+              )}
+              disabled={currentPage === pageCount}
+            >
+              Next page
+            </button>
+            <ul className="pagination-list">
+              {getArrayFromNumber(pageCount).map(page => (
+                <li key={page}>
+                  <Link
+                    to={`/gallery/${page}`}
+                    onClick={() => setCurrentPage(page)}
+                    aria-label="Goto page 1"
+                    className={classNames('pagination-link', {
+                      'is-current': currentPage === page,
+                    })}
+                  >
+                    {page}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
         </div>
       </div>
     </section>

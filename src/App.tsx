@@ -1,8 +1,6 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React from 'react';
 import { NavBar } from './components/NavBar';
 import { MainPage } from './pages/MainPage';
-import { Painting} from './types/painting';
-import axios from 'axios';
 import './styles.scss'
 import 'bulma/css/bulma.css';
 import { Footer } from './components/Footer';
@@ -13,85 +11,55 @@ import { Fund } from './components/Fund';
 import { AboutUs } from './components/AboutUs';
 import { PaintingPage } from './pages/PaintingPage';
 
-const URL = 'https://www.albedosunrise.com/paintings?';
-const UPLOAD = 'https://www.albedosunrise.com/images/getUrl?extension=jpeg';
-const SEARCH = 'https://www.albedosunrise.com/paintings/search?';
+// const UPLOAD = 'https://www.albedosunrise.com/images/getUrl?extension=jpeg';
 
 export const App: React.FC= () => {
-  const [paintings, setPaintings] = useState<Painting[]>([]);
-  const [selectedImage, setSelectedImage] = useState<FileList | null>(null);
-  const [sortBy, setSortBy] = useState('');
-  const [perPage, setPerPage] = useState('2');
-  const defaultPerPage = `page=0&pageSize=${perPage}`;
+  // const [selectedImage, setSelectedImage] = useState<FileList | null>(null);
 
-  const getAllPaintingsFromServer = async () => {
-    axios.get(URL + defaultPerPage)
-      .then((response) => {
-        setPaintings(response.data.paintings);
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-  };
+  // const onFileUpload = async () => {
+  //   console.log('onFileUpload');
+  //   axios.get(UPLOAD)
+  //   .then((response) => {
+  //     const {
+  //       imagePutUrl,
+  //       imageFileName,
+  //     } = response.data;
 
-  useEffect(() => {
-    getAllPaintingsFromServer();
-  }, []);
+  //     selectedImage && axios.put(imagePutUrl, selectedImage[0])
+  //       .then(response => {
+  //         console.log('save image request', response);
 
-  const getFilteredPaintings = async (filters: string) => {
-    await axios.get(SEARCH + filters + '&' + sortBy + '&' + defaultPerPage)
-      .then((response) => {
-        setPaintings(response.data.paintings);
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-  };
+  //         const imageDataPost = {
+  //           title: 'Test Image',
+  //           price: 1000,
+  //           authorId: 1,
+  //           description: 'Picture',
+  //           yearOfCreation: 2020,
+  //           createdAt: new Date(),
+  //           height: 100,
+  //           width: 50,
+  //           styleId: 1,
+  //           mediumId: 1,
+  //           supportId: 1,
+  //           imageFileName: imageFileName,
+  //         };
 
-  const onFileUpload = async () => {
-    console.log('onFileUpload');
-    axios.get(UPLOAD)
-    .then((response) => {
-      const {
-        imagePutUrl,
-        imageFileName,
-      } = response.data;
+  //         axios.post(URL, imageDataPost)
+  //           .then(response => console.log('post other fields', response))
+  //           .catch(error => console.log('error', error));
+  //       })
+  //       .catch((error) => {
+  //         console.log(error);
+  //       })
+  //   })
+  //   .catch((error) => {
+  //     console.log(error);
+  //   })
+  // }
 
-      selectedImage && axios.put(imagePutUrl, selectedImage[0])
-        .then(response => {
-          console.log('save image request', response);
-
-          const imageDataPost = {
-            title: 'Test Image',
-            price: 1000,
-            authorId: 1,
-            description: 'Picture',
-            yearOfCreation: 2020,
-            createdAt: new Date(),
-            height: 100,
-            width: 50,
-            styleId: 1,
-            mediumId: 1,
-            supportId: 1,
-            imageFileName: imageFileName,
-          };
-
-          axios.post(URL, imageDataPost)
-            .then(response => console.log('post other fields', response))
-            .catch(error => console.log('error', error));
-        })
-        .catch((error) => {
-          console.log(error);
-        })
-    })
-    .catch((error) => {
-      console.log(error);
-    })
-  }
-
-  const onFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setSelectedImage(event.target.files);
-  }
+  // const onFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+  //   setSelectedImage(event.target.files);
+  // }
 
   return (
     <>
@@ -100,9 +68,7 @@ export const App: React.FC= () => {
         <Route
           path="/"
           element={
-            <MainPage
-              getAll={getAllPaintingsFromServer}
-            />
+            <MainPage />
           }
         />
 
@@ -121,33 +87,32 @@ export const App: React.FC= () => {
         <Route
           path="united24"
           element={
-            <Fund getAll={getAllPaintingsFromServer} />
+            <Fund />
           }
         />
 
         <Route
           path="about"
           element={
-            <AboutUs getAll={getAllPaintingsFromServer} />
+            <AboutUs />
           }
         />
 
         <Route path="gallery">
           <Route
             index
+            element={<Catalog />}
+          />
+
+          <Route
+            path=":page"
             element={
-              <Catalog
-                sortBy={sortBy}
-                setSortBy={setSortBy}
-                paintings={paintings}
-                perPage={perPage}
-                setPerPage={setPerPage}
-                getFiltered={getFilteredPaintings}
-              />
+              <Catalog/>
             }
           />
-          <Route path=":paintingId" element={<PaintingPage />} />
         </Route>
+
+        <Route path=":paintingId" element={<PaintingPage />} />
 
         <Route
           path="*"

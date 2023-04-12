@@ -1,10 +1,6 @@
 import React from 'react';
 
-type Props = {
-  getAll: () => void;
-};
-
-export const AboutUs: React.FC<Props> = ({ getAll }) => {
+export const AboutUs: React.FC = () => {
   return (
     <section id="about" className="section about">
       <div className="container about-items">
@@ -23,7 +19,6 @@ export const AboutUs: React.FC<Props> = ({ getAll }) => {
         
         <button
           className="button-get-all"
-          onClick={getAll}
         >
           Learn More
         </button>
