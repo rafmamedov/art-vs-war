@@ -1,6 +1,7 @@
 import React from 'react';
 import { PaintingCard } from './PaintingCard';
 import { Painting } from '../types/painting';
+import '../styles.scss';
 
 type Props = {
   paintings: Painting[];
