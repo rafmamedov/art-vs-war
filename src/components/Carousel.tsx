@@ -72,9 +72,6 @@ export const Carousel: React.FC = () => {
                         <p className="subtitle is-4">€ {painting.price}</p>
                       </div>
                     </div>
-                    <div className="content">
-                      {painting.description}
-                    </div>
                   </div>
                 </div>
               </Link>

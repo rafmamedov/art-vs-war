@@ -5,7 +5,6 @@ import './Catalog.scss';
 import 'bulma/css/bulma.css';
 import { Painting } from "../types/painting";
 import { Gallery } from "./Gallery";
-import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import axios from 'axios';
 
@@ -48,6 +47,11 @@ export const Catalog: React.FC = () => {
       .catch((error) => {
         console.log(error);
       })
+  };
+
+  const handlePerPageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setCurrentPage(1);
+    setPerPage(+event.target.value);
   };
 
   const getArrayFromNumber = (num: number) => {
@@ -314,23 +318,7 @@ export const Catalog: React.FC = () => {
 
           <div className="filter filter-container">
             <div className="subtitle filter-subtitle is-6">
-              {`Width: ${width[0]} - ${width[1]} cm`}
-            </div>
-
-            <RangeSlider
-              min={0}
-              max={150}
-              defaultValue={width}
-              value={width}
-              onInput={(value: number[]) => {
-                setWidth(value);
-              }}
-            />
-          </div>
-
-          <div className="filter filter-container">
-            <div className="subtitle filter-subtitle is-6">
-              {`Height: ${height[0]} - ${height[1]} cm`}
+              {`Height: ${height[0]} - ${height[1]}+ cm`}
             </div>
 
             <RangeSlider
@@ -342,6 +330,22 @@ export const Catalog: React.FC = () => {
                   setHeight(value);
                 }}
               />
+          </div>
+
+          <div className="filter filter-container">
+            <div className="subtitle filter-subtitle is-6">
+              {`Width: ${width[0]} - ${width[1]}+ cm`}
+            </div>
+
+            <RangeSlider
+              min={0}
+              max={150}
+              defaultValue={width}
+              value={width}
+              onInput={(value: number[]) => {
+                setWidth(value);
+              }}
+            />
           </div>
 
           <div className="filter filter-container">
@@ -448,12 +452,12 @@ export const Catalog: React.FC = () => {
                 <div className="sorting-title">Per page:</div>
                 <select
                   className="perpage dropdown"
-                  onChange={(event) => setPerPage(+event.target.value)}
+                  onChange={handlePerPageChange}
                   value={perPage}
                 >
-                  <option value="2">2</option>
-                  <option value="4">4</option>
-                  <option value="6">6</option>
+                  <option value={2}>2</option>
+                  <option value={4}>4</option>
+                  <option value={6}>6</option>
                 </select>
               </div>
             </div>
@@ -463,13 +467,15 @@ export const Catalog: React.FC = () => {
 
           <nav className="pagination is-centered">
             <button
-              className="pagination-previous"
+              className={classNames('pagination-previous', {
+                'is-disabled': currentPage === 1,
+              })}
               onClick={() => setCurrentPage(
-                (prevPage) => prevPage === 0 ? prevPage : prevPage - 1
+                (prevPage) => prevPage === 1 ? prevPage : prevPage - 1
                 )}
               disabled={currentPage === 1}
             >
-                Previous
+              Previous
             </button>
             <button
               className="pagination-next"
@@ -483,16 +489,14 @@ export const Catalog: React.FC = () => {
             <ul className="pagination-list">
               {getArrayFromNumber(pageCount).map(page => (
                 <li key={page}>
-                  <Link
-                    to={`/gallery/${page}`}
+                  <button
                     onClick={() => setCurrentPage(page)}
-                    aria-label="Goto page 1"
                     className={classNames('pagination-link', {
                       'is-current': currentPage === page,
                     })}
                   >
                     {page}
-                  </Link>
+                  </button>
                 </li>
               ))}
             </ul>

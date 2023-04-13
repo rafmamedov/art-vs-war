@@ -1,4 +1,3 @@
-import React from 'react';
 import { NavBar } from './components/NavBar';
 import { MainPage } from './pages/MainPage';
 import './styles.scss'
@@ -11,9 +10,16 @@ import { Fund } from './components/Fund';
 import { AboutUs } from './components/AboutUs';
 import { PaintingPage } from './pages/PaintingPage';
 
-// const UPLOAD = 'https://www.albedosunrise.com/images/getUrl?extension=jpeg';
+import { Amplify } from 'aws-amplify';
+import { Authenticator, useAuthenticator } from '@aws-amplify/ui-react';
 
-export const App: React.FC= () => {
+import '@aws-amplify/ui-react/styles.css';
+import awsExports from './aws-exports';
+
+Amplify.configure(awsExports);
+
+
+  // const UPLOAD = 'https://www.albedosunrise.com/images/getUrl?extension=jpeg';
   // const [selectedImage, setSelectedImage] = useState<FileList | null>(null);
 
   // const onFileUpload = async () => {
@@ -61,9 +67,20 @@ export const App: React.FC= () => {
   //   setSelectedImage(event.target.files);
   // }
 
+export const App = () => {
+  const { route, signOut, toSignIn, toSignUp } = useAuthenticator((context) => [context.route]);
+  // Use the value of route to decide which page to render
+  const isAuthentificated = route === 'authenticated';
+
   return (
     <>
-      <NavBar />
+      <NavBar
+        signIn={toSignIn}
+        signOut={signOut}
+        signUp={toSignUp}
+        isAuthentificated={isAuthentificated}
+      />
+
       <Routes>
         <Route
           path="/"
@@ -71,49 +88,42 @@ export const App: React.FC= () => {
             <MainPage />
           }
         />
-
         <Route
           path="home"
           element={
             <Navigate to="/" replace />
           }
         />
-
+        <Route
+          path="authenticator"
+          element={<Authenticator ><MainPage /></Authenticator>}
+        />
         <Route
           path="authors"
           element={<JoinUs />}
         />
-
         <Route
           path="united24"
           element={
             <Fund />
           }
         />
-
         <Route
           path="about"
           element={
             <AboutUs />
           }
         />
-
         <Route path="gallery">
           <Route
             index
             element={<Catalog />}
           />
-
-          <Route
-            path=":page"
-            element={
-              <Catalog/>
-            }
-          />
+        <Route
+          path=":paintingId"
+          element={<PaintingPage />}
+        />
         </Route>
-
-        <Route path=":paintingId" element={<PaintingPage />} />
-
         <Route
           path="*"
           element={

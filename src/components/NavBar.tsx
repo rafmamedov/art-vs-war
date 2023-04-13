@@ -3,7 +3,14 @@ import Logo from '../images/LOGO.svg'
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 
-export const NavBar: React.FC = () => {
+type Props = {
+  signIn: (data?: any) => void;
+  signUp: (data?: any) => void;
+  signOut: (data?: any) => void;
+  isAuthentificated: boolean;
+};
+
+export const NavBar: React.FC<Props> = ({ signIn, signUp, signOut, isAuthentificated }) => {
   const [isActive, setIsActive] = useState(false);
 
   const handleOpenMenu = () => {
@@ -64,8 +71,15 @@ export const NavBar: React.FC = () => {
           <Link to="/authors" className="navlink" onClick={handleLinkClick}>Authors</Link>
           <a href="https://u24.gov.ua/" target="blank" className="navlink" onClick={handleLinkClick}>United24</a>
           <Link to="about" className="navlink" onClick={handleLinkClick}>About</Link>
-          <button className="button is-light button-auth">Log in</button>
-          <button className="button is-dark button-auth">Sign up</button>
+
+          {isAuthentificated
+            ? <Link to="/" onClick={signOut} className="button is-dark button-auth">Sign out</Link>
+            : (
+              <>
+                <Link to="/authenticator" onClick={signIn} className="button is-light button-auth">Sign in</Link>
+                <Link to="/authenticator" onClick={signUp} className="button is-dark button-auth">Sign up</Link>
+              </>
+            )}
         </div>
       </div>
     </nav>

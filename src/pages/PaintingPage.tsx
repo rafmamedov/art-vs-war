@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../styles.scss';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -29,7 +29,7 @@ export const PaintingPage: React.FC = () => {
 
   return (
     <section className="section painting">
-      <div className="icon-container"><Link to="/">{element}</Link></div>
+      <div className="icon-container"><Link to="/gallery">{element}</Link></div>
 
       <div className="container painting-card">
         <img
@@ -70,7 +70,7 @@ export const PaintingPage: React.FC = () => {
           </div>
 
           <div className="painting-title-container">
-            <div className="painting-title">Height x width:</div>
+            <div className="painting-title">Height x Width:</div>
             <div className="painting-title">{painting?.height} x {painting?.width} cm</div>
           </div>
 
