@@ -69,7 +69,6 @@ Amplify.configure(awsExports);
 
 export const App = () => {
   const { route, signOut, toSignIn, toSignUp } = useAuthenticator((context) => [context.route]);
-  // Use the value of route to decide which page to render
   const isAuthentificated = route === 'authenticated';
 
   return (
