@@ -1,0 +1,96 @@
+.profile {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto 100px;
+
+  &-container {
+    max-width: 610px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  &-header {
+    margin: 0 auto 40px;
+    max-width: 790px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 20px;
+  }
+
+  &-tabs {
+    margin: 0 auto;
+    padding: 10px 0;
+    width: 810px;
+
+    &-link {
+      align-items: center;
+      border-bottom-color: #dbdbdb;
+      border-bottom-style: solid;
+      border-bottom-width: 1px;
+      color: #4a4a4a;
+      display: flex;
+      justify-content: center;
+      margin-bottom: -1px;
+      padding: 0.5em 1em;
+      vertical-align: top;
+      cursor: pointer;
+      transition: 0.3s;
+
+      &:hover {
+        border-bottom-color: #4a4a4a;
+      }
+    }
+  }
+
+  &-info {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  &-item {
+    width: 300px;
+
+    &-about {
+      width: 610px;
+    }
+  }
+}
+
+.is-active {
+  border-bottom-color: #4a4a4a;
+}
+
+.sidebar-info {
+  margin: 0 auto;
+}
+
+.my-works {
+  margin: 0 auto;
+}
+
+.button {
+  &-submit {
+    width: 150px;
+  }
+
+  &-edit {
+    margin-bottom: 10px;
+  }
+}
+
+.checkbox {
+  justify-content: flex-start;
+  padding: 10px;
+
+  &-container {
+    display: flex;
+    gap: 20px;
+    justify-content: flex-start;
+    align-items: baseline;
+  }
+}

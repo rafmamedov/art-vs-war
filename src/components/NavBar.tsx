@@ -2,16 +2,17 @@ import React, { useState } from 'react';
 import Logo from '../images/LOGO.svg'
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
+import { useAuthenticator } from '@aws-amplify/ui-react';
 
-type Props = {
-  signIn: (data?: any) => void;
-  signUp: (data?: any) => void;
-  signOut: (data?: any) => void;
-  isAuthentificated: boolean;
-};
-
-export const NavBar: React.FC<Props> = ({ signIn, signUp, signOut, isAuthentificated }) => {
+export const NavBar: React.FC = () => {
   const [isActive, setIsActive] = useState(false);
+  const {
+    route,
+    signOut,
+    toSignIn,
+    toSignUp,
+  } = useAuthenticator((context) => [context.route]);
+  const isAuthentificated = route === 'authenticated';
 
   const handleOpenMenu = () => {
     if (isActive) {
@@ -76,8 +77,8 @@ export const NavBar: React.FC<Props> = ({ signIn, signUp, signOut, isAuthentific
             ? <Link to="/" onClick={signOut} className="button is-dark button-auth">Sign out</Link>
             : (
               <>
-                <Link to="/authenticator" onClick={signIn} className="button is-light button-auth">Sign in</Link>
-                <Link to="/authenticator" onClick={signUp} className="button is-dark button-auth">Sign up</Link>
+                <Link to="/authenticator" onClick={toSignIn} className="button is-light button-auth">Sign in</Link>
+                <Link to="/authenticator" onClick={toSignUp} className="button is-dark button-auth">Sign up</Link>
               </>
             )}
         </div>

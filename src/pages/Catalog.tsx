@@ -5,8 +5,8 @@ import './Catalog.scss';
 import 'bulma/css/bulma.css';
 import { Painting } from "../types/painting";
 import { Gallery } from "./Gallery";
-import classNames from 'classnames';
 import axios from 'axios';
+import { Pagination } from '../components/Pagination';
 
 const SEARCH = 'https://www.albedosunrise.com/paintings/search?';
 
@@ -53,16 +53,6 @@ export const Catalog: React.FC = () => {
     setCurrentPage(1);
     setPerPage(+event.target.value);
   };
-
-  const getArrayFromNumber = (num: number) => {
-    const result = [];
-
-    for (let i = 1; i <= pageCount; i++ ) {
-      result.push(i);
-    }
-
-    return result;
-  }
 
   const getFilterParams = (
     priceBetween: string,
@@ -131,6 +121,7 @@ export const Catalog: React.FC = () => {
   );
 
   const handleApplyFilters = () => {
+    setCurrentPage(1);
     getFilteredPaintingsFromServer(filterParams);
   };
 
@@ -350,7 +341,7 @@ export const Catalog: React.FC = () => {
 
           <div className="filter filter-container">
             <div className="subtitle filter-subtitle is-6">
-              Art movement, style
+              Art movement
             </div>
 
             <div className="filter-checkbox">
@@ -465,42 +456,12 @@ export const Catalog: React.FC = () => {
             <Gallery paintings={currentPaintings} />
           </div>
 
-          <nav className="pagination is-centered">
-            <button
-              className={classNames('pagination-previous', {
-                'is-disabled': currentPage === 1,
-              })}
-              onClick={() => setCurrentPage(
-                (prevPage) => prevPage === 1 ? prevPage : prevPage - 1
-                )}
-              disabled={currentPage === 1}
-            >
-              Previous
-            </button>
-            <button
-              className="pagination-next"
-              onClick={() => setCurrentPage(
-                (prevPage) => prevPage === pageCount ? prevPage : prevPage + 1
-              )}
-              disabled={currentPage === pageCount}
-            >
-              Next page
-            </button>
-            <ul className="pagination-list">
-              {getArrayFromNumber(pageCount).map(page => (
-                <li key={page}>
-                  <button
-                    onClick={() => setCurrentPage(page)}
-                    className={classNames('pagination-link', {
-                      'is-current': currentPage === page,
-                    })}
-                  >
-                    {page}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </nav>
+          <Pagination
+            className={'pagination is-centered'}
+            pageCount={pageCount}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+          />
         </div>
       </div>
     </section>

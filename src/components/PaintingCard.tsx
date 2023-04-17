@@ -38,7 +38,7 @@ export const PaintingCard: React.FC<Props> = ({ painting }) => {
                 <br/>{medium.name}, {support.name}
                 <br/>{height} x {width} cm
               </p>
-              <p className="collection-card-title">{title.slice(0, -2)}</p>
+              <p className="collection-card-title">{title}</p>
               <p className="collection-card-subtitle">{author.name}</p>
               <p className="subtitle is-4">€ {price}</p>
             </div>

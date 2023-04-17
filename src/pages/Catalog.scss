@@ -22,8 +22,10 @@
 }
 
 .pagination {
-  margin: 0 !important;
+  margin: 0 auto !important;
   width: 100%;
+  max-width: 810px;
+  padding: 0 10px;
 }
 
 .pagination-previous,
