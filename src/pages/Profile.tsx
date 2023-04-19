@@ -20,7 +20,9 @@ export const Profile: React.FC = () => {
   const [isCreateVisible, setIsCreateVisible] = useState(false);
   const [isPaintingsVisible, setIsPaintingsVisible] = useState(false);
   const [isFetching, setIsFetching] = useState(true);
-  const { user } = useAuthenticator((context) => [context.user]);
+  const { user, route } = useAuthenticator((context) => [context.route]);
+
+  const isAuthenticated = route === 'authenticated';
 
   const getAuthorById = async () => {
     await axios.get(GETAUTHOR + user.username)
@@ -39,7 +41,11 @@ export const Profile: React.FC = () => {
 
   useEffect(() => {
     getAuthorById();
-  }, [])
+
+    if (isAuthenticated) {
+      setIsFetching(false);
+    }
+  }, [route])
 
   return (
     <section className="section profile">
