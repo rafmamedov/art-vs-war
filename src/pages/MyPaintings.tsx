@@ -77,51 +77,52 @@ export const MyPaintings: React.FC<Props> = ({ author }) => {
 
   return (
     <>
-      {(!isFetching && !paintings.length) && notification}
-
       {isFetching ? (
         <Loader />
       ) : (
         <>
-          <div className="container my-works">
-          {/* <div className="author-title">My paintings</div> */}
-            <div className="sorting">
-              <div className="sorting-container">
-                <div className="sorting-title">Sorting:</div>
-                <select
-                  className="sortby dropdown"
-                  onChange={(event) => setSortBy(event.target.value)}
-                  value={sortBy}
-                >
-                  <option value={sortByYearAsc}>Newest</option>
-                  <option value={sortByYearDesc}>Oldest</option>
-                  <option value={sortByPriceAsc}>Cheapest</option>
-                  <option value={sortByPriceDesc}>Most expensive</option>
-                </select>
-              </div>
-              <div className="sorting-container">
-                <div className="sorting-title">Per page:</div>
-                <select
-                  className="perpage dropdown"
-                  onChange={handlePerPageChange}
-                  value={perPage}
-                >
-                  <option value={2}>2</option>
-                  <option value={4}>4</option>
-                  <option value={6}>6</option>
-                </select>
-              </div>
-            </div>
+          {!paintings.length
+            ? notification
+            : (
+              <div className="container my-works">
+                <div className="sorting">
+                  <div className="sorting-container">
+                    <div className="sorting-title">Sorting:</div>
+                    <select
+                      className="sortby dropdown"
+                      onChange={(event) => setSortBy(event.target.value)}
+                      value={sortBy}
+                    >
+                      <option value={sortByYearAsc}>Newest</option>
+                      <option value={sortByYearDesc}>Oldest</option>
+                      <option value={sortByPriceAsc}>Cheapest</option>
+                      <option value={sortByPriceDesc}>Most expensive</option>
+                    </select>
+                  </div>
+                  <div className="sorting-container">
+                    <div className="sorting-title">Per page:</div>
+                    <select
+                      className="perpage dropdown"
+                      onChange={handlePerPageChange}
+                      value={perPage}
+                    >
+                      <option value={2}>2</option>
+                      <option value={4}>4</option>
+                      <option value={6}>6</option>
+                    </select>
+                  </div>
+                </div>
 
-            <PaintingList paintings={paintings}/>
+                <PaintingList paintings={paintings}/>
 
-            <Pagination
-              className={'pagination is-left'}
-              pageCount={pageCount}
-              currentPage={currentPage}
-              setCurrentPage={setCurrentPage}
-            />
-          </div>
+                <Pagination
+                  className={'pagination is-left'}
+                  pageCount={pageCount}
+                  currentPage={currentPage}
+                  setCurrentPage={setCurrentPage}
+                />
+              </div>
+            )}
         </>
       )}
     </>
