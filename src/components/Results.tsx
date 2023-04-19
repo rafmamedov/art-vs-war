@@ -20,9 +20,9 @@ export const Results: React.FC = () => (
       </div>
 
       <div className="subtitle is-4 results-item">
-        Unique users
+        Artists
         <div className="subtitle is-3">
-          54987
+          45
         </div>
       </div>
     </div>

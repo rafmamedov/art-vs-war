@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { SetStateAction } from 'react';
 import '../styles.scss'
 import 'bulma/css/bulma.css';
 import { Header } from '../components/Header';
@@ -7,8 +7,14 @@ import { Carousel } from '../components/Carousel';
 import { Fund } from '../components/Fund';
 import { JoinUs } from '../components/JoinUs';
 import { Results } from '../components/Results';
+import { useAuthenticator } from '@aws-amplify/ui-react';
 
-export const MainPage: React.FC = () => {
+type Props ={
+  onAuthenticating: React.Dispatch<SetStateAction<boolean>>;
+};
+
+export const MainPage: React.FC<Props> = ({ onAuthenticating }) => {
+  const { route } = useAuthenticator((context) => [context.route]);
   return (
     <>
       <Header />
@@ -16,7 +22,9 @@ export const MainPage: React.FC = () => {
       <Carousel />
       <Fund />
       <Results />
-      <JoinUs />
+      {route !== 'authenticated' && (
+        <JoinUs onAuthenticating={onAuthenticating} />
+      )}
     </>
   );
 }

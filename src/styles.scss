@@ -173,10 +173,6 @@ body {
   align-items: center;
   width: 100%;
 
-  &-main-page {
-    margin-bottom: 120px;
-  }
-
   &-list {
     margin: 0 10px;
     padding: 0 10px;
@@ -276,6 +272,11 @@ body {
 
   &-auth {
     width: 120px
+  }
+
+  &-collection {
+    margin-bottom: 80px;
+    width: 240px;
   }
 }
 

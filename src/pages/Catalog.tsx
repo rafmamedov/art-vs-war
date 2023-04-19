@@ -18,13 +18,16 @@ export const Catalog: React.FC = () => {
   const [pageCount, setPageCount] = useState(0);
   const [width, setWidth] = useState([0, 300]);
   const [height, setHeight] = useState([0, 300]);
-  const [price, setPrice] = useState([0, 100000]);
+  const [price, setPrice] = useState([0, 900000]);
   const [currentPage, setCurrentPage] = useState(1);
   const [countOfFiltered, setCountOfFiltered] = useState(0);
   const [stylesParams, setStylesParams] = useState<string[]>([]);
   const [mediumParams, setMediumParams] = useState<string[]>([]);
   const [supportParams, setSupportParams] = useState<string[]>([]);
   const [currentPaintings, setCurrentPaintings] = useState<Painting[]>([]);
+  const [isStylesVisible, setIsStylesVisible] = useState(false);
+  const [isMediumsVisible, setIsMediumsVisible] = useState(false);
+  const [isSupportsVisible, setIsSupportsVisible] = useState(false);
   const [isFetching, setIsFetching] = useState(true);
 
   const sortByDateAsc = 'sortBy=entityCreatedAt:ASC';
@@ -59,20 +62,6 @@ export const Catalog: React.FC = () => {
         }, 300)
       })
   };
-
-  // const getTotalCountOfPaintings = async () => {
-  //   await axios.get(COUNT)
-  //   .then((response) => {
-  //     totalPaintingsInBase = response.data;
-  //   })
-  //   .catch(error => {
-  //     console.log(error)
-  //   })
-  // }
-
-  // useEffect(() => {
-  //   getTotalCountOfPaintings();
-  // }, []);
 
   const handlePerPageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setCurrentPage(1);
@@ -360,83 +349,98 @@ export const Catalog: React.FC = () => {
               </div>
 
               <div className="filter filter-container">
-                <div className="subtitle filter-subtitle is-6">
+                <div
+                  className="subtitle filter-subtitle is-6 select filter-select"
+                  onClick={() => setIsStylesVisible(!isStylesVisible)}
+                >
                   Styles
                 </div>
 
-                <div className="filter-checkbox">
-                  {styles.map((style, index) => (
-                    <div key={index} className="checkbox">
-                      <input
-                        id={style}
-                        value={normalizeString(style)}
-                        type="checkbox"
-                        className="checkbox-content"
-                        checked={checkedStyles[index]}
-                        onChange={() => handleCheckStyles(index)}
-                      />
-
-                      <label htmlFor={style} className="checkbox-content">
-                        {style}
-                      </label>
-                    </div>
-                  ))}
-                </div>
+                {isStylesVisible && (
+                  <div className="filter-checkbox">
+                    {styles.map((style, index) => (
+                      <div key={index} className="checkbox">
+                        <input
+                          id={style}
+                          value={normalizeString(style)}
+                          type="checkbox"
+                          className="checkbox-content"
+                          checked={checkedStyles[index]}
+                          onChange={() => handleCheckStyles(index)}
+                        />
+  
+                        <label htmlFor={style} className="checkbox-content">
+                          {style}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <div className="filter filter-container">
-                <div className="subtitle filter-subtitle is-6">
+                <div
+                  className="subtitle filter-subtitle is-6 select filter-select"
+                  onClick={() => setIsMediumsVisible(!isMediumsVisible)}
+                >
                   Medium
                 </div>
 
-                <div className="filter-checkbox">
-                  {mediums.map((medium, index) => (
-                    <div key={medium} className="checkbox">
-                      <input
-                        id={medium}
-                        value={normalizeString(medium)}
-                        type="checkbox"
-                        className="checkbox-content"
-                        checked={checkedMediums[index]}
-                        onChange={() => handleCheckMediums(index)}
-                      />
-                      <label htmlFor={medium} className="checkbox-content">{medium}</label>
-                    </div>
-                  ))}
-                </div>
+                {isMediumsVisible && (
+                  <div className="filter-checkbox">
+                    {mediums.map((medium, index) => (
+                      <div key={medium} className="checkbox">
+                        <input
+                          id={medium}
+                          value={normalizeString(medium)}
+                          type="checkbox"
+                          className="checkbox-content"
+                          checked={checkedMediums[index]}
+                          onChange={() => handleCheckMediums(index)}
+                        />
+                        <label htmlFor={medium} className="checkbox-content">{medium}</label>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <div className="filter filter-container">
-                <div className="subtitle filter-subtitle is-6">
+                <div
+                  className="subtitle filter-subtitle is-6 select filter-select"
+                  onClick={() => setIsSupportsVisible(!isSupportsVisible)}
+                >
                   Support
                 </div>
 
-                <div className="filter-checkbox">
-                  {supports.map((support, index) => (
-                    <div key={support} className="checkbox">
-                      <input
-                        id={support}
-                        value={normalizeString(support)}
-                        type="checkbox"
-                        className="checkbox-content"
-                        checked={checkedSupports[index]}
-                        onChange={() => handleCheckSupports(index)}
-                      />
-                      <label htmlFor={support} className="checkbox-content">{support}</label>
-                    </div>
-                  ))}
-                </div>
+                {isSupportsVisible && (
+                  <div className="filter-checkbox">
+                    {supports.map((support, index) => (
+                      <div key={support} className="checkbox">
+                        <input
+                          id={support}
+                          value={normalizeString(support)}
+                          type="checkbox"
+                          className="checkbox-content"
+                          checked={checkedSupports[index]}
+                          onChange={() => handleCheckSupports(index)}
+                        />
+                        <label htmlFor={support} className="checkbox-content">{support}</label>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <button
-                className="button-get-all button-get-all-dark"
+                className="button-get-all button-get-all-dark filter-button"
                 onClick={handleApplyFilters}
               >
                 Apply
               </button>
 
               <button
-                className="button-get-all"
+                className="button-get-all filter-button"
                 onClick={handleClearFilters}
               >
                 Clear filters

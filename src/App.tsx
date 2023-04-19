@@ -61,7 +61,7 @@ export const App = () => {
             <Route
               path="/"
               element={
-                <MainPage />
+                <MainPage onAuthenticating={setIsAuthenticating} />
               }
             />
 
@@ -89,7 +89,7 @@ export const App = () => {
 
             <Route
               path="callback"
-              element={<Profile />}
+              element={<Authenticator><Profile /></Authenticator>}
             />
 
             <Route

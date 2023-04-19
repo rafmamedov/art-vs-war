@@ -17,14 +17,9 @@ export const MyPaintings: React.FC<Props> = ({ author }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageCount, setPageCount] = useState(0);
   const [perPage, setPerPage] = useState(6);
-  const [sortBy, setSortBy] = useState('');
   const [isCreateVisible, setIsCreateVisible] = useState(false);
   const [isFetching, setIsFetching] = useState(true);
 
-  const sortByYearAsc = 'sortBy=yearOfCreation:ASC';
-  const sortByYearDesc = 'sortBy=yearOfCreation:DESC';
-  const sortByPriceAsc = 'sortBy=price:ASC';
-  const sortByPriceDesc = 'sortBy=price:DESC';
   const defaultPerPage = `page=${currentPage - 1}&pageSize=${perPage}`;
 
   const notification = (
@@ -86,19 +81,6 @@ export const MyPaintings: React.FC<Props> = ({ author }) => {
             : (
               <div className="container my-works">
                 <div className="sorting">
-                  <div className="sorting-container">
-                    <div className="sorting-title">Sorting:</div>
-                    <select
-                      className="sortby dropdown"
-                      onChange={(event) => setSortBy(event.target.value)}
-                      value={sortBy}
-                    >
-                      <option value={sortByYearAsc}>Newest</option>
-                      <option value={sortByYearDesc}>Oldest</option>
-                      <option value={sortByPriceAsc}>Cheapest</option>
-                      <option value={sortByPriceDesc}>Most expensive</option>
-                    </select>
-                  </div>
                   <div className="sorting-container">
                     <div className="sorting-title">Per page:</div>
                     <select
