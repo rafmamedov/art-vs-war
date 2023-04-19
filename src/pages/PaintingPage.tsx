@@ -90,12 +90,12 @@ export const PaintingPage: React.FC = () => {
               </div>
 
               <div className="painting-title-container">
-                <div className="painting-title">Cost:</div>
-                <div className="painting-title"><strong>${painting?.price}</strong></div>
+                <div className="painting-title">Price:</div>
+                <div className="painting-title"><strong>€{painting?.price}</strong></div>
               </div>
 
               <div className="painting-title-container painting-title-container-last">
-                <div className="painting-title">Date of ading to database:</div>
+                <div className="painting-title">Date of adding to database:</div>
                 <div className="painting-title">{painting?.entityCreatedAt}</div>
               </div>
 

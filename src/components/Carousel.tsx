@@ -77,7 +77,7 @@ export const Carousel: React.FC = () => {
                             <br/>{painting.medium.name}, {painting.support.name}
                             <br/>{painting.width} x {painting.height} cm
                           </p>
-                          <p className="collection-card-title">{painting.title.slice(0, -2)}</p>
+                          <p className="collection-card-title">{painting.title}</p>
                           <p className="collection-card-subtitle">{painting.author.fullName}</p>
                           <p className="subtitle is-4">€ {painting.price}</p>
                         </div>

@@ -6,7 +6,7 @@ import { Author } from '../types/painting';
 import { CreatePainting } from '../components/CreatePainting';
 import { Loader } from '../components/Loader';
 
-const URL = 'http://www.albedosunrise.com/paintings/by-author?authorId='
+const URL = 'https://www.albedosunrise.com/paintings/by-author?authorId='
 
 type Props = {
   author: Author;

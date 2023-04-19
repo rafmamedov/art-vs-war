@@ -25,29 +25,13 @@ export const CreatePainting: React.FC<Props> = ({ name }) => {
   const [width, setWidth] = useState('');
   const [height, setHeight] = useState('');
   const [isAdded, setIsAdded] = useState(false);
+  const [styleId, setStyleId] = useState(0);
+  const [mediumId, setMediumId] = useState(0);
+  const [supportId, setSupportId] = useState(0);
   const [description, setDescription] = useState('');
-  const [isStylesActive, setIsStylesActive] = useState(false);
-  const [isMediumActive, setIsMediumActive] = useState(false);
-  const [isSupportActive, setIsSupportActive] = useState(false);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const selectRef = useRef<any>(null);
 
-  const {
-    user,
-  } = useAuthenticator((context) => [context.user]);
-
-  const handleClickOutside = (event: any) => {
-    if (!selectRef?.current?.contains(event.target)) {
-      setIsStylesActive(false);
-    }
-  }
-  
-  useEffect(() => {
-    window.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      window.removeEventListener('mousedown', handleClickOutside);
-    }
-  }, [selectRef]);
+  const { user } = useAuthenticator((context) => [context.user]);
 
   const onFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
@@ -74,9 +58,9 @@ export const CreatePainting: React.FC<Props> = ({ name }) => {
             yearOfCreation: year,
             height,
             width,
-            styleId: 1,
-            mediumId: 1,
-            supportId: 1,
+            styleId,
+            mediumId,
+            supportId,
             imageFileName: imageFileName,
           };
 
@@ -252,9 +236,9 @@ export const CreatePainting: React.FC<Props> = ({ name }) => {
             </div>
 
             <div className="profile-info">
-              <Checkbox checkboxItem='styles' />
-              <Checkbox checkboxItem='mediums' />
-              <Checkbox checkboxItem='supports' />
+              <Checkbox checkboxItem='styles' onSelect={setStyleId} />
+              <Checkbox checkboxItem='mediums' onSelect={setMediumId} />
+              <Checkbox checkboxItem='supports' onSelect={setSupportId} />
             </div>
 
             <div className="field profile-item-about">

@@ -10,26 +10,27 @@ import { Pagination } from '../components/Pagination';
 import { Loader } from '../components/Loader';
 
 const SEARCH = 'https://www.albedosunrise.com/paintings/search?';
+const COUNT = 'https://www.albedosunrise.com/paintings/count';
 
 export const Catalog: React.FC = () => {
-  const [sortBy, setSortBy] = useState('');
+  const [sortBy, setSortBy] = useState('sortBy=entityCreatedAt:DESC');
   const [perPage, setPerPage] = useState(2);
   const [pageCount, setPageCount] = useState(0);
-  const [width, setWidth] = useState([0, 150]);
-  const [height, setHeight] = useState([0, 150]);
-  const [price, setPrice] = useState([0, 1500]);
+  const [width, setWidth] = useState([0, 300]);
+  const [height, setHeight] = useState([0, 300]);
+  const [price, setPrice] = useState([0, 100000]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPaintings, setTotalPaintings] = useState(0);
+  const [countOfFiltered, setCountOfFiltered] = useState(0);
   const [stylesParams, setStylesParams] = useState<string[]>([]);
   const [mediumParams, setMediumParams] = useState<string[]>([]);
   const [supportParams, setSupportParams] = useState<string[]>([]);
   const [currentPaintings, setCurrentPaintings] = useState<Painting[]>([]);
   const [isFetching, setIsFetching] = useState(true);
 
-  const sortByYearAsc = 'sortBy=yearOfCreation:ASC';
-  const sortByYearDesc = 'sortBy=yearOfCreation:DESC';
-  const sortByPriceAsc = 'sortBy=price:ASC';
-  const sortByPriceDesc = 'sortBy=price:DESC';
+  const sortByDateAsc = 'sortBy=entityCreatedAt:ASC';
+  const sortByDateDesc = 'sortBy=entityCreatedAt:DESC';
+  const sortByPriceAsc = 'sortBy=price:ASC;entityCreatedAt:DESC';
+  const sortByPriceDesc = 'sortBy=price:DESC;entityCreatedAt:DESC';
   const priceBetween = `priceBetween=${price[0]},${price[1]}`;
   const widthBetween = `widthBetween=${width[0]},${width[1]}`;
   const heightBetween = `heightBetween=${height[0]},${height[1]}`;
@@ -37,14 +38,17 @@ export const Catalog: React.FC = () => {
   const supportIn = `supportIn=${supportParams.join(',')}`;
   const mediumIn = `mediumIn=${mediumParams.join(',')}`;
   const defaultPerPage = `page=${currentPage - 1}&pageSize=${perPage}`;
+  
 
   const getFilteredPaintingsFromServer = async (filters: string) => {
+    console.log(filterParams);
+    console.log(SEARCH + filters + '&' + sortBy + '&' + defaultPerPage);
     await axios.get(SEARCH + filters + '&' + sortBy + '&' + defaultPerPage)
     .then((response) => {
-      setCurrentPaintings(response.data.paintings);
-      setTotalPaintings(response.data.page.totalElements);
-      setPageCount(response.data.page.totalPages);
       console.log(response);
+      setCountOfFiltered(response.data.page.totalElements);
+      setCurrentPaintings(response.data.paintings);
+      setPageCount(response.data.page.totalPages);
       })
       .catch((error) => {
         console.log(error);
@@ -55,6 +59,20 @@ export const Catalog: React.FC = () => {
         }, 300)
       })
   };
+
+  // const getTotalCountOfPaintings = async () => {
+  //   await axios.get(COUNT)
+  //   .then((response) => {
+  //     totalPaintingsInBase = response.data;
+  //   })
+  //   .catch(error => {
+  //     console.log(error)
+  //   })
+  // }
+
+  // useEffect(() => {
+  //   getTotalCountOfPaintings();
+  // }, []);
 
   const handlePerPageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setCurrentPage(1);
@@ -69,15 +87,7 @@ export const Catalog: React.FC = () => {
     mediumIn: string,
     supportIn: string,
   ) => {
-    const params = [priceBetween];
-
-    if (width[1] !== 500) {
-      params.push(widthBetween);
-    }
-
-    if (height[1] !== 500) {
-      params.push(heightBetween);
-    }
+    const params = [priceBetween, widthBetween, heightBetween];
 
     if (stylesParams.length > 0) {
       params.push(styleIn);
@@ -144,7 +154,7 @@ export const Catalog: React.FC = () => {
     setStylesParams([]);
     setMediumParams([]);
     setSupportParams([]);
-    setSortBy(sortByYearAsc);
+    setSortBy(sortByDateDesc);
     setCheckedStyles(new Array(styles.length).fill(false));
     setCheckedMediums(new Array(styles.length).fill(false));
     setCheckedSupports(new Array(styles.length).fill(false));
@@ -272,7 +282,7 @@ export const Catalog: React.FC = () => {
   return (
     <section className="section catalog">
       <div className="catalog-header title is-3">
-        {!isFetching && `Paintings: ${totalPaintings}`}
+        {!isFetching && `Paintings: ${countOfFiltered}`}
       </div>
 
       {isFetching
@@ -351,7 +361,7 @@ export const Catalog: React.FC = () => {
 
               <div className="filter filter-container">
                 <div className="subtitle filter-subtitle is-6">
-                  Art movement
+                  Styles
                 </div>
 
                 <div className="filter-checkbox">
@@ -443,8 +453,8 @@ export const Catalog: React.FC = () => {
                       onChange={(event) => setSortBy(event.target.value)}
                       value={sortBy}
                     >
-                      <option value={sortByYearAsc}>Newest</option>
-                      <option value={sortByYearDesc}>Oldest</option>
+                      <option value={sortByDateDesc}>Newest</option>
+                      <option value={sortByDateAsc}>Oldest</option>
                       <option value={sortByPriceAsc}>Cheapest</option>
                       <option value={sortByPriceDesc}>Most expensive</option>
                     </select>
