@@ -335,9 +335,8 @@ body {
   padding: 0 20px;
 
   &-title {
-    margin: 0 auto 20px !important;
+    margin: 0 auto 40px !important;
     padding: 0 20px;
-    text-align: start;
 
     @media (max-width: 830px) {
       max-width: 500px;

@@ -10,25 +10,24 @@ import { Pagination } from '../components/Pagination';
 import { Loader } from '../components/Loader';
 
 const SEARCH = 'https://www.albedosunrise.com/paintings/search?';
-const COUNT = 'https://www.albedosunrise.com/paintings/count';
 
 export const Catalog: React.FC = () => {
-  const [sortBy, setSortBy] = useState('sortBy=entityCreatedAt:DESC');
   const [perPage, setPerPage] = useState(6);
-  const [pageCount, setPageCount] = useState(0);
   const [width, setWidth] = useState([0, 300]);
+  const [pageCount, setPageCount] = useState(0);
   const [height, setHeight] = useState([0, 300]);
   const [price, setPrice] = useState([0, 900000]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [isFetching, setIsFetching] = useState(true);
   const [countOfFiltered, setCountOfFiltered] = useState(0);
-  const [stylesParams, setStylesParams] = useState<string[]>([]);
-  const [mediumParams, setMediumParams] = useState<string[]>([]);
-  const [supportParams, setSupportParams] = useState<string[]>([]);
-  const [currentPaintings, setCurrentPaintings] = useState<Painting[]>([]);
   const [isStylesVisible, setIsStylesVisible] = useState(false);
   const [isMediumsVisible, setIsMediumsVisible] = useState(false);
   const [isSupportsVisible, setIsSupportsVisible] = useState(false);
-  const [isFetching, setIsFetching] = useState(true);
+  const [stylesParams, setStylesParams] = useState<string[]>([]);
+  const [mediumParams, setMediumParams] = useState<string[]>([]);
+  const [supportParams, setSupportParams] = useState<string[]>([]);
+  const [sortBy, setSortBy] = useState('sortBy=entityCreatedAt:DESC');
+  const [currentPaintings, setCurrentPaintings] = useState<Painting[]>([]);
 
   const sortByDateAsc = 'sortBy=entityCreatedAt:ASC';
   const sortByDateDesc = 'sortBy=entityCreatedAt:DESC';
@@ -307,7 +306,7 @@ export const Catalog: React.FC = () => {
 
                 <RangeSlider
                   min={0}
-                  max={1500}
+                  max={900000}
                   defaultValue={price}
                   value={price}
                   onInput={(value: number[]) => {
@@ -323,7 +322,7 @@ export const Catalog: React.FC = () => {
 
                 <RangeSlider
                     min={0}
-                    max={150}
+                    max={300}
                     defaultValue={height}
                     value={height}
                     onInput={(value: number[]) => {
@@ -339,7 +338,7 @@ export const Catalog: React.FC = () => {
 
                 <RangeSlider
                   min={0}
-                  max={150}
+                  max={300}
                   defaultValue={width}
                   value={width}
                   onInput={(value: number[]) => {

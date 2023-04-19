@@ -29,14 +29,19 @@ export const App = () => {
   const isAuthentificated = route === 'authenticated';
   const location = useLocation();
 
-  console.log();
-
   const createAuthor = async () => {
+    console.log('user', user);
     if (route === 'confirmSignUp') {
       const body = {
         'id': user.username,
       }
       await axios.post(CREATEAUTHOR, body)
+      .then((response) => {
+        console.log(response)
+      })
+      .catch(error => {
+        console.log(error)
+      })
     }
   }
 

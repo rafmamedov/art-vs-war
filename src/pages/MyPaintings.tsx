@@ -6,7 +6,7 @@ import { Author } from '../types/painting';
 import { CreatePainting } from '../components/CreatePainting';
 import { Loader } from '../components/Loader';
 
-const URL = 'https://www.albedosunrise.com/paintings/by-author?authorId='
+const URL = 'https://www.albedosunrise.com/paintings/by-author/'
 
 type Props = {
   author: Author;
@@ -19,6 +19,12 @@ export const MyPaintings: React.FC<Props> = ({ author }) => {
   const [perPage, setPerPage] = useState(6);
   const [isCreateVisible, setIsCreateVisible] = useState(false);
   const [isFetching, setIsFetching] = useState(true);
+  const [sortBy, setSortBy] = useState('sortBy=entityCreatedAt:DESC');
+
+  const sortByDateAsc = 'sortBy=entityCreatedAt:ASC';
+  const sortByDateDesc = 'sortBy=entityCreatedAt:DESC';
+  const sortByPriceAsc = 'sortBy=price:ASC;entityCreatedAt:DESC';
+  const sortByPriceDesc = 'sortBy=price:DESC;entityCreatedAt:DESC';
 
   const defaultPerPage = `page=${currentPage - 1}&pageSize=${perPage}`;
 
@@ -45,7 +51,7 @@ export const MyPaintings: React.FC<Props> = ({ author }) => {
   );
 
   const getPaintingsFromServer = async () => {
-    await axios.get(URL + author.id + '&' + defaultPerPage)
+    await axios.get(URL + author.id + '?' + defaultPerPage + '&' + sortBy)
     .then((response) => {
       setPaintings(response.data.paintings);
       setPageCount(response.data.page.totalPages);
@@ -63,7 +69,7 @@ export const MyPaintings: React.FC<Props> = ({ author }) => {
 
   useEffect(() => {
     getPaintingsFromServer();
-  }, [currentPage, perPage]);
+  }, [sortBy, currentPage, perPage]);
 
   const handlePerPageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setCurrentPage(1);
@@ -81,6 +87,19 @@ export const MyPaintings: React.FC<Props> = ({ author }) => {
             : (
               <div className="container my-works">
                 <div className="sorting">
+                  <div className="sorting-container">
+                    <div className="sorting-title">Sorting:</div>
+                    <select
+                      className="sortby dropdown"
+                      onChange={(event) => setSortBy(event.target.value)}
+                      value={sortBy}
+                    >
+                      <option value={sortByDateDesc}>Newest</option>
+                      <option value={sortByDateAsc}>Oldest</option>
+                      <option value={sortByPriceAsc}>Cheapest</option>
+                      <option value={sortByPriceDesc}>Most expensive</option>
+                    </select>
+                  </div>
                   <div className="sorting-container">
                     <div className="sorting-title">Per page:</div>
                     <select
