@@ -3,7 +3,7 @@ import { MainPage } from './pages/MainPage';
 import './styles.scss'
 import 'bulma/css/bulma.css';
 import { Footer } from './components/Footer';
-import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { Catalog } from './pages/Catalog';
 import { Fund } from './components/Fund';
 import { AboutUs } from './components/AboutUs';
@@ -27,32 +27,29 @@ export const App = () => {
   const { user, route } = useAuthenticator((context) => [context.route]);
   const [isAuthenticating, setIsAuthenticating] = useState(false);
   const isAuthentificated = route === 'authenticated';
-  const location = useLocation();
 
   const createAuthor = async () => {
-    console.log('user', user);
-    if (route === 'confirmSignUp') {
-      const body = {
-        'id': user.username,
-      }
-      await axios.post(CREATEAUTHOR, body)
-      .then((response) => {
-        console.log(response)
-      })
-      .catch(error => {
-        console.log(error)
-      })
+    const body = {
+      'id': user.username,
     }
+
+    await axios.post(CREATEAUTHOR, body)
   }
 
   useEffect(() => {
     if (isAuthentificated) {
       setIsAuthenticating(false);
+    }
+
+    if (route === 'confirmSignUp') {
       createAuthor();
     }
 
-    location.pathname !== '/' && setIsAuthenticating(false);
-  }, [isAuthentificated, location]);
+    if ((user && user.username?.includes('google'))
+      || (user && user.username?.includes('facebook'))) {
+        createAuthor()
+      }
+  }, [route]);
 
   return (
     <>
