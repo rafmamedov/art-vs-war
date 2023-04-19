@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
-import { faLocationDot, faPaintBrush, faPalette } from '@fortawesome/free-solid-svg-icons';
+import { faLocationDot, faPaintBrush, faPalette, faSquare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Author, Painting } from '../types/painting';
 import axios from 'axios';
@@ -8,7 +8,7 @@ import axios from 'axios';
 const locationIcon = <FontAwesomeIcon className="far" icon={faLocationDot} />;
 const paintbrushIcon = <FontAwesomeIcon className="far" icon={faPaintBrush} />;
 const paletteIcon = <FontAwesomeIcon className="far" icon={faPalette} />;
-
+const supportsIcon = <FontAwesomeIcon className="" icon={faSquare} />;
 const GETALLPAINTINGS = 'https://www.albedosunrise.com/paintings/by-author?authorId='
 
 type Props = {
@@ -17,9 +17,21 @@ type Props = {
 
 export const AuthorInfo: React.FC<Props> = ({ author}) => {
   const [paintings, setPaintings] = useState<Painting[]>([]);
-  const styles = paintings.map(painting => painting.style.name).join(', ');
-  const supports = paintings.map(painting => painting.support.name).join(', ');
-  const mediums = paintings.map(painting => painting.medium.name).join(', ');
+  const styles = paintings.map(painting => painting.style.name);
+  const supports = paintings.map(painting => painting.support.name);
+  const mediums = paintings.map(painting => painting.medium.name);
+  
+  const removeDublicates = (array: string[]) => {
+    const result: string[] = [];
+
+    array.forEach(item => {
+      if (!result.includes(item)) {
+        result.push(item);
+      }
+    });
+
+    return result.join(', ');
+  }
 
   const getAllPaintingsByAuthor = async () => {
     axios.get(GETALLPAINTINGS + author.id)
@@ -45,15 +57,15 @@ export const AuthorInfo: React.FC<Props> = ({ author}) => {
             {locationIcon} {author.country}, {author.city}
           </div>
           <div className="author-subtitle">
-          {paletteIcon} <strong>preferred styles:</strong> {styles}
+          {paletteIcon} <strong>preferred styles: </strong> {removeDublicates(styles)}
           </div>
 
           <div className="author-subtitle">
-            {paintbrushIcon} <strong>preferred mediums:</strong> {mediums}
+            {paintbrushIcon} <strong>preferred mediums: </strong> {removeDublicates(mediums)}
           </div>
 
           <div className="author-subtitle">
-            {paletteIcon} <strong>preferred supports:</strong> {supports}
+            {supportsIcon}  <strong>preferred supports: </strong> {removeDublicates(supports)}
           </div>
         </div>
 

@@ -66,7 +66,7 @@ export const PaintingPage: React.FC = () => {
 
               <div className="painting-title-container">
               <div className="painting-title">Year:</div>
-              <div className="painting-title">{painting?.entityCreatedAt.split('.')[2]}</div>
+              <div className="painting-title">{painting?.yearOfCreation}</div>
               </div>
 
               <div className="painting-title-container">

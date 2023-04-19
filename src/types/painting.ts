@@ -10,6 +10,7 @@ export interface Painting {
   height: number;
   width: number;
   imageUrl: string;
+  yearOfCreation: number;
   entityCreatedAt: string;
 };
 

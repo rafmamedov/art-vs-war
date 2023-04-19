@@ -14,7 +14,7 @@ const COUNT = 'https://www.albedosunrise.com/paintings/count';
 
 export const Catalog: React.FC = () => {
   const [sortBy, setSortBy] = useState('sortBy=entityCreatedAt:DESC');
-  const [perPage, setPerPage] = useState(2);
+  const [perPage, setPerPage] = useState(6);
   const [pageCount, setPageCount] = useState(0);
   const [width, setWidth] = useState([0, 300]);
   const [height, setHeight] = useState([0, 300]);
@@ -147,7 +147,7 @@ export const Catalog: React.FC = () => {
   }, [sortBy, currentPage, perPage]);
 
   const handleClearFilters = () => {
-    setPerPage(2);
+    setPerPage(6);
     setWidth([0, 150]);
     setHeight([0, 150]);
     setPrice([0, 1500]);
@@ -466,9 +466,8 @@ export const Catalog: React.FC = () => {
                       onChange={handlePerPageChange}
                       value={perPage}
                     >
-                      <option value={2}>2</option>
-                      <option value={4}>4</option>
                       <option value={6}>6</option>
+                      <option value={12}>12</option>
                     </select>
                   </div>
                 </div>

@@ -16,7 +16,7 @@ export const MyPaintings: React.FC<Props> = ({ author }) => {
   const [paintings, setPaintings] = useState([])
   const [currentPage, setCurrentPage] = useState(1);
   const [pageCount, setPageCount] = useState(0);
-  const [perPage, setPerPage] = useState(2);
+  const [perPage, setPerPage] = useState(6);
   const [sortBy, setSortBy] = useState('');
   const [isCreateVisible, setIsCreateVisible] = useState(false);
   const [isFetching, setIsFetching] = useState(true);
@@ -106,9 +106,8 @@ export const MyPaintings: React.FC<Props> = ({ author }) => {
                       onChange={handlePerPageChange}
                       value={perPage}
                     >
-                      <option value={2}>2</option>
-                      <option value={4}>4</option>
                       <option value={6}>6</option>
+                      <option value={12}>12</option>
                     </select>
                   </div>
                 </div>
