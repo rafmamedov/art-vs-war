@@ -1,53 +1,40 @@
-import React, { ChangeEvent, SetStateAction, useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import 'bulma/css/bulma.css';
 import '../pages/Profile.scss'
 import classNames from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowRight, faUpload } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
+import { useAuthenticator } from '@aws-amplify/ui-react';
+import { Auth } from 'aws-amplify';
+import { Checkbox } from './Checkbox';
 
+const URL = 'https://www.albedosunrise.com/paintings';
+const UPLOAD = 'https://www.albedosunrise.com/images/getUrl?extension=';
 const element = <FontAwesomeIcon className="far" icon={faArrowRight} />;
 const uploadIcon = <FontAwesomeIcon className="far" icon={faUpload} />;
 
 type Props = {
-  title: string;
-  price: number;
-  width: number;
-  height: number;
   name: string,
-  year: string;
-  description: string;
-  setPrice: React.Dispatch<SetStateAction<number>>;
-  setHeight: React.Dispatch<SetStateAction<number>>;
-  setWidth: React.Dispatch<SetStateAction<number>>;
-  setTitle: React.Dispatch<SetStateAction<string>>;
-  setYear: React.Dispatch<SetStateAction<string>>;
-  setDescription: React.Dispatch<SetStateAction<string>>;
 };
-const URL = 'https://www.albedosunrise.com/paintings';
-const UPLOAD = 'https://www.albedosunrise.com/images/getUrl?extension=';
 
-export const CreatePainting: React.FC<Props> = ({
-  name,
-  year,
-  title,
-  price,
-  width,
-  height,
-  setYear,
-  setTitle,
-  setPrice,
-  setWidth,
-  setHeight,
-  description,
-  setDescription,
-}) => {
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+export const CreatePainting: React.FC<Props> = ({ name }) => {
+  const [year, setYear] = useState('');
+  const [title, setTitle] = useState('')
+  const [price, setPrice] = useState('');
+  const [width, setWidth] = useState('');
+  const [height, setHeight] = useState('');
+  const [isAdded, setIsAdded] = useState(false);
+  const [description, setDescription] = useState('');
   const [isStylesActive, setIsStylesActive] = useState(false);
   const [isMediumActive, setIsMediumActive] = useState(false);
   const [isSupportActive, setIsSupportActive] = useState(false);
-  const [isAdded, setIsAdded] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const selectRef = useRef<any>(null);
+
+  const {
+    user,
+  } = useAuthenticator((context) => [context.user]);
 
   const handleClickOutside = (event: any) => {
     if (!selectRef?.current?.contains(event.target)) {
@@ -79,15 +66,12 @@ export const CreatePainting: React.FC<Props> = ({
 
       selectedImage && axios.put(imagePutUrl, selectedImage)
         .then(response => {
-          console.log('save image request', response);
-
           const imageDataPost = {
             title,
             price,
-            authorId: 1,
+            authorId: user.username,
             description,
             yearOfCreation: year,
-            createdAt: new Date(),
             height,
             width,
             styleId: 1,
@@ -96,9 +80,17 @@ export const CreatePainting: React.FC<Props> = ({
             imageFileName: imageFileName,
           };
 
-          axios.post(URL, imageDataPost)
-            .then(response => console.log('post other fields', response))
-            .catch(error => console.log('error', error));
+          Auth.currentSession()
+            .then(response => {
+              const accessToken = response.getAccessToken().getJwtToken();
+              const headers = {
+                'Authorization': `Bearer ${accessToken}`,
+              }
+
+              axios.post(URL, imageDataPost, { headers })
+                .then(response => console.log('post other fields', response))
+                .catch(error => console.log('error', error));
+            });
         })
         .catch((error) => {
           console.log(error);
@@ -115,9 +107,9 @@ export const CreatePainting: React.FC<Props> = ({
     setTitle('');
     setDescription('');
     setYear('');
-    setHeight(0);
-    setWidth(0);
-    setPrice(0);
+    setHeight('');
+    setWidth('');
+    setPrice('');
     setSelectedImage(null);
   }
 
@@ -127,7 +119,7 @@ export const CreatePainting: React.FC<Props> = ({
         className="delete"
         onClick={() => setIsAdded(false)}
       />
-      Painting is successfuly created!
+      Painting is successfuly added!
     </div>
   );
 
@@ -151,7 +143,7 @@ export const CreatePainting: React.FC<Props> = ({
                   <input
                     className="input"
                     type="text"
-                    placeholder="full name"
+                    placeholder="painting title"
                     value={title}
                     onChange={(event) => setTitle(event.target.value)}
                   />
@@ -193,24 +185,6 @@ export const CreatePainting: React.FC<Props> = ({
 
             <div className="profile-info">
               <div className="field profile-item">
-                <label className="label">Author</label>
-                <div className="control has-icons-left has-icons-right">
-                  <input
-                    className="input"
-                    type="text"
-                    placeholder="author's name"
-                    value={name}
-                  />
-                  <span className="icon is-small is-left">
-                    <i className="fas fa-user"></i>
-                  </span>
-                  <span className="icon is-small is-left">
-                    {element}
-                  </span>
-                </div>
-              </div>
-
-              <div className="field profile-item">
                 <label className="label">Year</label>
                 <div className="control has-icons-left has-icons-right">
                   <input
@@ -225,42 +199,8 @@ export const CreatePainting: React.FC<Props> = ({
                   </span>
                 </div>
               </div>
-            </div>
 
-            <div className="profile-info painting-grouped">
-              <div className="field painting-item">
-                <label className="label">Width</label>
-                <div className="control has-icons-left has-icons-right">
-                  <input
-                    className="input"
-                    type="text"
-                    placeholder="width cm"
-                    value={width}
-                    onChange={(event) => setWidth(+event.target.value)}
-                  />
-                  <span className="icon is-small is-left">
-                    {element}
-                  </span>
-                </div>
-              </div>
-
-              <div className="field painting-item">
-                <label className="label">Height</label>
-                <div className="control has-icons-left has-icons-right">
-                  <input
-                    className="input"
-                    type="text"
-                    placeholder="height cm"
-                    value={height}
-                    onChange={(event) => setHeight(+event.target.value)}
-                  />
-                  <span className="icon is-small is-left">
-                    {element}
-                  </span>
-                </div>
-              </div>
-
-              <div className="field painting-item">
+              <div className="field profile-item">
                 <label className="label">Price</label>
                 <div className="control has-icons-left has-icons-right">
                   <input
@@ -268,7 +208,7 @@ export const CreatePainting: React.FC<Props> = ({
                     type="text"
                     placeholder="price €"
                     value={price}
-                    onChange={(event) => setPrice(+event.target.value)}
+                    onChange={(event) => setPrice(event.target.value)}
                   />
                   <span className="icon is-small is-left">
                     {element}
@@ -278,139 +218,43 @@ export const CreatePainting: React.FC<Props> = ({
             </div>
 
             <div className="profile-info">
-              <div className="field painting-item">
-                <label className="label">Art movement</label>
-                <div
-                  ref={selectRef}
-                  className="control">
-                  <div
-                    onClick={() => setIsStylesActive(!isStylesActive)}
-                    className={classNames('dropdown', {
-                    'is-active': isStylesActive,
-                    })}
-                  >
-                    <div className="dropdown-trigger">
-                      <button className="button painting-item" aria-haspopup="true" aria-controls="dropdown-menu2">
-                        <span>choose styles</span>
-                        <span className="icon is-small">
-                          <i className="fas fa-angle-down" aria-hidden="true"></i>
-                        </span>
-                      </button>
-                    </div>
-
-                    <div
-                      className="dropdown-menu painting-item"
-                      id="dropdown-menu2"
-                      role="menu"
-                    >
-                      <div className="dropdown-content">
-                      <label className="checkbox">
-                        <input type="checkbox"/>
-                        abstraction
-                      </label>
-                        <hr className="dropdown-divider"/>
-                        <label className="checkbox">
-                          <input type="checkbox"/>
-                          cubism
-                        </label>
-                        <hr className="dropdown-divider"/>
-                        <label className="checkbox">
-                          <input type="checkbox"/>
-                          expressionism
-                        </label>
-                      </div>
-                    </div>
-                  </div>
+              <div className="field profile-item">
+                <label className="label">Width</label>
+                <div className="control has-icons-left has-icons-right">
+                  <input
+                    className="input"
+                    type="text"
+                    placeholder="width cm"
+                    value={width}
+                    onChange={(event) => setWidth(event.target.value)}
+                  />
+                  <span className="icon is-small is-left">
+                    {element}
+                  </span>
                 </div>
               </div>
 
-              <div
-                className="field painting-item"
-                onClick={() => setIsMediumActive(!isMediumActive)}
-              >
-                <label className="label">Medium</label>
-                <div className="control">
-                  <div
-                    className={classNames('dropdown', {
-                    'is-active': isMediumActive,
-                    })}
-                  >
-                    <div className="dropdown-trigger">
-                      <button className="button painting-item" aria-haspopup="true" aria-controls="dropdown-menu2">
-                        <span>choose medium</span>
-                        <span className="icon is-small">
-                          <i className="fas fa-angle-down" aria-hidden="true"></i>
-                        </span>
-                      </button>
-                    </div>
-
-                    <div className="dropdown-menu painting-item" id="dropdown-menu2" role="menu">
-                      <div className="dropdown-content">
-                      <label className="checkbox">
-                        <input type="checkbox"/>
-                        oil
-                      </label>
-                        <hr className="dropdown-divider"/>
-                        <label className="checkbox">
-                          <input type="checkbox"/>
-                          acrylic
-                        </label>
-                        <hr className="dropdown-divider"/>
-                        <label className="checkbox">
-                          <input type="checkbox"/>
-                          watercolor
-                        </label>
-                      </div>
-                    </div>
-                  </div>
+              <div className="field profile-item">
+                <label className="label">Height</label>
+                <div className="control has-icons-left has-icons-right">
+                  <input
+                    className="input"
+                    type="text"
+                    placeholder="height cm"
+                    value={height}
+                    onChange={(event) => setHeight(event.target.value)}
+                  />
+                  <span className="icon is-small is-left">
+                    {element}
+                  </span>
                 </div>
               </div>
+            </div>
 
-              <div className="field painting-item">
-                <label className="label">Support</label>
-                <div
-                  ref={selectRef}
-                  className="control">
-                  <div
-                    onClick={() => setIsSupportActive(!isSupportActive)}
-                    className={classNames('dropdown', {
-                    'is-active': isSupportActive,
-                    })}
-                  >
-                    <div className="dropdown-trigger">
-                      <button className="button painting-item" aria-haspopup="true" aria-controls="dropdown-menu2">
-                        <span>choose support</span>
-                        <span className="icon is-small">
-                          <i className="fas fa-angle-down" aria-hidden="true"></i>
-                        </span>
-                      </button>
-                    </div>
-
-                    <div
-                      className="dropdown-menu painting-item"
-                      id="dropdown-menu2"
-                      role="menu"
-                    >
-                      <div className="dropdown-content">
-                      <label className="checkbox">
-                        <input type="checkbox"/>
-                        canvas
-                      </label>
-                        <hr className="dropdown-divider"/>
-                        <label className="checkbox">
-                          <input type="checkbox"/>
-                          hardboard
-                        </label>
-                        <hr className="dropdown-divider"/>
-                        <label className="checkbox">
-                          <input type="checkbox"/>
-                          paper
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div className="profile-info">
+              <Checkbox checkboxItem='styles' />
+              <Checkbox checkboxItem='mediums' />
+              <Checkbox checkboxItem='supports' />
             </div>
 
             <div className="field profile-item-about">
@@ -418,7 +262,7 @@ export const CreatePainting: React.FC<Props> = ({
               <div className="control">
                 <textarea
                   className="textarea profile-item"
-                  placeholder="write a short story about you"
+                  placeholder="write a short description about painting"
                   value={description}
                   onChange={(event) => setDescription(event.target.value)}
                 />

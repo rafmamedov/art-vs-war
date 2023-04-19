@@ -1,33 +1,57 @@
-import React, { SetStateAction, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../pages/Profile.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
+import { Auth } from 'aws-amplify';
 
-type Props = {
-  name: string,
-  city: string;
-  about: string;
-  country: string;
-  setName: React.Dispatch<SetStateAction<string>>;
-  setCity: React.Dispatch<SetStateAction<string>>;
-  setAbout: React.Dispatch<SetStateAction<string>>;
-  setCountry: React.Dispatch<SetStateAction<string>>;
-  setIsVisible: React.Dispatch<SetStateAction<boolean>>;
-};
-
+const UPDATEAUTHOR = 'https://www.albedosunrise.com/authors';
 const element = <FontAwesomeIcon className="far" icon={faArrowRight} />;
 
-export const ProfileEdit: React.FC<Props> = ({
-  name,
-  city,
-  about,
-  country,
-  setName,
-  setCity,
-  setAbout,
-  setCountry,
-  setIsVisible,
-}) => {
+type Props = {
+  getAuthor: () => void;
+};
+
+export const ProfileEdit: React.FC<Props> = ({ getAuthor }) => {
+  const [name, setName] = useState('');
+  const [city, setCity] = useState('');
+  const [country, setCountry] = useState('');
+  const [shortStory, setShortStory] = useState('');
+
+  const onProfileUpdate = async () => {
+    const authorDataPut = {
+      fullName: name,
+      country,
+      city,
+      aboutMe: shortStory,
+    };
+
+    Auth.currentSession()
+      .then(response => {
+        const accessToken = response.getAccessToken().getJwtToken();
+
+        const headers = {
+          'Authorization': `Bearer ${accessToken}`,
+        }
+
+        axios.put(UPDATEAUTHOR, authorDataPut, { headers })
+      })
+      .finally(() => {
+        onCancelEditing();
+      });
+  };
+
+  useEffect(() => {
+    getAuthor();
+  }, [onProfileUpdate]);
+
+  const onCancelEditing = () => {
+    setName('');
+    setCity('');
+    setCountry('');
+    setShortStory('');
+  }
+
   return (
     <div className="profile-container">
       <div className="field profile-item-about">
@@ -56,7 +80,7 @@ export const ProfileEdit: React.FC<Props> = ({
             <input
               className="input"
               type="text"
-              placeholder="country origin"
+              placeholder="country of current stay"
               value={country}
               onChange={(event) => setCountry(event.target.value)}
             />
@@ -69,12 +93,12 @@ export const ProfileEdit: React.FC<Props> = ({
           </div>
         </div>
         <div className="field profile-item">
-          <label className="label">Town</label>
+          <label className="label">City</label>
           <div className="control has-icons-left has-icons-right">
             <input
               className="input"
               type="text"
-              placeholder="town origin"
+              placeholder="city of current stay"
               value={city}
               onChange={(event) => setCity(event.target.value)}
             />
@@ -91,8 +115,8 @@ export const ProfileEdit: React.FC<Props> = ({
           <textarea
             className="textarea profile-item"
             placeholder="write a short story about you"
-            value={about}
-            onChange={(event) => setAbout(event.target.value)}
+            value={shortStory}
+            onChange={(event) => setShortStory(event.target.value)}
           />
         </div>
       </div>
@@ -101,13 +125,18 @@ export const ProfileEdit: React.FC<Props> = ({
         <div className="control">
           <button
             className="button button-submit is-dark"
-            onClick={() => setIsVisible(false)}
+            onClick={onProfileUpdate}
           >
             Submit
           </button>
         </div>
         <div className="control">
-          <button className="button button-submit is-light">Cancel</button>
+          <button
+            className="button button-submit is-light"
+            onClick={onCancelEditing}
+          >
+            Cancel
+          </button>
         </div>
       </div>
     </div>

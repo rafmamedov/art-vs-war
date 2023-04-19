@@ -14,7 +14,7 @@ const awsmobile = {
         ],
         "redirectSignIn": "https://master.d1dcq3v4qwioh.amplifyapp.com/callback",
         "redirectSignOut": "https://master.d1dcq3v4qwioh.amplifyapp.com",
-        "responseType": "code"
+        "responseType": "code",
     },
     "federationTarget": "COGNITO_USER_POOLS",
     "aws_cognito_username_attributes": [

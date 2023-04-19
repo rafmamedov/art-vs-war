@@ -7,6 +7,7 @@ import { Painting } from "../types/painting";
 import { Gallery } from "./Gallery";
 import axios from 'axios';
 import { Pagination } from '../components/Pagination';
+import { Loader } from '../components/Loader';
 
 const SEARCH = 'https://www.albedosunrise.com/paintings/search?';
 
@@ -23,6 +24,7 @@ export const Catalog: React.FC = () => {
   const [mediumParams, setMediumParams] = useState<string[]>([]);
   const [supportParams, setSupportParams] = useState<string[]>([]);
   const [currentPaintings, setCurrentPaintings] = useState<Painting[]>([]);
+  const [isFetching, setIsFetching] = useState(true);
 
   const sortByYearAsc = 'sortBy=yearOfCreation:ASC';
   const sortByYearDesc = 'sortBy=yearOfCreation:DESC';
@@ -46,6 +48,11 @@ export const Catalog: React.FC = () => {
       })
       .catch((error) => {
         console.log(error);
+      })
+      .finally(() => {
+        setTimeout(() => {
+          setIsFetching(false);
+        }, 300)
       })
   };
 
@@ -265,205 +272,208 @@ export const Catalog: React.FC = () => {
   return (
     <section className="section catalog">
       <div className="catalog-header title is-3">
-        {`Paintings: ${currentPaintings.length} from ${totalPaintings}`}
+        {!isFetching && `Paintings: ${totalPaintings}`}
       </div>
 
-      <div className="catalog-info">
-        <div className="filters">
-          <div className="filter filter-container">
-            <div className="subtitle filter-subtitle is-6">Price</div>
+      {isFetching
+        ? <Loader />
+        : (
+          <div className="catalog-info">
+            <div className="filters">
+              <div className="filter filter-container">
+                <div className="subtitle filter-subtitle is-6">Price</div>
 
-            <div className="filter-inputs">
-              <div className="filter-inputs">
-                <label htmlFor="minPrice" className="filter-subtitle">from:</label>
-                <input
-                  id="minPrice"
-                  type="text"
-                  className="filter-input subtitle filter-subtitle is-6"
-                  value={`${price[0]}`}
-                  onChange={changeMinPrice}
+                <div className="filter-inputs">
+                  <div className="filter-inputs">
+                    <label htmlFor="minPrice" className="filter-subtitle">from:</label>
+                    <input
+                      id="minPrice"
+                      type="text"
+                      className="filter-input subtitle filter-subtitle is-6"
+                      value={`${price[0]}`}
+                      onChange={changeMinPrice}
+                    />
+                  </div>
+
+                  <div className="filter-inputs">
+                    <div className="filter-subtitle">to:</div>
+                    <input
+                      type="text"
+                      className="filter-input subtitle filter-subtitle is-6"
+                      value={`${price[1]}`}
+                      onChange={changeMaxPrice}
+                    />
+                  </div>
+                </div>
+
+                <RangeSlider
+                  min={0}
+                  max={1500}
+                  defaultValue={price}
+                  value={price}
+                  onInput={(value: number[]) => {
+                    setPrice(value)
+                  }}
                 />
               </div>
 
-              <div className="filter-inputs">
-                <div className="filter-subtitle">to:</div>
-                <input
-                  type="text"
-                  className="filter-input subtitle filter-subtitle is-6"
-                  value={`${price[1]}`}
-                  onChange={changeMaxPrice}
+              <div className="filter filter-container">
+                <div className="subtitle filter-subtitle is-6">
+                  {`Height: ${height[0]} - ${height[1]}+ cm`}
+                </div>
+
+                <RangeSlider
+                    min={0}
+                    max={150}
+                    defaultValue={height}
+                    value={height}
+                    onInput={(value: number[]) => {
+                      setHeight(value);
+                    }}
+                  />
+              </div>
+
+              <div className="filter filter-container">
+                <div className="subtitle filter-subtitle is-6">
+                  {`Width: ${width[0]} - ${width[1]}+ cm`}
+                </div>
+
+                <RangeSlider
+                  min={0}
+                  max={150}
+                  defaultValue={width}
+                  value={width}
+                  onInput={(value: number[]) => {
+                    setWidth(value);
+                  }}
                 />
               </div>
+
+              <div className="filter filter-container">
+                <div className="subtitle filter-subtitle is-6">
+                  Art movement
+                </div>
+
+                <div className="filter-checkbox">
+                  {styles.map((style, index) => (
+                    <div key={index} className="checkbox">
+                      <input
+                        id={style}
+                        value={normalizeString(style)}
+                        type="checkbox"
+                        className="checkbox-content"
+                        checked={checkedStyles[index]}
+                        onChange={() => handleCheckStyles(index)}
+                      />
+
+                      <label htmlFor={style} className="checkbox-content">
+                        {style}
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="filter filter-container">
+                <div className="subtitle filter-subtitle is-6">
+                  Medium
+                </div>
+
+                <div className="filter-checkbox">
+                  {mediums.map((medium, index) => (
+                    <div key={medium} className="checkbox">
+                      <input
+                        id={medium}
+                        value={normalizeString(medium)}
+                        type="checkbox"
+                        className="checkbox-content"
+                        checked={checkedMediums[index]}
+                        onChange={() => handleCheckMediums(index)}
+                      />
+                      <label htmlFor={medium} className="checkbox-content">{medium}</label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="filter filter-container">
+                <div className="subtitle filter-subtitle is-6">
+                  Support
+                </div>
+
+                <div className="filter-checkbox">
+                  {supports.map((support, index) => (
+                    <div key={support} className="checkbox">
+                      <input
+                        id={support}
+                        value={normalizeString(support)}
+                        type="checkbox"
+                        className="checkbox-content"
+                        checked={checkedSupports[index]}
+                        onChange={() => handleCheckSupports(index)}
+                      />
+                      <label htmlFor={support} className="checkbox-content">{support}</label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <button
+                className="button-get-all button-get-all-dark"
+                onClick={handleApplyFilters}
+              >
+                Apply
+              </button>
+
+              <button
+                className="button-get-all"
+                onClick={handleClearFilters}
+              >
+                Clear filters
+              </button>
             </div>
 
-            <RangeSlider
-              min={0}
-              max={1500}
-              defaultValue={price}
-              value={price}
-              onInput={(value: number[]) => {
-                setPrice(value)
-              }}
-            />
-          </div>
+            <div className="container paintinglist">
+              <div className="painting-container">
+                <div className="sorting">
+                  <div className="sorting-container">
+                    <div className="sorting-title">Sorting:</div>
+                    <select
+                      className="sortby dropdown"
+                      onChange={(event) => setSortBy(event.target.value)}
+                      value={sortBy}
+                    >
+                      <option value={sortByYearAsc}>Newest</option>
+                      <option value={sortByYearDesc}>Oldest</option>
+                      <option value={sortByPriceAsc}>Cheapest</option>
+                      <option value={sortByPriceDesc}>Most expensive</option>
+                    </select>
+                  </div>
+                  <div className="sorting-container">
+                    <div className="sorting-title">Per page:</div>
+                    <select
+                      className="perpage dropdown"
+                      onChange={handlePerPageChange}
+                      value={perPage}
+                    >
+                      <option value={2}>2</option>
+                      <option value={4}>4</option>
+                      <option value={6}>6</option>
+                    </select>
+                  </div>
+                </div>
+                <Gallery paintings={currentPaintings} />
+              </div>
 
-          <div className="filter filter-container">
-            <div className="subtitle filter-subtitle is-6">
-              {`Height: ${height[0]} - ${height[1]}+ cm`}
-            </div>
-
-            <RangeSlider
-                min={0}
-                max={150}
-                defaultValue={height}
-                value={height}
-                onInput={(value: number[]) => {
-                  setHeight(value);
-                }}
+              <Pagination
+                className={'pagination is-centered'}
+                pageCount={pageCount}
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
               />
-          </div>
-
-          <div className="filter filter-container">
-            <div className="subtitle filter-subtitle is-6">
-              {`Width: ${width[0]} - ${width[1]}+ cm`}
-            </div>
-
-            <RangeSlider
-              min={0}
-              max={150}
-              defaultValue={width}
-              value={width}
-              onInput={(value: number[]) => {
-                setWidth(value);
-              }}
-            />
-          </div>
-
-          <div className="filter filter-container">
-            <div className="subtitle filter-subtitle is-6">
-              Art movement
-            </div>
-
-            <div className="filter-checkbox">
-              {styles.map((style, index) => (
-                <div key={index} className="checkbox">
-                  <input
-                    id={style}
-                    value={normalizeString(style)}
-                    type="checkbox"
-                    className="checkbox-content"
-                    checked={checkedStyles[index]}
-                    onChange={() => handleCheckStyles(index)}
-                  />
-
-                  <label htmlFor={style} className="checkbox-content">
-                    {style}
-                  </label>
-                </div>
-              ))}
             </div>
           </div>
-
-          <div className="filter filter-container">
-            <div className="subtitle filter-subtitle is-6">
-              Medium
-            </div>
-
-            <div className="filter-checkbox">
-              {mediums.map((medium, index) => (
-                <div key={medium} className="checkbox">
-                  <input
-                    id={medium}
-                    value={normalizeString(medium)}
-                    type="checkbox"
-                    className="checkbox-content"
-                    checked={checkedMediums[index]}
-                    onChange={() => handleCheckMediums(index)}
-                  />
-                  <label htmlFor={medium} className="checkbox-content">{medium}</label>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="filter filter-container">
-            <div className="subtitle filter-subtitle is-6">
-              Support
-            </div>
-
-            <div className="filter-checkbox">
-              {supports.map((support, index) => (
-                <div key={support} className="checkbox">
-                  <input
-                    id={support}
-                    value={normalizeString(support)}
-                    type="checkbox"
-                    className="checkbox-content"
-                    checked={checkedSupports[index]}
-                    onChange={() => handleCheckSupports(index)}
-                  />
-                  <label htmlFor={support} className="checkbox-content">{support}</label>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <button
-            className="button-get-all button-get-all-dark"
-            onClick={handleApplyFilters}
-          >
-            Apply
-          </button>
-
-          <button
-            className="button-get-all"
-            onClick={handleClearFilters}
-          >
-            Clear filters
-          </button>
-        </div>
-
-        <div className="container paintinglist">
-          <div className="painting-container">
-            <div className="sorting">
-              <div className="sorting-container">
-                <div className="sorting-title">Sorting:</div>
-                <select
-                  className="sortby dropdown"
-                  onChange={(event) => setSortBy(event.target.value)}
-                  value={sortBy}
-                >
-                  <option value={sortByYearAsc}>Newest</option>
-                  <option value={sortByYearDesc}>Oldest</option>
-                  <option value={sortByPriceAsc}>Cheapest</option>
-                  <option value={sortByPriceDesc}>Most expensive</option>
-                </select>
-              </div>
-              <div className="sorting-container">
-                <div className="sorting-title">Per page:</div>
-                <select
-                  className="perpage dropdown"
-                  onChange={handlePerPageChange}
-                  value={perPage}
-                >
-                  <option value={2}>2</option>
-                  <option value={4}>4</option>
-                  <option value={6}>6</option>
-                </select>
-              </div>
-            </div>
-
-            <Gallery paintings={currentPaintings} />
-          </div>
-
-          <Pagination
-            className={'pagination is-centered'}
-            pageCount={pageCount}
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-          />
-        </div>
-      </div>
+        )}
     </section>
   );
 };

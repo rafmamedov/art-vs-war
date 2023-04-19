@@ -14,26 +14,48 @@ export interface Painting {
 };
 
 export interface Author {
-  id: number;
-  name: string;
+  id: string;
+  fullName: string;
   country: string;
   city: string;
-  shortStory: string;
+  aboutMe: string;
+  photoUrl: string;
 };
 
 export interface Style {
-  id: number;
   name: string;
+  _links: {
+    self: {
+      href: string;
+    },
+    style: {
+      href: string;
+    }
+  }
 }
 
 export interface Medium {
-  id: number;
   name: string;
+  _links: {
+    self: {
+      href: string;
+    },
+    style: {
+      href: string;
+    }
+  }
 }
 
 export interface Support {
-  id: number;
   name: string;
+  _links: {
+    self: {
+      href: string;
+    },
+    style: {
+      href: string;
+    }
+  }
 }
 
 export interface Picture {

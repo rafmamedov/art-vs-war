@@ -1,33 +1,45 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Profile.scss'
 import '../styles.scss'
 import { ProfileEdit } from '../components/ProfileEdit';
 import { MyPaintings } from './MyPaintings';
 import { CreatePainting } from '../components/CreatePainting';
-import { faGlobe, faPaintBrush, faPalette } from '@fortawesome/free-solid-svg-icons';
+import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
+import { Author } from '../types/painting';
+import { useAuthenticator } from '@aws-amplify/ui-react';
+import axios from 'axios';
+import { Loader } from '../components/Loader';
 
-const globeIcon = <FontAwesomeIcon className="far" icon={faGlobe} />;
-const paintbrushIcon = <FontAwesomeIcon className="far" icon={faPaintBrush} />;
-const paletteIcon = <FontAwesomeIcon className="far" icon={faPalette} />;
-
-// const UPLOAD = 'https://www.albedosunrise.com/images/getUrl?extension=jpeg';
+const locationIcon = <FontAwesomeIcon className="far" icon={faLocationDot} />;
+const GETAUTHOR = 'https://www.albedosunrise.com/authors/';
 
 export const Profile: React.FC = () => {
-  const [name, setName] = useState('');
-  const [city, setCity] = useState('');
-  const [year, setYear] = useState('');
-  const [title, setTitle] = useState('')
-  const [price, setPrice] = useState(0);
-  const [width, setWidth] = useState(0);
-  const [height, setHeight] = useState(0);
-  const [country, setCountry] = useState('');
-  const [shortStory, setShortStory] = useState('');
-  const [description, setDescription] = useState('');
-  const [isEditVisible, setIsEditVisible] = useState(true);
+  const [author, setAuthor] = useState<Author | null>(null)
   const [isCreateVisible, setIsCreateVisible] = useState(false);
   const [isPaintingsVisible, setIsPaintingsVisible] = useState(false);
+  const [isFetching, setIsFetching] = useState(true);
+  const { user } = useAuthenticator((context) => [context.user]);
+
+  const getAuthorById = async () => {
+    await axios.get(GETAUTHOR + user.username)
+      .then((response) => {
+        setAuthor(response.data)
+      })
+      .catch(error => {
+        console.log(error);
+      })
+      .finally(() => {
+        setTimeout(() => {
+          setIsFetching(false);
+        }, 300);
+      })
+  }
+
+  useEffect(() => {
+    getAuthorById();
+  }, [])
 
   return (
     <section className="section profile">
@@ -56,79 +68,61 @@ export const Profile: React.FC = () => {
         </ul>
       </div>
 
-      {isPaintingsVisible
+      {isFetching
         ? (
-          <MyPaintings />
+        <Loader />
         ) : (
-          <div className="container sidebar-info">
-            <div className="profile-header">
-              <div className="author-image"></div>
-
-              <div className="author-info">
-                <div className="author-subtitle"><strong>Rafael Mamedov</strong></div>
-                <div className="author-subtitle">
-                  {globeIcon} Ukraine, Kyiv
-                </div>
-
-                <button
-                    className={classNames(
-                      'button-get-all',
-                      'button-edit',
-                      'button', {
-                        'is-dark': isEditVisible,
-                      })}
+          (isPaintingsVisible && author)
+            ? (
+              <MyPaintings author={author} />
+            ) : (
+            <div className="container sidebar-info">
+              <div className="profile-header">
+                <div className="author-image"></div>
+  
+                <div className="author-info">
+                  {(author?.fullName || author?.city || author?.country) && (
+                    <>
+                      <div className="author-subtitle"><strong>{author?.fullName}</strong></div>
+                      <div className="author-subtitle">
+                        {locationIcon} {author?.country}, {author?.city}
+                      </div>
+                    </>
+                  )}
+  
+                  <button
+                      className={classNames(
+                        'button-get-all',
+                        'button-edit',
+                        'button', {
+                          'is-dark': !isCreateVisible,
+                        })}
+                      onClick={() => {
+                        setIsCreateVisible(false);
+                      }}
+                    >
+                      Edit info
+                    </button>
+  
+                  <button
+                    className="button is-warning button-get-all"
                     onClick={() => {
-                      setIsEditVisible(true)
-                      setIsCreateVisible(false);
+                      setIsCreateVisible(true);
                     }}
                   >
-                    Edit info
+                    Create Painting
                   </button>
-
-                <button
-                  className="button is-warning button-get-all"
-                  onClick={() => {
-                    setIsEditVisible(false);
-                    setIsCreateVisible(true);
-                  }}
-                >
-                  Create Painting
-                </button>
+                </div>
               </div>
+  
+              {isCreateVisible
+                ? (
+                <CreatePainting name={author?.fullName || ''} />
+                ) : (
+                <ProfileEdit getAuthor={getAuthorById} />
+                )}
             </div>
-
-            {isEditVisible && (
-              <ProfileEdit
-                name={name}
-                city={city}
-                about={shortStory}
-                country={country}
-                setName={setName}
-                setCity={setCity}
-                setAbout={setShortStory}
-                setCountry={setCountry}
-                setIsVisible={setIsEditVisible}
-              />
-            )}
-
-            {isCreateVisible && (
-              <CreatePainting
-                name={name}
-                year={year}
-                title={title}
-                price={price}
-                width={width}
-                height={height}
-                setYear={setYear}
-                setPrice={setPrice}
-                setTitle={setTitle}
-                setWidth={setWidth}
-                setHeight={setHeight}
-                description={description}
-                setDescription={setDescription}
-              />
-            )}
-          </div>
+          )
         )}
     </section>
   );

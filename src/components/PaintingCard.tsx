@@ -39,7 +39,7 @@ export const PaintingCard: React.FC<Props> = ({ painting }) => {
                 <br/>{height} x {width} cm
               </p>
               <p className="collection-card-title">{title}</p>
-              <p className="collection-card-subtitle">{author.name}</p>
+              <p className="collection-card-subtitle">{author.fullName}</p>
               <p className="subtitle is-4">€ {price}</p>
             </div>
           </div>

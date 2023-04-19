@@ -1,16 +1,20 @@
-import React, { useState } from 'react';
+import React, { SetStateAction, useState } from 'react';
 import Logo from '../images/LOGO.svg'
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 
-export const NavBar: React.FC = () => {
+type Props ={
+  onAuthenticating: React.Dispatch<SetStateAction<boolean>>;
+};
+
+export const NavBar: React.FC<Props> = ({ onAuthenticating }) => {
   const [isActive, setIsActive] = useState(false);
   const {
     route,
     signOut,
-    toSignIn,
     toSignUp,
+    toSignIn,
   } = useAuthenticator((context) => [context.route]);
   const isAuthentificated = route === 'authenticated';
 
@@ -28,6 +32,11 @@ export const NavBar: React.FC = () => {
     setIsActive(false);
     document.body.style.overflow = 'unset';
   };
+
+  const handleAuthenticate = (signUp: boolean) => {
+    onAuthenticating(true);
+    signUp ? toSignUp() : toSignIn();
+  }
 
   return (
     <nav
@@ -74,11 +83,28 @@ export const NavBar: React.FC = () => {
           <Link to="about" className="navlink" onClick={handleLinkClick}>About</Link>
 
           {isAuthentificated
-            ? <Link to="/" onClick={signOut} className="button is-dark button-auth">Sign out</Link>
+            ? (
+              <>
+                <Link
+                  to="/profile"
+                  className="button button-auth"
+                >
+                  My profile
+                </Link>
+
+                <Link
+                  to="/"
+                  onClick={signOut}
+                  className="button is-dark button-auth"
+                >
+                  Sign out
+                </Link>
+              </>
+            )
             : (
               <>
-                <Link to="/authenticator" onClick={toSignIn} className="button is-light button-auth">Sign in</Link>
-                <Link to="/authenticator" onClick={toSignUp} className="button is-dark button-auth">Sign up</Link>
+                <button onClick={() => handleAuthenticate(false)} className="button is-light button-auth">Sign in</button>
+                <button onClick={() => handleAuthenticate(true)} className="button is-dark button-auth">Sign up</button>
               </>
             )}
         </div>
