@@ -136,9 +136,9 @@ export const Catalog: React.FC = () => {
 
   const handleClearFilters = () => {
     setPerPage(6);
-    setWidth([0, 150]);
-    setHeight([0, 150]);
-    setPrice([0, 1500]);
+    setWidth([0, 300]);
+    setHeight([0, 300]);
+    setPrice([0, 900000]);
     setStylesParams([]);
     setMediumParams([]);
     setSupportParams([]);
@@ -266,6 +266,12 @@ export const Catalog: React.FC = () => {
 
     return string;
   };
+
+  const notificationNoPaintings = (
+    <div className="notification is-warning catalog-notification">
+      There are no paintings on server!
+    </div>
+  );
 
   return (
     <section className="section catalog">
@@ -446,44 +452,49 @@ export const Catalog: React.FC = () => {
               </button>
             </div>
 
-            <div className="container paintinglist">
-              <div className="painting-container">
-                <div className="sorting">
-                  <div className="sorting-container">
-                    <div className="sorting-title">Sorting:</div>
-                    <select
-                      className="sortby dropdown"
-                      onChange={(event) => setSortBy(event.target.value)}
-                      value={sortBy}
-                    >
-                      <option value={sortByDateDesc}>Newest</option>
-                      <option value={sortByDateAsc}>Oldest</option>
-                      <option value={sortByPriceAsc}>Cheapest</option>
-                      <option value={sortByPriceDesc}>Most expensive</option>
-                    </select>
+            {currentPaintings.length
+              ? (
+                <div className="container paintinglist">
+                  <div className="painting-container">
+                    <div className="sorting">
+                      <div className="sorting-container">
+                        <div className="sorting-title">Sorting:</div>
+                        <select
+                          className="sortby dropdown"
+                          onChange={(event) => setSortBy(event.target.value)}
+                          value={sortBy}
+                        >
+                          <option value={sortByDateDesc}>Newest</option>
+                          <option value={sortByDateAsc}>Oldest</option>
+                          <option value={sortByPriceAsc}>Cheapest</option>
+                          <option value={sortByPriceDesc}>Most expensive</option>
+                        </select>
+                      </div>
+                      <div className="sorting-container">
+                        <div className="sorting-title">Per page:</div>
+                        <select
+                          className="perpage dropdown"
+                          onChange={handlePerPageChange}
+                          value={perPage}
+                        >
+                          <option value={6}>6</option>
+                          <option value={12}>12</option>
+                        </select>
+                      </div>
+                    </div>
+                    <Gallery paintings={currentPaintings} />
                   </div>
-                  <div className="sorting-container">
-                    <div className="sorting-title">Per page:</div>
-                    <select
-                      className="perpage dropdown"
-                      onChange={handlePerPageChange}
-                      value={perPage}
-                    >
-                      <option value={6}>6</option>
-                      <option value={12}>12</option>
-                    </select>
-                  </div>
-                </div>
-                <Gallery paintings={currentPaintings} />
-              </div>
 
-              <Pagination
-                className={'pagination is-centered'}
-                pageCount={pageCount}
-                currentPage={currentPage}
-                setCurrentPage={setCurrentPage}
-              />
-            </div>
+                  <Pagination
+                    className={'pagination is-centered'}
+                    pageCount={pageCount}
+                    currentPage={currentPage}
+                    setCurrentPage={setCurrentPage}
+                  />
+                </div>
+              ) : (
+                notificationNoPaintings
+              )}
           </div>
         )}
     </section>

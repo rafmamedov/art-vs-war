@@ -18,6 +18,7 @@ import { AuthorPage } from './pages/AuthorPage';
 import { Profile } from './pages/Profile';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { About } from './pages/About';
 
 Amplify.configure(awsExports);
 
@@ -103,7 +104,7 @@ export const App = () => {
             <Route
               path="about"
               element={
-                <AboutUs />
+                <About />
               }
             />
             <Route path="gallery">

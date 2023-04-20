@@ -40,7 +40,6 @@ export const CreatePainting: React.FC<Props> = ({ name }) => {
   }
 
   const onFileUpload = async () => {
-    console.log('onFileUpload');
     axios.get(UPLOAD + selectedImage?.type.split('/')[1])
     .then((response) => {
       const {
