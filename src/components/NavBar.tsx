@@ -31,6 +31,7 @@ export const NavBar: React.FC<Props> = ({ onAuthenticating }) => {
   const handleLinkClick = () => {
     setIsActive(false);
     document.body.style.overflow = 'unset';
+    onAuthenticating(false);
   };
 
   const handleAuthenticate = (signUp: boolean) => {
@@ -49,7 +50,7 @@ export const NavBar: React.FC<Props> = ({ onAuthenticating }) => {
           'is-open-container': isActive,
         })}
       >
-        <Link to="/" className="logo-link">
+        <Link to="/" className="logo-link" onClick={() => onAuthenticating(false)}>
           <img className="logo-icon" src={ Logo } alt="Logo" />
         </Link>
 
