@@ -18,7 +18,7 @@ export const Catalog: React.FC = () => {
   const [width, setWidth] = useState([0, 300]);
   const [pageCount, setPageCount] = useState(0);
   const [height, setHeight] = useState([0, 300]);
-  const [price, setPrice] = useState<number[]>([0, 150000]);
+  const [price, setPrice] = useState<number[]>([0, 20000]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isFetching, setIsFetching] = useState(true);
   const [countOfFiltered, setCountOfFiltered] = useState(0);
@@ -138,7 +138,7 @@ export const Catalog: React.FC = () => {
     setPerPage(6);
     setWidth([0, 300]);
     setHeight([0, 300]);
-    setPrice([0, 150000]);
+    setPrice([0, 20000]);
     setStylesParams([]);
     setMediumParams([]);
     setSupportParams([]);
@@ -312,7 +312,7 @@ export const Catalog: React.FC = () => {
 
                 <RangeSlider
                   min={0}
-                  max={150000}
+                  max={20000}
                   defaultValue={price}
                   value={price}
                   onInput={(value: number[]) => {

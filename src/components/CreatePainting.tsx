@@ -83,7 +83,10 @@ export const CreatePainting: React.FC<Props> = ({ name }) => {
     })
     .catch((error) => {
       console.log(error);
-    });
+    })
+    .finally(() => {
+      handleCancelEditing();
+    })
   }
 
   const handleCancelEditing = () => {
