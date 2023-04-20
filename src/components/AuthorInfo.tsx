@@ -9,7 +9,7 @@ const locationIcon = <FontAwesomeIcon className="far" icon={faLocationDot} />;
 const paintbrushIcon = <FontAwesomeIcon className="far" icon={faPaintBrush} />;
 const paletteIcon = <FontAwesomeIcon className="far" icon={faPalette} />;
 const supportsIcon = <FontAwesomeIcon className="" icon={faSquare} />;
-const GETALLPAINTINGS = 'https://www.albedosunrise.com/paintings/by-author?authorId='
+const GETALLPAINTINGS = 'https://www.albedosunrise.com/paintings/by-author/'
 
 type Props = {
   author: Author;

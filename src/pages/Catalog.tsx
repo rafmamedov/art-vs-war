@@ -10,13 +10,15 @@ import { Pagination } from '../components/Pagination';
 import { Loader } from '../components/Loader';
 
 const SEARCH = 'https://www.albedosunrise.com/paintings/search?';
+const MAXPRICE = 'https://www.albedosunrise.com/paintings/maxPrice';
+const MINPRICE = 'https://www.albedosunrise.com/paintings/minPrice';
 
 export const Catalog: React.FC = () => {
   const [perPage, setPerPage] = useState(6);
   const [width, setWidth] = useState([0, 300]);
   const [pageCount, setPageCount] = useState(0);
   const [height, setHeight] = useState([0, 300]);
-  const [price, setPrice] = useState([0, 900000]);
+  const [price, setPrice] = useState<number[]>([0, 150000]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isFetching, setIsFetching] = useState(true);
   const [countOfFiltered, setCountOfFiltered] = useState(0);
@@ -43,15 +45,13 @@ export const Catalog: React.FC = () => {
   
 
   const getFilteredPaintingsFromServer = async (filters: string) => {
-    console.log(filterParams);
-    console.log(SEARCH + filters + '&' + sortBy + '&' + defaultPerPage);
-    await axios.get(SEARCH + filters + '&' + sortBy + '&' + defaultPerPage)
-    .then((response) => {
-      console.log(response);
-      setCountOfFiltered(response.data.page.totalElements);
-      setCurrentPaintings(response.data.paintings);
-      setPageCount(response.data.page.totalPages);
-      })
+    axios.get(SEARCH + filters + '&' + sortBy + '&' + defaultPerPage)
+      .then((response) => {
+        console.log(response);
+        setCountOfFiltered(response.data.page.totalElements);
+        setCurrentPaintings(response.data.paintings);
+        setPageCount(response.data.page.totalPages);
+        })
       .catch((error) => {
         console.log(error);
       })
@@ -138,7 +138,7 @@ export const Catalog: React.FC = () => {
     setPerPage(6);
     setWidth([0, 300]);
     setHeight([0, 300]);
-    setPrice([0, 900000]);
+    setPrice([0, 150000]);
     setStylesParams([]);
     setMediumParams([]);
     setSupportParams([]);
@@ -312,7 +312,7 @@ export const Catalog: React.FC = () => {
 
                 <RangeSlider
                   min={0}
-                  max={900000}
+                  max={150000}
                   defaultValue={price}
                   value={price}
                   onInput={(value: number[]) => {
