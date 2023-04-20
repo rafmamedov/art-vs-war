@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import RangeSlider from 'react-range-slider-input';
 import 'react-range-slider-input/dist/style.css';
 import './Catalog.scss';
@@ -130,23 +130,27 @@ export const Catalog: React.FC = () => {
     getFilteredPaintingsFromServer(filterParams);
   };
 
-  useEffect(() => {
-    getFilteredPaintingsFromServer(filterParams);
-  }, [sortBy, currentPage, perPage]);
-
-  const handleClearFilters = () => {
-    setPerPage(6);
+  const handleClearFilters = async () => {
     setWidth([0, 300]);
     setHeight([0, 300]);
     setPrice([0, 20000]);
     setStylesParams([]);
     setMediumParams([]);
     setSupportParams([]);
-    setSortBy(sortByDateDesc);
     setCheckedStyles(new Array(styles.length).fill(false));
     setCheckedMediums(new Array(styles.length).fill(false));
     setCheckedSupports(new Array(styles.length).fill(false));
-  }
+    setSortBy(sortByDateDesc);
+    setPerPage(6);
+    setIsStylesVisible(false);
+    setIsMediumsVisible(false);
+    setIsSupportsVisible(false);
+    getFilteredPaintingsFromServer(filterParams);
+  };
+
+  useEffect(() => {
+    getFilteredPaintingsFromServer(filterParams);
+  }, [sortBy, currentPage, perPage, isStylesVisible, isMediumsVisible, isSupportsVisible]);
 
   const styles = [
     'abstraction',
