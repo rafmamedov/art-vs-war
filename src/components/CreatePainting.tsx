@@ -50,10 +50,7 @@ export const CreatePainting: React.FC = () => {
     setState: React.Dispatch<SetStateAction<string>>
   ) => {
     setErrors([]);
-
-    if (!isNumber.test(event.target.value) || event.target.value === '') {
-      setState(event.target.value);
-    }
+    setState(event.target.value);
   }
 
   const handleNumberInputChange = (
@@ -66,6 +63,14 @@ export const CreatePainting: React.FC = () => {
       setState(event.target.value);
     }
   }
+
+  const checkImagePostObject = (image: {[key: string]: any}) => {
+    for (const key in image) {
+      if (image[key] === 0) {
+        delete image[key];
+      };
+    };
+  };
 
   const onCreateWithFileUpload = async () => {
     await axios.get(UPLOAD + selectedImage?.type.split('/')[1])
@@ -90,6 +95,8 @@ export const CreatePainting: React.FC = () => {
             supportId,
             imageFileName: imageFileName,
           };
+
+          checkImagePostObject(imageDataPost);
 
           axios.post(URL, imageDataPost, { headers })
             .then(() => setIsAdded(true))
@@ -124,6 +131,8 @@ export const CreatePainting: React.FC = () => {
       mediumId,
       supportId,
     };
+
+    checkImagePostObject(imageDataPost);
 
     axios.post(URL, imageDataPost, { headers })
       .then(() => setIsAdded(true))
