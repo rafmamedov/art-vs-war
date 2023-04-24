@@ -167,9 +167,9 @@ export const Filters: React.FC<Props> = ({ setFilters }) => {
 
   const handleClearFilters = async () => {
     setFilters('');
-    setPrice([0, 20000]);
-    setWidth([0, 300]);
-    setHeight([0, 300]);
+    setPrice([minPrice, maxPrice]);
+    setWidth([0, maxWidth]);
+    setHeight([0, maxHeight]);
     setStylesParams([]);
     setMediumParams([]);
     setSupportParams([]);

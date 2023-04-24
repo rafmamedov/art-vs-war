@@ -96,13 +96,13 @@ export const CreatePainting: React.FC = () => {
   };
 
   const onFileUpload = async () => {
-    if (isAuthenticated) {
+    if (!isAuthenticated) {
       return;
     };
 
     onSubmit();
 
-    axios.get(UPLOAD + selectedImage?.type.split('/')[1])
+    await axios.get(UPLOAD + selectedImage?.type.split('/')[1])
     .then((response) => {
       const {
         imagePutUrl,
@@ -130,9 +130,6 @@ export const CreatePainting: React.FC = () => {
             .catch(error => {
               setIsAdded(false);
               setErrors(error.response.data.errors.map((error: Error) => error.message));
-            })
-            .finally(() => {
-              handleCancelEditing();
             });
         })
         .catch((error) => {

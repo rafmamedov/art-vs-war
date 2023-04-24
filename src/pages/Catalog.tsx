@@ -83,12 +83,14 @@ export const Catalog: React.FC = () => {
                   }
                 </div>
 
-                <Pagination
-                  className={'pagination is-centered'}
-                  pageCount={pageCount}
-                  currentPage={currentPage}
-                  setCurrentPage={setCurrentPage}
-                />
+                {currentPaintings.length > 0 && (
+                  <Pagination
+                    className={'pagination is-centered'}
+                    pageCount={pageCount}
+                    currentPage={currentPage}
+                    setCurrentPage={setCurrentPage}
+                  />
+                )}
               </>
             )}
         </div>
