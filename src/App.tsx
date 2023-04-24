@@ -15,40 +15,20 @@ import awsExports from './aws-exports';
 import { AuthorPage } from './pages/AuthorPage';
 import { Profile } from './pages/Profile';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { About } from './pages/About';
 import { Authors } from './pages/Authors';
 
 Amplify.configure(awsExports);
 
-const CREATEAUTHOR = 'https://www.albedosunrise.com/authors';
-
 export const App = () => {
-  const { user, route } = useAuthenticator((context) => [context.route]);
+  const { route } = useAuthenticator((context) => [context.route]);
   const [isAuthenticating, setIsAuthenticating] = useState(false);
   const isAuthentificated = route === 'authenticated';
-
-  const createAuthor = async () => {
-    const body = {
-      'id': user.username,
-    }
-
-    await axios.post(CREATEAUTHOR, body)
-  }
 
   useEffect(() => {
     if (isAuthentificated) {
       setIsAuthenticating(false);
     }
-
-    if (route === 'confirmSignUp') {
-      createAuthor();
-    }
-
-    if ((user && user.username?.includes('google'))
-      || (user && user.username?.includes('facebook'))) {
-        createAuthor()
-      }
   }, [route]);
 
   return (
