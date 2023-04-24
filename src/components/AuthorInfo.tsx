@@ -48,7 +48,16 @@ export const AuthorInfo: React.FC<Props> = ({ author}) => {
   return (
     <div className="container sidebar-info">
       <div className="profile-header">
-        <img src={author.photoUrl} className="author-image" alt="author" />
+        {author.photoUrl
+          ? (
+            <img src={author.photoUrl} className="author-image" alt="author" />
+          ) : (
+            <img
+              src="https://i.etsystatic.com/17358183/r/il/7a5539/3875154600/il_794xN.3875154600_9zse.jpg"
+              className="author-image"
+              alt="author"
+            />
+        )}
 
         <div className="author-info">
           <div className="author-subtitle"><strong>{author.fullName}</strong></div>

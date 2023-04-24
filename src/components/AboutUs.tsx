@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 export const AboutUs: React.FC = () => {
   return (
@@ -16,12 +17,14 @@ export const AboutUs: React.FC = () => {
           By purchasing a painting, you support the artist and contribute to the victory of Ukraine and democracy. 
           Browse our collection and find a painting that speaks to you. Thank you for your support.
         </div>
-        
-        <button
-          className="button-get-all"
-        >
-          Learn More
-        </button>
+
+        <Link to="/about" >
+          <button
+            className="button-get-all"
+          >
+            Learn More
+          </button>
+        </Link>
       </div>
     </section>
   );

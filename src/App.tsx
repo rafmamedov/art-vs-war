@@ -29,7 +29,11 @@ export const App = () => {
     if (isAuthentificated) {
       setIsAuthenticating(false);
     }
-  }, [route]);
+  }, [route, isAuthentificated]);
+
+  useEffect(() => {
+    document.body.scrollTo(0, 0);
+  });
 
   return (
     <>

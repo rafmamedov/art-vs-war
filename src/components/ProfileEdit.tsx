@@ -1,16 +1,17 @@
 import React, { ChangeEvent, SetStateAction, useEffect, useState } from 'react';
 import '../pages/Profile.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRight, faUser} from '@fortawesome/free-solid-svg-icons';
+import { faArrowRight, faUpload, faUser} from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import { Author } from '../types/painting';
 import classNames from 'classnames';
 import { useAuthenticator } from '@aws-amplify/ui-react';
-import { InputAboutError, InputCityError, InputCountryError, InputNameError } from '../types/errors';
+import { Error } from '../types/errors';
 
 const UPLOAD = 'https://www.albedosunrise.com/images/getUrl?extension=';
 const UPDATEAUTHOR = 'https://www.albedosunrise.com/authors';
 const element = <FontAwesomeIcon className="far" icon={faArrowRight} />;
+const uploadIcon = <FontAwesomeIcon className="far" icon={faUpload} />;
 const icon = <FontAwesomeIcon className="fas" icon={faUser} />;
 // const uploadIcon = <FontAwesomeIcon className="far" icon={faUpload} />;
 const isNumber = /^\d+$/;
@@ -35,7 +36,7 @@ export const ProfileEdit: React.FC<Props> = ({
   const [name, setName] = useState('');
   const [city, setCity] = useState('');
   const [country, setCountry] = useState('');
-  const [errors, setErrors] = useState(['']);
+  const [errors, setErrors] = useState<Error[]>([]);
   const [shortStory, setShortStory] = useState('');
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
 
@@ -87,9 +88,9 @@ export const ProfileEdit: React.FC<Props> = ({
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     setState: React.Dispatch<SetStateAction<string>>
   ) => {
-    setErrors(['']);
+    setErrors([]);
 
-    if (!isNumber.test(event.target.value)) {
+    if (!isNumber.test(event.target.value) || event.target.value === '') {
       setState(event.target.value);
     }
   }
@@ -120,9 +121,13 @@ export const ProfileEdit: React.FC<Props> = ({
             })
             .catch(error => {
               setIsAdded(false);
-              setErrors(
-                error.response.data.errors.map((error: Error) => error.message),
-              );
+              setErrors(error.response.data.errors
+                .map((error: Error) => ({
+                  message: error.message,
+                  field: error.field,
+                })));
+                console.log(error);
+                console.log(errors);
             });
           })
         .catch((error) => {
@@ -147,9 +152,13 @@ export const ProfileEdit: React.FC<Props> = ({
       })
       .catch(error => {
         setIsAdded(false);
-        setErrors(
-          error.response.data.errors.map((error: Error) => error.message),
-        );
+        setErrors(error.response.data.errors
+          .map((error: Error) => ({
+            message: error.message,
+            field: error.field,
+          })));
+          console.log(error);
+          console.log(errors);
       });
     };
   };
@@ -169,13 +178,16 @@ export const ProfileEdit: React.FC<Props> = ({
     })
     .catch(error => {
       setIsAdded(false);
-      setErrors(error.response.data.errors.map((error: Error) => error.message));
+      setErrors(error.response.data.errors
+        .map((error: Error) => ({
+          message: error.message,
+          field: error.field,
+        })));
+        console.log(error);
     })
   };
 
   const onUpdateProfile = async () => {
-    setErrors(['']);
-
     if (selectedImage) {
       await axios.get(UPLOAD + selectedImage.type.split('/')[1])
       .then(response => {
@@ -202,7 +214,11 @@ export const ProfileEdit: React.FC<Props> = ({
             })
             .catch(error => {
               setIsAdded(false);
-              setErrors(error.response.data.errors.map((error: Error) => error.message));
+              setErrors(error.response.data.errors
+                .map((error: Error) => ({
+                  message: error.message,
+                  field: error.field,
+                })));
             });
           })
           .catch((error) => {
@@ -218,28 +234,22 @@ export const ProfileEdit: React.FC<Props> = ({
   };
 
   const onSubmit = () => {
+    setErrors([]);
+
     if (!isAuthenticated) {
       return;
     };
 
-    if (!name.length) {
-      setErrors((prevErrors) => [...prevErrors, InputNameError.REQUIRED]);
-    };
-
-    if (!country.length) {
-      setErrors((prevErrors) => [...prevErrors, InputCountryError.REQUIRED]);
-    }
-
-    if (!city.length) {
-      setErrors((prevErrors) => [...prevErrors, InputCityError.REQUIRED]);
-    }
-
-    if (!shortStory.length) {
-      setErrors((prevErrors) => [...prevErrors, InputAboutError.REQUIRED]);
-    }
-
     author ? onUpdateProfile() : onCreateProfile();
   };
+
+  const getErrors = (field: string) => {
+    const inputWithError = errors.find(error => error.field === field);
+
+    return inputWithError && (
+      <p className="help is-danger">{inputWithError?.message}</p>
+    )
+  }
 
   useEffect(() => {
     setTimeout(() => {
@@ -254,7 +264,7 @@ export const ProfileEdit: React.FC<Props> = ({
     setCountry('');
     setShortStory('');
     setSelectedImage(null);
-    setErrors(['']);
+    setErrors([]);
   }
 
   return (
@@ -287,13 +297,11 @@ export const ProfileEdit: React.FC<Props> = ({
 
       <div className="profile-info">
         <div className="field profile-item">
-          <label className="label">Full Name</label>
+          <label className="label required-field">Full Name</label>
           <div className="control has-icons-left has-icons-right">
             <input
               className={classNames('input', {
-                'is-danger': errors.includes(InputNameError.NAME)
-                || errors.includes(InputNameError.LENGTH)
-                || errors.includes(InputNameError.REQUIRED),
+                'is-danger': errors.some(error => error.field === 'fullName'),
               })}
               type="text"
               placeholder="full name"
@@ -308,39 +316,30 @@ export const ProfileEdit: React.FC<Props> = ({
               {element}
             </span>
           </div>
-          {(errors.includes(InputNameError.NAME)) && (
-            <p className="help is-danger">{InputNameError.NAME}</p>
-          )}
 
-          {errors.includes(InputNameError.LENGTH) && (
-            <p className="help is-danger">{InputNameError.LENGTH}</p>
-          )}
-
-          {errors.includes(InputNameError.REQUIRED) && (
-            <p className="help is-danger">{InputNameError.REQUIRED}</p>
-          )}
+          {getErrors('fullName')}
         </div>
 
         <div className="field profile-item">
           <label className="label">Change profile photo</label>
-          <div className="file has-name is-right">
+          <div className="file has-name is-right is-fullwidth">
             <label className="file-label">
               <input
                 className="file-input"
                 type="file"
-                name="resume"
+                name="painting image file"
                 onChange={onFileChange}
               />
               <span className="file-cta">
                 <span className="file-icon">
-                  <i className="fas fa-upload"></i>
+                  {uploadIcon}
                 </span>
                 <span className="file-label">
-                  Choose a file…
+                  Choose a file
                 </span>
               </span>
               <span className="file-name">
-                {selectedImage?.name || 'choose a file'}
+                {selectedImage ? selectedImage?.name : 'Choose a file'}
               </span>
             </label>
           </div>
@@ -349,13 +348,11 @@ export const ProfileEdit: React.FC<Props> = ({
 
       <div className="profile-info">
         <div className="field profile-item">
-          <label className="label">Country</label>
+          <label className="label required-field">Country</label>
           <div className="control has-icons-left has-icons-right">
             <input
               className={classNames('input', {
-                'is-danger': errors.includes(InputCountryError.COUNTRY)
-                || errors.includes(InputCountryError.LENGTH)
-                || errors.includes(InputCountryError.REQUIRED),
+                'is-danger': errors.some(error => error.field === 'country'),
               })}
               type="text"
               placeholder="country of current stay"
@@ -371,27 +368,15 @@ export const ProfileEdit: React.FC<Props> = ({
             </span>
           </div>
 
-          {(errors.includes(InputCountryError.COUNTRY)) && (
-            <p className="help is-danger">{InputCountryError.COUNTRY}</p>
-          )}
-
-          {errors.includes(InputCountryError.LENGTH) && (
-            <p className="help is-danger">{InputCountryError.LENGTH}</p>
-          )}
-
-          {errors.includes(InputCountryError.REQUIRED) && (
-            <p className="help is-danger">{InputCountryError.REQUIRED}</p>
-          )}
+          {getErrors('country')}
         </div>
 
         <div className="field profile-item">
-          <label className="label">City</label>
+          <label className="label required-field">City</label>
           <div className="control has-icons-left has-icons-right">
             <input
               className={classNames('input', {
-                'is-danger': errors.includes(InputCityError.CITY)
-                || errors.includes(InputCityError.LENGTH)
-                || errors.includes(InputCityError.REQUIRED),
+                'is-danger': errors.some(error => error.field === 'city'),
               })}
               type="text"
               placeholder="city of current stay"
@@ -404,28 +389,16 @@ export const ProfileEdit: React.FC<Props> = ({
             </span>
           </div>
 
-          {(errors.includes(InputCityError.CITY)) && (
-            <p className="help is-danger">{InputCityError.CITY}</p>
-          )}
-
-          {errors.includes(InputCountryError.LENGTH) && (
-            <p className="help is-danger">{InputCountryError.LENGTH}</p>
-          )}
-
-          {errors.includes(InputCountryError.REQUIRED) && (
-            <p className="help is-danger">{InputCountryError.REQUIRED}</p>
-          )}
+          {getErrors('city')}
         </div>
       </div>
 
       <div className="field profile-item-about">
-        <label className="label">About me:</label>
+        <label className="label required-field">About me:</label>
         <div className="control">
           <textarea
             className={classNames('textarea', 'profile-item', {
-              'is-danger': errors.includes(InputAboutError.ABOUT)
-              || errors.includes(InputAboutError.LENGTH)
-              || errors.includes(InputAboutError.REQUIRED),
+              'is-danger': errors.some(error => error.field === 'aboutMe'),
             })}
             placeholder="write a short story about you"
             value={shortStory}
@@ -433,17 +406,7 @@ export const ProfileEdit: React.FC<Props> = ({
           />
         </div>
 
-        {(errors.includes(InputAboutError.ABOUT)) && (
-          <p className="help is-danger">{InputAboutError.ABOUT}</p>
-        )}
-
-        {errors.includes(InputAboutError.LENGTH) && (
-          <p className="help is-danger">{InputAboutError.LENGTH}</p>
-        )}
-
-        {errors.includes(InputAboutError.REQUIRED) && (
-          <p className="help is-danger">{InputAboutError.REQUIRED}</p>
-        )}
+        {getErrors('aboutMe')}
       </div>
 
       <div className="field is-grouped">

@@ -20,8 +20,8 @@ export const PaintingCard: React.FC<Props> = ({ painting }) => {
   } = painting;
 
   return (
-    <Link to={`/gallery/${painting.id}`}>
-      <div className="card collection-card">
+    <div className="card collection-card">
+      <Link className="card-link" to={`/gallery/${painting.id}`}>
         <div className="card-image">
           <figure className="image is-4by3">
             <img
@@ -44,7 +44,7 @@ export const PaintingCard: React.FC<Props> = ({ painting }) => {
             </div>
           </div>
         </div>
-      </div>
-    </Link>
+      </Link>
+    </div>
   );
 };

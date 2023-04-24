@@ -129,3 +129,8 @@
   display: flex;
   gap: 5px;
 }
+
+.required-field::after {
+  content: " *";
+  color: red;
+}

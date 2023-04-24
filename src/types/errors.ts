@@ -1,3 +1,8 @@
+export interface Error {
+  message: string;
+  field: string;
+};
+
 export enum InputNameError {
   NAME = "full name except only Latin, space, ' and -",
   LENGTH = "full name must be between 1 and 101 characters",
@@ -47,11 +52,17 @@ export enum InputWidthError {
 };
 
 export enum InputPriceError {
-  REQUIRED = "price field is required",
   PRICE = "price must have maximum 8 number of digits without cents",
+  REQUIRED = "price field is required",
 };
 
 export enum InputDescriptionError {
-REQUIRED = "description field is required",
-MAX = "description must have maximum 1000 characters",
+  MAX = "description must have maximum 1000 characters",
+  REQUIRED = "description field is required",
 };
+
+export enum CheckboxInputError {
+  STYLE = "style field is required",
+  MEDIUM = "medium field is required",
+  SUPPORT = "support field is required",
+}

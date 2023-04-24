@@ -7,14 +7,20 @@ const GETSTYLES = 'https://www.albedosunrise.com/';
 
 type Props = {
   checkboxItem: string;
+  getErrors: (field: string) => JSX.Element | undefined;
   onSelect: React.Dispatch<SetStateAction<number>>;
 };
 
-export const Checkbox: React.FC<Props> = ({ checkboxItem, onSelect }) => {
+export const Checkbox: React.FC<Props> = ({
+  checkboxItem,
+  onSelect,
+  getErrors,
+}) => {
   const [isCheckboxActive, setIsCheckboxActive] = useState(false);
   const [selectedItem, setSelectedItem] = useState('');
   const [items, setItems] = useState([]);
   const selectRef = useRef<any>(null);
+  const checkboxName = checkboxItem.slice(0, checkboxItem.length - 1) + 'Id';
 
   const handleClickOutside = (event: any) => {
     if (!selectRef?.current?.contains(event.target)) {
@@ -56,7 +62,7 @@ export const Checkbox: React.FC<Props> = ({ checkboxItem, onSelect }) => {
 
   return (
     <div className="field painting-item">
-      <label className="label">{toUpperCasedTitle(checkboxItem)}</label>
+      <label className="label required-field">{toUpperCasedTitle(checkboxItem)}</label>
       <div
         ref={selectRef}
         className="control">
@@ -102,6 +108,8 @@ export const Checkbox: React.FC<Props> = ({ checkboxItem, onSelect }) => {
           </div>
         </div>
       </div>
+
+      {getErrors(checkboxName)}
     </div>
   );
 };

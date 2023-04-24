@@ -7,7 +7,7 @@ import axios from 'axios';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import { Checkbox } from './Checkbox';
 import classNames from 'classnames';
-import { InputDescriptionError, InputHeightError, InputPriceError, InputTitleError, InputWidthError, InputYearError } from '../types/errors';
+import { Error } from '../types/errors';
 
 const URL = 'https://www.albedosunrise.com/paintings';
 const UPLOAD = 'https://www.albedosunrise.com/images/getUrl?extension=';
@@ -23,7 +23,7 @@ export const CreatePainting: React.FC = () => {
   const [width, setWidth] = useState('');
   const [height, setHeight] = useState('');
   const [styleId, setStyleId] = useState(0);
-  const [errors, setErrors] = useState(['']);
+  const [errors, setErrors] = useState<Error[]>([]);
   const [mediumId, setMediumId] = useState(0);
   const [supportId, setSupportId] = useState(0);
   const [isAdded, setIsAdded] = useState(false);
@@ -38,7 +38,7 @@ export const CreatePainting: React.FC = () => {
   };
 
   const onFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setErrors(['']);
+    setErrors([]);
 
     if (event.target.files) {
       setSelectedImage(event.target.files[0]);
@@ -49,9 +49,9 @@ export const CreatePainting: React.FC = () => {
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     setState: React.Dispatch<SetStateAction<string>>
   ) => {
-    setErrors(['']);
+    setErrors([]);
 
-    if (!isNumber.test(event.target.value)) {
+    if (!isNumber.test(event.target.value) || event.target.value === '') {
       setState(event.target.value);
     }
   }
@@ -60,48 +60,14 @@ export const CreatePainting: React.FC = () => {
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     setState: React.Dispatch<SetStateAction<string>>
   ) => {
-    setErrors(['']);
+    setErrors([]);
 
-    if (isNumber.test(event.target.value)) {
+    if (isNumber.test(event.target.value) || event.target.value === '') {
       setState(event.target.value);
     }
   }
 
-  const onSubmit = () => {
-    setErrors(['']);
-
-    if (!title.length) {
-      setErrors((prevErrors) => [...prevErrors, InputTitleError.REQUIRED]);
-    };
-
-    if (!year.length) {
-      setErrors((prevErrors) => [...prevErrors, InputYearError.REQUIRED]);
-    };
-
-    if (!price.length) {
-      setErrors((prevErrors) => [...prevErrors, InputPriceError.REQUIRED]);
-    };
-
-    if (!height.length) {
-      setErrors((prevErrors) => [...prevErrors, InputHeightError.REQUIRED]);
-    };
-
-    if (!width.length) {
-      setErrors((prevErrors) => [...prevErrors, InputWidthError.REQUIRED]);
-    };
-
-    if (!description.length) {
-      setErrors((prevErrors) => [...prevErrors, InputDescriptionError.REQUIRED]);
-    };
-  };
-
-  const onFileUpload = async () => {
-    if (!isAuthenticated) {
-      return;
-    };
-
-    onSubmit();
-
+  const onCreateWithFileUpload = async () => {
     await axios.get(UPLOAD + selectedImage?.type.split('/')[1])
     .then((response) => {
       const {
@@ -110,7 +76,7 @@ export const CreatePainting: React.FC = () => {
       } = response.data;
 
       selectedImage && axios.put(imagePutUrl, selectedImage)
-        .then(response => {
+        .then(() => {
           const imageDataPost = {
             title,
             price,
@@ -129,7 +95,11 @@ export const CreatePainting: React.FC = () => {
             .then(() => setIsAdded(true))
             .catch(error => {
               setIsAdded(false);
-              setErrors(error.response.data.errors.map((error: Error) => error.message));
+              setErrors(error.response.data.errors
+                .map((error: Error) => ({
+                  message: error.message,
+                  field: error.field,
+                })));
             });
         })
         .catch((error) => {
@@ -141,6 +111,43 @@ export const CreatePainting: React.FC = () => {
     })
   };
 
+  const onCreateWithoutFile = () => {
+    const imageDataPost = {
+      title,
+      price,
+      authorId: user.username,
+      description,
+      yearOfCreation: year,
+      height,
+      width,
+      styleId,
+      mediumId,
+      supportId,
+    };
+
+    axios.post(URL, imageDataPost, { headers })
+      .then(() => setIsAdded(true))
+      .catch(error => {
+        setIsAdded(false);
+        setErrors(error.response.data.errors
+          .map((error: Error) => ({
+            message: error.message,
+            field: error.field,
+          })));
+          console.log(error);
+      });
+  }
+
+  const onSubmit = () => {
+    setErrors([]);
+
+    if (!isAuthenticated) {
+      return;
+    };
+
+    selectedImage ? onCreateWithFileUpload() : onCreateWithoutFile();
+  }
+
   const handleCancelEditing = () => {
     setTitle('');
     setDescription('');
@@ -148,8 +155,11 @@ export const CreatePainting: React.FC = () => {
     setHeight('');
     setWidth('');
     setPrice('');
+    setMediumId(0);
+    setSupportId(0);
+    setStyleId(0);
     setSelectedImage(null);
-    setErrors(['']);
+    setErrors([]);
   }
 
   const notificationSuccess = (
@@ -161,6 +171,14 @@ export const CreatePainting: React.FC = () => {
       Painting is successfuly added!
     </div>
   );
+
+  const getErrors = (field: string) => {
+    const inputWithError = errors.find(error => error.field === field);
+
+    return inputWithError && (
+      <p className="help is-danger">{inputWithError?.message}</p>
+    )
+  }
 
   useEffect(() => {
     setTimeout(() => (
@@ -177,13 +195,11 @@ export const CreatePainting: React.FC = () => {
           <>
             <div className="profile-info">
               <div className="field profile-item">
-                <label className="label">Title</label>
+                <label className="label required-field">Title</label>
                 <div className="control has-icons-left has-icons-right">
                   <input
                     className={classNames('input', {
-                      'is-danger': errors.includes(InputTitleError.TITLE)
-                      || errors.includes(InputTitleError.LENGTH)
-                      || errors.includes(InputTitleError.REQUIRED),
+                      'is-danger': errors.some(error => error.field === 'title'),
                     })}
                     type="text"
                     placeholder="painting title"
@@ -198,17 +214,7 @@ export const CreatePainting: React.FC = () => {
                   </span>
                 </div>
 
-                {(errors.includes(InputTitleError.TITLE)) && (
-                  <p className="help is-danger">{InputTitleError.TITLE}</p>
-                )}
-
-                {errors.includes(InputTitleError.LENGTH) && (
-                  <p className="help is-danger">{InputTitleError.LENGTH}</p>
-                )}
-
-                {errors.includes(InputTitleError.REQUIRED) && (
-                  <p className="help is-danger">{InputTitleError.REQUIRED}</p>
-                )}
+                {getErrors('title')}
               </div>
 
               <div className="field profile-item">
@@ -231,7 +237,7 @@ export const CreatePainting: React.FC = () => {
                       </span>
                     </span>
                     <span className="file-name">
-                      {selectedImage?.name}
+                      {selectedImage ? selectedImage?.name : 'Choose a file'}
                     </span>
                   </label>
                 </div>
@@ -240,13 +246,11 @@ export const CreatePainting: React.FC = () => {
 
             <div className="profile-info">
               <div className="field profile-item">
-                <label className="label">Year</label>
+                <label className="label required-field">Year</label>
                 <div className="control has-icons-left has-icons-right">
                   <input
                     className={classNames('input', {
-                      'is-danger': errors.includes(InputYearError.YEAR)
-                      || errors.includes(InputYearError.MIN)
-                      || errors.includes(InputYearError.REQUIRED),
+                      'is-danger': errors.some(error => error.field === 'yearOfCreation'),
                     })}
                     type="text"
                     placeholder="year of creation"
@@ -258,26 +262,15 @@ export const CreatePainting: React.FC = () => {
                   </span>
                 </div>
 
-                {(errors.includes(InputYearError.YEAR)) && (
-                  <p className="help is-danger">{InputYearError.YEAR}</p>
-                )}
-
-                {errors.includes(InputYearError.MIN) && (
-                  <p className="help is-danger">{InputYearError.MIN}</p>
-                )}
-
-                {errors.includes(InputYearError.REQUIRED) && (
-                  <p className="help is-danger">{InputYearError.REQUIRED}</p>
-                )}
+                {getErrors('yearOfCreation')}
               </div>
 
               <div className="field profile-item">
-                <label className="label">Price</label>
+                <label className="label required-field">Price</label>
                 <div className="control has-icons-left has-icons-right">
                   <input
                     className={classNames('input', {
-                      'is-danger': errors.includes(InputPriceError.PRICE)
-                      || errors.includes(InputPriceError.REQUIRED),
+                      'is-danger': errors.some(error => error.field === 'price'),
                     })}
                     type="text"
                     placeholder="price €"
@@ -289,25 +282,17 @@ export const CreatePainting: React.FC = () => {
                   </span>
                 </div>
 
-                {errors.includes(InputPriceError.PRICE) && (
-                  <p className="help is-danger">{InputPriceError.PRICE}</p>
-                )}
-
-                {errors.includes(InputPriceError.REQUIRED) && (
-                  <p className="help is-danger">{InputPriceError.REQUIRED}</p>
-                )}
+                {getErrors('price')}
               </div>
             </div>
 
             <div className="profile-info">
               <div className="field profile-item">
-                <label className="label">Width</label>
+                <label className="label required-field">Width</label>
                 <div className="control has-icons-left has-icons-right">
                   <input
                     className={classNames('input', {
-                      'is-danger': errors.includes(InputWidthError.MIN)
-                      || errors.includes(InputWidthError.MAX)
-                      || errors.includes(InputWidthError.REQUIRED),
+                      'is-danger': errors.some(error => error.field === 'width'),
                     })}
                     type="text"
                     placeholder="width cm"
@@ -320,27 +305,15 @@ export const CreatePainting: React.FC = () => {
                 </div>
 
 
-                {(errors.includes(InputWidthError.MIN)) && (
-                  <p className="help is-danger">{InputWidthError.MIN}</p>
-                )}
-
-                {errors.includes(InputWidthError.MAX) && (
-                  <p className="help is-danger">{InputWidthError.MAX}</p>
-                )}
-
-                {errors.includes(InputWidthError.REQUIRED) && (
-                  <p className="help is-danger">{InputWidthError.REQUIRED}</p>
-                )}
+                {getErrors('width')}
               </div>
 
               <div className="field profile-item">
-                <label className="label">Height</label>
+                <label className="label required-field">Height</label>
                 <div className="control has-icons-left has-icons-right">
                   <input
                     className={classNames('input', {
-                      'is-danger': errors.includes(InputHeightError.MIN)
-                      || errors.includes(InputHeightError.MAX)
-                      || errors.includes(InputHeightError.REQUIRED),
+                      'is-danger': errors.some(error => error.field === 'height'),
                     })}
                     type="text"
                     placeholder="height cm"
@@ -352,24 +325,14 @@ export const CreatePainting: React.FC = () => {
                   </span>
                 </div>
 
-                {(errors.includes(InputHeightError.MIN)) && (
-                  <p className="help is-danger">{InputHeightError.MIN}</p>
-                )}
-
-                {errors.includes(InputHeightError.MAX) && (
-                  <p className="help is-danger">{InputHeightError.MAX}</p>
-                )}
-
-                {errors.includes(InputHeightError.REQUIRED) && (
-                  <p className="help is-danger">{InputHeightError.REQUIRED}</p>
-                )}
+                {getErrors('height')}
               </div>
             </div>
 
             <div className="profile-info">
-              <Checkbox checkboxItem='styles' onSelect={setStyleId} />
-              <Checkbox checkboxItem='mediums' onSelect={setMediumId} />
-              <Checkbox checkboxItem='supports' onSelect={setSupportId} />
+              <Checkbox checkboxItem='styles' onSelect={setStyleId} getErrors={getErrors} />
+              <Checkbox checkboxItem='mediums' onSelect={setMediumId} getErrors={getErrors} />
+              <Checkbox checkboxItem='supports' onSelect={setSupportId} getErrors={getErrors} />
             </div>
 
             <div className="field profile-item-about">
@@ -377,8 +340,7 @@ export const CreatePainting: React.FC = () => {
               <div className="control">
                 <textarea
                   className={classNames('textarea', 'profile-item', {
-                    'is-danger': errors.includes(InputDescriptionError.MAX)
-                    || errors.includes(InputDescriptionError.REQUIRED),
+                    'is-danger': errors.some(error => error.field === 'description'),
                   })}
                   placeholder="write a short description about painting"
                   value={description}
@@ -386,20 +348,14 @@ export const CreatePainting: React.FC = () => {
                 />
               </div>
 
-              {(errors.includes(InputDescriptionError.MAX)) && (
-                <p className="help is-danger">{InputDescriptionError.MAX}</p>
-              )}
-
-              {errors.includes(InputDescriptionError.REQUIRED) && (
-                <p className="help is-danger">{InputDescriptionError.REQUIRED}</p>
-              )}
+              {getErrors('description')}
             </div>
 
             <div className="field is-grouped">
               <div className="control">
                 <button
                   className="button button-submit is-dark"
-                  onClick={onFileUpload}
+                  onClick={onSubmit}
                 >
                   Submit
                 </button>

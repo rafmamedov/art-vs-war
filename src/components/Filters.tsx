@@ -184,7 +184,7 @@ export const Filters: React.FC<Props> = ({ setFilters }) => {
   const changeMinPrice = (
     event: React.ChangeEvent<HTMLInputElement>,
     ) => {
-    if (isNumber.test(event.target.value)) {
+    if (isNumber.test(event.target.value) || event.target.value === '') {
         setPrice([+event.target.value, price[1]]);
     }
   };
@@ -192,7 +192,7 @@ export const Filters: React.FC<Props> = ({ setFilters }) => {
   const changeMaxPrice = (
     event: React.ChangeEvent<HTMLInputElement>,
     ) => {
-    if (isNumber.test(event.target.value)) {
+    if (isNumber.test(event.target.value) || event.target.value === '') {
         setPrice([price[0], +event.target.value]);
     }
   };

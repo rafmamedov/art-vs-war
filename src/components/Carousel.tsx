@@ -9,7 +9,7 @@ import axios from 'axios';
 import { Loader } from './Loader';
 import { PaintingCard } from './PaintingCard';
 
-const URL = 'https://www.albedosunrise.com/paintings?page=0&pageSize=12';
+const URL = 'https://www.albedosunrise.com/paintings?page=0&pageSize=4';
 
 export const Carousel: React.FC = () => {
   const [paintings, setPaintings] = useState<Painting[]>([]);
@@ -52,7 +52,28 @@ export const Carousel: React.FC = () => {
       >
         {isFetching && <Loader />}
 
-        {(!isFetching && paintings.length > 1) && (
+        {(!isFetching && paintings.length === 1) && (
+          <div className="carousel-two-cards">
+            <PaintingCard painting={paintings[0]} />
+          </div>
+        )}
+
+        {(!isFetching && paintings.length === 2) && (
+          <div className="carousel-two-cards">
+            <PaintingCard painting={paintings[0]} />
+            <PaintingCard painting={paintings[1]} />
+          </div>
+        )}
+
+        {(!isFetching && paintings.length === 3) && (
+          <div className="carousel-two-cards">
+            <PaintingCard painting={paintings[0]} />
+            <PaintingCard painting={paintings[1]} />
+            <PaintingCard painting={paintings[2]} />
+          </div>
+        )}
+
+        {(!isFetching && paintings.length > 3) && (
           <Swiper
             modules={[Navigation]}
             navigation={true}
@@ -61,8 +82,8 @@ export const Carousel: React.FC = () => {
           >
             {paintings.map(painting => (
               <SwiperSlide key={painting.id}>
-                <Link to={`/gallery/${painting.id}`}>
-                  <div className="card collection-card swiper-card">
+                <div className="card collection-card swiper-card">
+                  <Link className="card-link" to={`/gallery/${painting.id}`}>
                     <div className="card-image">
                       <figure className="image is-4by3">
                         <img
@@ -85,26 +106,24 @@ export const Carousel: React.FC = () => {
                         </div>
                       </div>
                     </div>
-                  </div>
-                </Link>
+                  </Link>
+                </div>
               </SwiperSlide>
             ))}
           </Swiper>
         )}
-
-        {(!isFetching && paintings.length === 1) && (
-          <PaintingCard painting={paintings[0]} />
-        )}
       </section>
 
-      <section className="section collection">
-        <Link
-          to="/gallery"
-          className="button button-get-all button-collection"
-        >
-          View All
-        </Link>
-      </section>
+      {paintings.length && (
+        <section className="section collection">
+          <Link
+            to="/gallery"
+            className="button button-get-all button-collection"
+          >
+            View All
+          </Link>
+        </section>
+      )}
     </>
   );
 };

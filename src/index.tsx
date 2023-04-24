@@ -6,11 +6,13 @@ import './index.css';
 import '@aws-amplify/ui-react/styles.css'
 import { Authenticator } from '@aws-amplify/ui-react';
 import { App } from './App';
+import ScrollToTop from './ScrollToTop';
 
 createRoot(document.getElementById('root') as HTMLDivElement)
   .render(
     <Authenticator.Provider>
       <Router>
+        <ScrollToTop/>
         <App />
       </Router>
     </Authenticator.Provider>
