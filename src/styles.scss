@@ -430,9 +430,9 @@ body {
 }
 
 .footer {
-  max-width: 1200px;
-  margin: 0 auto !important;
-  padding: 20px;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 120px;
   background-color: #fff;
 
   &-container {
@@ -566,9 +566,6 @@ body {
   }
 
   &-image {
-    // margin: 0 auto;
-    padding: 10px;
-    background-image: url("https://i.etsystatic.com/17358183/r/il/67b2ee/3879584352/il_fullxfull.3879584352_drkw.jpg");
     background-position: center;
     background-size: cover;
     width: 150px;

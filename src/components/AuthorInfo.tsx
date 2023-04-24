@@ -45,7 +45,6 @@ export const AuthorInfo: React.FC<Props> = ({ author}) => {
     getAllPaintingsByAuthor();
   }, [])
 
-  console.log(styles);
   return (
     <div className="container sidebar-info">
       <div className="profile-header">
@@ -56,22 +55,23 @@ export const AuthorInfo: React.FC<Props> = ({ author}) => {
           <div className="author-subtitle">
             {locationIcon} {author.country}, {author.city}
           </div>
+
           <div className="author-subtitle">
-          {paletteIcon} <strong>preferred styles: </strong> {removeDublicates(styles)}
+          {paletteIcon} <strong>styles: </strong> {removeDublicates(styles)}
           </div>
 
           <div className="author-subtitle">
-            {paintbrushIcon} <strong>preferred mediums: </strong> {removeDublicates(mediums)}
+            {paintbrushIcon} <strong>mediums: </strong> {removeDublicates(mediums)}
           </div>
 
           <div className="author-subtitle">
-            {supportsIcon}  <strong>preferred supports: </strong> {removeDublicates(supports)}
+            {supportsIcon} <strong>supports: </strong> {removeDublicates(supports)}
           </div>
         </div>
+      </div>
 
-        <div className="block">
-          <strong>About me:</strong> {author.aboutMe}
-        </div>
+      <div className="block profile-header">
+        <strong>About me:</strong> {author.aboutMe}
       </div>
     </div>
   );

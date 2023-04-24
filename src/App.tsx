@@ -1,12 +1,10 @@
 import { NavBar } from './components/NavBar';
 import { MainPage } from './pages/MainPage';
 import './styles.scss'
-import 'bulma/css/bulma.css';
 import { Footer } from './components/Footer';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { Catalog } from './pages/Catalog';
 import { Fund } from './components/Fund';
-import { AboutUs } from './components/AboutUs';
 import { PaintingPage } from './pages/PaintingPage';
 
 import { Amplify } from 'aws-amplify';
@@ -19,6 +17,7 @@ import { Profile } from './pages/Profile';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { About } from './pages/About';
+import { Authors } from './pages/Authors';
 
 Amplify.configure(awsExports);
 
@@ -88,6 +87,11 @@ export const App = () => {
               <Route
                 path="author"
                 element={<AuthorPage />}
+              />
+
+              <Route
+                path="authors"
+                element={<Authors />}
               />
 
             <Route

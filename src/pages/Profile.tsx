@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './Profile.scss'
 import '../styles.scss'
+import 'bulma/css/bulma.css';
 import { ProfileEdit } from '../components/ProfileEdit';
 import { MyPaintings } from './MyPaintings';
 import { CreatePainting } from '../components/CreatePainting';
@@ -12,40 +13,45 @@ import { useAuthenticator } from '@aws-amplify/ui-react';
 import axios from 'axios';
 import { Loader } from '../components/Loader';
 
-const locationIcon = <FontAwesomeIcon className="far" icon={faLocationDot} />;
 const GETAUTHOR = 'https://www.albedosunrise.com/authors/';
 
+const locationIcon = <FontAwesomeIcon className="far" icon={faLocationDot} />;
+
 export const Profile: React.FC = () => {
-  const [author, setAuthor] = useState<Author | null>(null)
+  const [author, setAuthor] = useState<Author | null>(null);
   const [isCreateVisible, setIsCreateVisible] = useState(false);
   const [isPaintingsVisible, setIsPaintingsVisible] = useState(false);
+  const [isAdded, setIsAdded] = useState(false);
+  const [hasError, setHasError] = useState(false);
   const [isFetching, setIsFetching] = useState(true);
-  const { user, route } = useAuthenticator((context) => [context.route]);
 
+  const { user, route } = useAuthenticator((context) => [context.route]);
   const isAuthenticated = route === 'authenticated';
 
   const getAuthorById = async () => {
     await axios.get(GETAUTHOR + user.username)
       .then((response) => {
-        setAuthor(response.data)
+        setAuthor(response.data);
       })
       .catch(error => {
-        // console.log(error);
+        console.log(error);
       })
       .finally(() => {
         setTimeout(() => {
           setIsFetching(false);
         }, 300);
       })
-  }
+  };
 
   useEffect(() => {
     getAuthorById();
+  }, [isAdded])
 
+  useEffect(() => {
     if (isAuthenticated) {
       setIsFetching(false);
     }
-  }, [route])
+  }, [user, route]);
 
   return (
     <section className="section profile">
@@ -61,75 +67,66 @@ export const Profile: React.FC = () => {
               Profile
             </div>
           </li>
-          <li>
-            <div
-              className={classNames('profile-tabs-link', {
-                'is-active': isPaintingsVisible,
-              })}
-              onClick={() => setIsPaintingsVisible(true)}
-            >
-              My paintings
-            </div>
-          </li>
+
+          {author && (
+            <li>
+              <div
+                className={classNames('profile-tabs-link', {
+                  'is-active': isPaintingsVisible,
+                })}
+                onClick={() => setIsPaintingsVisible(true)}
+              >
+                My paintings
+              </div>
+            </li>
+          )}
         </ul>
       </div>
 
-      {isFetching
+      {isFetching && <Loader />}
+
+      {(isPaintingsVisible && author)
         ? (
-        <Loader />
+          <MyPaintings author={author} />
         ) : (
-          (isPaintingsVisible && author)
-            ? (
-              <MyPaintings author={author} />
-            ) : (
-            <div className="container sidebar-info">
-              <div className="profile-header">
-                <div className="author-image"></div>
-  
-                <div className="author-info">
-                  {(author?.fullName || author?.city || author?.country) && (
-                    <>
-                      <div className="author-subtitle"><strong>{author?.fullName}</strong></div>
-                      <div className="author-subtitle">
-                        {locationIcon} {author?.country}, {author?.city}
-                      </div>
-                    </>
-                  )}
-  
-                  <button
-                      className={classNames(
-                        'button-get-all',
-                        'button-edit',
-                        'button', {
-                          'is-dark': !isCreateVisible,
-                        })}
-                      onClick={() => {
-                        setIsCreateVisible(false);
-                      }}
-                    >
-                      Edit info
-                    </button>
-  
-                  <button
-                    className="button is-warning button-get-all"
-                    onClick={() => {
-                      setIsCreateVisible(true);
-                    }}
-                  >
-                    Create Painting
-                  </button>
-                </div>
+        <div className="container sidebar-info">
+          {author && (
+            <div className="profile-header">
+            <img src={author.photoUrl} className="author-image" alt="author" />
+
+            <div className="author-info">
+              <div className="author-subtitle"><strong>{author.fullName}</strong></div>
+              <div className="author-subtitle">
+                {locationIcon} {author.country}, {author.city}
               </div>
-  
-              {isCreateVisible
-                ? (
-                <CreatePainting name={author?.fullName || ''} />
-                ) : (
-                <ProfileEdit getAuthor={getAuthorById} />
-                )}
+
+              <button
+                className={classNames('button', {
+                  'is-info': !isCreateVisible,
+                  'is-warning': isCreateVisible,
+                })}
+                onClick={() => {setIsCreateVisible(!isCreateVisible)}}
+              >
+                {isCreateVisible ? 'Edit Profile Info' : 'Create Painting'}
+              </button>
             </div>
-          )
-        )}
+          </div>
+          )}
+
+          {isCreateVisible
+            ? <CreatePainting />
+            : (
+                <ProfileEdit
+                  author={author}
+                  isAdded={isAdded}
+                  hasError={hasError}
+                  setAuthor={setAuthor}
+                  setIsAdded={setIsAdded}
+                  setHasError={setHasError}
+                />
+              )}
+        </div>
+      )}
     </section>
   );
 };

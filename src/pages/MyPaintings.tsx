@@ -44,7 +44,7 @@ export const MyPaintings: React.FC<Props> = ({ author }) => {
 
       {isCreateVisible && (
         <div className="profile-no-paintings">
-          <CreatePainting name={author.fullName} />
+          <CreatePainting />
         </div>
       )}
     </>
@@ -55,7 +55,6 @@ export const MyPaintings: React.FC<Props> = ({ author }) => {
     .then((response) => {
       setPaintings(response.data.paintings);
       setPageCount(response.data.page.totalPages);
-      console.log(response);
       })
       .catch((error) => {
         console.log(error);

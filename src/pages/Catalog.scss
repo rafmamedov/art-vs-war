@@ -47,17 +47,17 @@
 }
 
 .range-slider .range-slider__thumb {
-  background-color: #4a4a4a;
+  background-color: #4a4a4a !important;
 }
 
 .range-slider .range-slider__range {
-  background-color: #4a4a4a;
+  background-color: #4a4a4a !important;
 }
 
 .filters {
   display: flex;
   margin: 0 20px !important;
-  height: 1185px;
+  height: 100%;
   padding: 20px 10px;
   flex-direction: column;
   align-items: flex-start;
@@ -137,7 +137,7 @@
 .paintinglist {
   margin: 0 !important;
   height: 100%;
-  max-height: fit-content;
+  width: 870px;
   padding: 20px 10px;
   display: flex;
   flex-direction: column;
