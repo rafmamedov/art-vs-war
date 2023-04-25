@@ -2,6 +2,8 @@ import React, { SetStateAction } from 'react';
 import '../styles.scss'
 import 'bulma/css/bulma.css';
 import { useAuthenticator } from '@aws-amplify/ui-react';
+import Flag_of_bravery from '../images/Flag_of_bravery.jpg';
+import colours from '../images/colours.jpeg';
 
 type Props ={
   onAuthenticating: React.Dispatch<SetStateAction<boolean>>;
@@ -19,7 +21,7 @@ export const JoinUs: React.FC<Props> = ({ onAuthenticating }) => {
   }
 
   return (
-    <section id="authors" className="hero is-dark is-large join-us">
+    <section id="authors" className="hero is-dark is-medium join-us">
       <div className="join-us-items">
         <div className="join-us-item-1">
           <div className="subtitle is-3">
@@ -39,8 +41,8 @@ export const JoinUs: React.FC<Props> = ({ onAuthenticating }) => {
         </div>
 
         <div className="join-us-item-2">
-          <div className="join-us-img-1"></div>
-          <div className="join-us-img-2"></div>
+          <img className="join-us-img-1" src={Flag_of_bravery} alt="flag of bravery"/>
+          <img className="join-us-img-2" src={colours} alt="colours" />
         </div>
       </div>
     </section>

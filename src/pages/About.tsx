@@ -1,9 +1,14 @@
 import React from 'react';
 import '../styles.scss';
-import Flag_of_bravery from '../images/Flag_of_bravery.jpg';
-import fb from '../images/fb.png';
 import github from '../images/github.png';
 import linkedin from '../images/LI-In.png';
+import rafael from '../images/rafael.jpeg';
+import serhiy from '../images/serhiy.png';
+import roman from '../images/roman.jpg';
+import iryna from '../images/iryna.jpg';
+import Flag_of_bravery from '../images/Flag_of_bravery.jpg';
+import colours from '../images/colours.jpeg';
+
 import { Results } from '../components/Results';
 
 export const About = () => (
@@ -49,7 +54,7 @@ export const About = () => (
             </p>
           </div>
 
-          <img className="about-image" src={Flag_of_bravery} alt="Ukraine"/>
+          <img className="about-image" src={colours} alt="Ukraine"/>
         </div>
 
         <div className="team">
@@ -61,7 +66,7 @@ export const About = () => (
             <div className="card">
               <div className="card-image">
                 <figure className="image is-4by3 team-image">
-                  <img src="https://bulma.io/images/placeholders/1280x960.png" alt="placeholder" />
+                  <img src={serhiy} alt="placeholder" />
                 </figure>
               </div>
               <div className="card-content">
@@ -73,11 +78,14 @@ export const About = () => (
                 </div>
 
                 <div className="content">
-                  <p className="subtitle is-6 team-content">Backend java developer</p>
+                  <p className="subtitle is-6 team-content">Backend Java developer</p>
                   <div className="social">
-                    <img src={github} alt="github" className="social-logo" />
-                    <img src={linkedin} alt="linkedin" className="social-logo" />
-                    <img src={fb} alt="facebook" className="social-logo" />
+                    <a href="https://github.com/finedefinition" target="_blank" rel="noreferrer">
+                      <img src={github} alt="github" className="social-logo" />
+                    </a>
+                    <a href="https://www.linkedin.com/in/sergiibezrukov/" target="_blank" rel="noreferrer">
+                      <img src={linkedin} alt="linkedin" className="social-logo" />
+                    </a>
                   </div>
                 </div>
               </div>
@@ -86,7 +94,7 @@ export const About = () => (
             <div className="card">
               <div className="card-image">
                 <figure className="image is-4by3 team-image">
-                  <img src="https://bulma.io/images/placeholders/1280x960.png" alt="placeholder" />
+                  <img src={roman} alt="placeholder" />
                 </figure>
               </div>
               <div className="card-content">
@@ -98,11 +106,12 @@ export const About = () => (
                 </div>
 
                 <div className="content">
-                  <p className="subtitle is-6 team-content">Backend java developer</p>
+                  <p className="subtitle is-6 team-content">Backend Java developer</p>
                   <div className="social">
-                    <img src={github} alt="github" className="social-logo" />
+                    <a href="https://github.com/romanovosad87" target="_blank" rel="noreferrer">
+                      <img src={github} alt="github" className="social-logo" />
+                    </a>
                     <img src={linkedin} alt="linkedin" className="social-logo" />
-                    <img src={fb} alt="facebook" className="social-logo" />
                   </div>
                 </div>
               </div>
@@ -111,32 +120,7 @@ export const About = () => (
             <div className="card">
               <div className="card-image">
                 <figure className="image is-4by3 team-image">
-                  <img src="https://bulma.io/images/placeholders/1280x960.png" alt="placeholder" />
-                </figure>
-              </div>
-              <div className="card-content">
-                <div className="media">
-                  <div className="media-content">
-                    <p className="title is-4 team-title">Rafael Mamedov</p>
-                    <p className="subtitle is-6 team-subtitle">Demo Presenter</p>
-                  </div>
-                </div>
-
-                <div className="content">
-                  <p className="subtitle is-6 team-content">Frontend react developer</p>
-                  <div className="social">
-                    <img src={linkedin} alt="linkedin" className="social-logo" />
-                    <img src={github} alt="github" className="social-logo" />
-                    <img src={fb} alt="facebook" className="social-logo" />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="card">
-              <div className="card-image">
-                <figure className="image is-4by3 team-image">
-                  <img src="https://bulma.io/images/placeholders/1280x960.png" alt="placeholder" />
+                  <img src={iryna} alt="placeholder" />
                 </figure>
               </div>
               <div className="card-content">
@@ -148,11 +132,42 @@ export const About = () => (
                 </div>
 
                 <div className="content">
-                  <p className="subtitle is-6 team-content">QA</p>
+                  <p className="subtitle is-6 team-content">QA engineer</p>
                   <div className="social">
-                    <img src={github} alt="github" className="social-logo" />
-                    <img src={linkedin} alt="linkedin" className="social-logo" />
-                    <img src={fb} alt="facebook" className="social-logo" />
+                    <a href="https://www.linkedin.com/in/iryna-masliuk-b98573236/" target="_blank" rel="noreferrer">
+                      <img src={github} alt="github" className="social-logo" />
+                    </a>
+                    <a href="https://github.com/IrinaMaslyuk" target="_blank" rel="noreferrer">
+                      <img src={linkedin} alt="linkedin" className="social-logo" />
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="card">
+              <div className="card-image">
+                <figure className="image is-4by3 team-image">
+                  <img src={rafael} alt="placeholder" />
+                </figure>
+              </div>
+              <div className="card-content">
+                <div className="media">
+                  <div className="media-content">
+                    <p className="title is-4 team-title">Rafael Mamedov</p>
+                    <p className="subtitle is-6 team-subtitle">Demo Presenter</p>
+                  </div>
+                </div>
+
+                <div className="content">
+                  <p className="subtitle is-6 team-content">Frontend developer</p>
+                  <div className="social">
+                    <a href="https://www.linkedin.com/in/rafael-mamedov-598a82a7/" target="_blank" rel="noreferrer">
+                      <img src={linkedin} alt="linkedin" className="social-logo" />
+                    </a>
+                    <a href="https://github.com/rafmamedov/" target="_blank" rel="noreferrer">
+                      <img src={github} alt="github" className="social-logo" />
+                    </a>
                   </div>
                 </div>
               </div>

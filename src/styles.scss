@@ -105,7 +105,7 @@ body {
 
 .social {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
   gap: 30px;
 
@@ -473,22 +473,28 @@ body {
 
 .join-us {
   margin: 0 auto;
-  padding: 20px;
+  padding: 0 60px;
   max-width: 100%;
+
+  @media (min-width: 1400px) {
+    padding: 0 120px;
+  }
 
   &-items {
     margin: 0 auto;
-    max-width: 1200px !important;
-    padding: 20px;
     display: flex;
-    gap: 20px;
-    justify-content: space-between;
+    gap: 50px;
+    justify-content: space-evenly;
     align-items: center;
 
     @media (max-width: 830px) {
       flex-direction: column;
       align-items: center;
     }
+  }
+
+  &-item-1 {
+    flex-basis: 50%;
   }
 
   &-item-2 {
@@ -515,7 +521,7 @@ body {
       background-size: cover;
       background-position: center;
       transform: translate(20%, -50%);
-      background-image: url(./images/23.jpeg);
+      background-image: url(./images/colours.jpeg);
       border-radius: 3%;
     }
   }
