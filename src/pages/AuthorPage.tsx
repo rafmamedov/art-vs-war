@@ -7,6 +7,7 @@ import { useLocation } from 'react-router-dom';
 
 const GETAUTHOR = 'https://www.albedosunrise.com/authors/';
 
+
 export const AuthorPage = () => {
   const [author, setAuthor] = useState<Author | null>(null)
   const location = useLocation();
@@ -32,7 +33,10 @@ export const AuthorPage = () => {
           <AuthorInfo
             author={author}
           />
-          <MyPaintings author={author} />
+          <MyPaintings
+            author={author}
+            isAuthor={false}
+          />
         </>
       )}
     </section>

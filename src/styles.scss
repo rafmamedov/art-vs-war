@@ -290,13 +290,16 @@ body {
 
 .fund {
   margin: 0 auto 120px;
-  padding: 0 20px;
+  padding: 0 40px;
   max-width: 100%;
+
+  @media (min-width: 1400px) {
+    padding: 0 100px;
+  }
 
   &-content {
     margin: 0 auto;
     padding: 0 20px;
-    max-width: 1200px !important;
 
     @media (min-width: 830px) {
       display: flex;
@@ -338,9 +341,12 @@ body {
 }
 
 .results {
-  margin: 0 auto 120px !important;
-  max-width: 1200px;
-  padding: 0 20px;
+  margin: 0 auto 120px;
+  padding: 0 60px;
+
+  @media (min-width: 1400px) {
+    padding: 0px 120px;
+  }
 
   &-title {
     margin: 0 auto 40px !important;
@@ -432,13 +438,17 @@ body {
 .footer {
   max-width: 100%;
   margin: 0 auto;
-  padding: 120px;
+  padding: 30px 60px;
   background-color: #fff;
 
+  @media (min-width: 1400px) {
+    padding: 30px 120px;
+  }
+
   &-container {
-    max-width: 1200px;
+    max-width: 100%;
     margin: 0 auto 20px;
-    padding: 20px;
+    padding: 20px 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -459,9 +469,8 @@ body {
   }
 
   &-end {
-    max-width: 1200px;
-    margin: 0 auto 20px;
-    padding: 20px;
+    margin: 0 auto;
+    padding: 20px 0;
     display: flex;
     justify-content: space-between;
     align-items: baseline;
@@ -469,8 +478,13 @@ body {
 }
 
 .painting {
+  max-width: 100%;
+  padding: 0 40px;
+
+  @media (min-width: 1400px) {
+    padding: 0 100px;
+  }
   &-card {
-    max-width: 1200px;
     margin: 0 auto 20px;
     padding: 20px;
     display: flex;

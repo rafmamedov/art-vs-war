@@ -10,16 +10,17 @@ const URL = 'https://www.albedosunrise.com/paintings/by-author/'
 
 type Props = {
   author: Author;
+  isAuthor: boolean;
 };
 
-export const MyPaintings: React.FC<Props> = ({ author }) => {
+export const MyPaintings: React.FC<Props> = ({ author, isAuthor }) => {
   const [paintings, setPaintings] = useState([])
   const [currentPage, setCurrentPage] = useState(1);
   const [pageCount, setPageCount] = useState(0);
   const [perPage, setPerPage] = useState(6);
-  const [isCreateVisible, setIsCreateVisible] = useState(false);
   const [isFetching, setIsFetching] = useState(true);
   const [sortBy, setSortBy] = useState('sortBy=entityCreatedAt:DESC');
+  const [isCreateVisible, setIsCreateVisible] = useState(false);
 
   const sortByDateAsc = 'sortBy=entityCreatedAt:ASC';
   const sortByDateDesc = 'sortBy=entityCreatedAt:DESC';
@@ -31,15 +32,20 @@ export const MyPaintings: React.FC<Props> = ({ author }) => {
   const notification = (
     <>
       <div className="notification is-light profile-notification">
-        <span className="profile-notification-subtitle">There are no paintings added yet</span>
-        <button
-          className="button is-warning button-get-all"
-          onClick={() => {
-            setIsCreateVisible(!isCreateVisible);
-          }}
-        >
-          Create Painting
-        </button>
+        {!isAuthor
+          ? (
+            <span className="profile-notification-subtitle">There are no paintings added yet</span>
+          ) : (
+          <>
+            <span className="profile-notification-subtitle">There are no paintings added yet</span>
+            <button
+              className="button is-warning"
+              onClick={() => setIsCreateVisible(!isCreateVisible)}
+            >
+              Create Painting
+            </button>
+          </>
+        )}
       </div>
 
       {isCreateVisible && (

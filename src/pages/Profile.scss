@@ -19,6 +19,15 @@
     justify-content: flex-start;
     align-items: baseline;
     gap: 20px;
+
+    &-icon {
+      text-align: end;
+    }
+
+    &-about {
+      margin-bottom: 20px;
+      padding: 0 10px;
+    }
   }
 
   &-tabs {

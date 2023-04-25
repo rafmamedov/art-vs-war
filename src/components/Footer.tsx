@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 export const Footer: React.FC = () => (
   <section className="section footer">
-    <div className="container footer-container">
+    <div className="footer-container">
       <div className="footer-title">
         <div className="subtitle is-3">Art vs War</div>
         <div className="subtitle is-4">2023</div>
@@ -17,7 +17,7 @@ export const Footer: React.FC = () => (
       </div>
     </div>
 
-    <div className="container footer-end">
+    <div className="footer-end">
       <span className="footer-created">Created by Art vs War Team</span>
       <span className="footer-license">
         © This work is licensed under the terms of 

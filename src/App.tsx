@@ -31,10 +31,6 @@ export const App = () => {
     }
   }, [route, isAuthentificated]);
 
-  useEffect(() => {
-    document.body.scrollTo(0, 0);
-  });
-
   return (
     <>
       <NavBar

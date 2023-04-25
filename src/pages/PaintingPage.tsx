@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import '../styles.scss';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { Painting } from '../types/painting';
 import { Loader } from '../components/Loader';
@@ -13,6 +13,7 @@ const URL = 'https://www.albedosunrise.com/paintings/';
 export const PaintingPage: React.FC = () => {
   const [painting, setPainting] = useState<Painting | null>(null);
   const [isFetching, setIsFetching] = useState(true);
+  const navigate = useNavigate();
   const { paintingId = '' } = useParams();
 
   const getPaintingById = async () => {
@@ -39,9 +40,11 @@ export const PaintingPage: React.FC = () => {
       ? <Loader />
       : (
         <section className="section painting">
-          <div className="icon-container"><Link to="/gallery">{element}</Link></div>
+          <div className="icon-container">
+            <span onClick={() => navigate(-1)}>{element}</span>
+          </div>
 
-          <div className="container painting-card">
+          <div className="painting-card">
             <img
               src={painting?.imageUrl}
               className="painting-image"
@@ -58,7 +61,8 @@ export const PaintingPage: React.FC = () => {
                 <div className="painting-title">Author:</div>
                 <div className="painting-title">
                     <Link
-                      to={`/${painting?.author.id}`}>
+                      to={`/${painting?.author.id}`}
+                    >
                         {painting?.author.fullName}
                     </Link>
                 </div>

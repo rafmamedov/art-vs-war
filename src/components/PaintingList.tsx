@@ -10,7 +10,7 @@ type Props = {
 export const PaintingList: React.FC<Props> = ({ paintings }) => {
   return (
     <section id="gallery" className="section collection">
-      <div className="container collection-list">
+      <div className="collection-list">
         {paintings.map(painting => (
             <PaintingCard
               key={painting.id}

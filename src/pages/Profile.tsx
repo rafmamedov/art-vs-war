@@ -25,8 +25,7 @@ export const Profile: React.FC = () => {
   const [hasError, setHasError] = useState(false);
   const [isFetching, setIsFetching] = useState(true);
 
-  const { user, route } = useAuthenticator((context) => [context.route]);
-  const isAuthenticated = route === 'authenticated';
+  const { user } = useAuthenticator((context) => [context.user]);
 
   const getAuthorById = async () => {
     await axios.get(GETAUTHOR + user.username)
@@ -48,10 +47,10 @@ export const Profile: React.FC = () => {
   }, [isAdded])
 
   useEffect(() => {
-    if (isAuthenticated) {
+    setTimeout(() => {
       setIsFetching(false);
-    }
-  }, [user, route]);
+    }, 1000)
+  }, []);
 
   return (
     <section className="section profile">
@@ -85,10 +84,14 @@ export const Profile: React.FC = () => {
 
       {isFetching && <Loader />}
 
-      {(isPaintingsVisible && author)
-        ? (
-          <MyPaintings author={author} />
-        ) : (
+      {(isPaintingsVisible && author && !isFetching) && (
+        <MyPaintings
+          author={author}
+          isAuthor={true}
+        />
+      )}
+
+      {(!isPaintingsVisible && !isFetching) && (
         <div className="container sidebar-info">
           {author && (
             <div className="profile-header">
@@ -125,15 +128,16 @@ export const Profile: React.FC = () => {
           {isCreateVisible
             ? <CreatePainting />
             : (
-                <ProfileEdit
-                  author={author}
-                  isAdded={isAdded}
-                  hasError={hasError}
-                  setAuthor={setAuthor}
-                  setIsAdded={setIsAdded}
-                  setHasError={setHasError}
-                />
-              )}
+            <ProfileEdit
+              author={author}
+              isAdded={isAdded}
+              hasError={hasError}
+              setAuthor={setAuthor}
+              setIsAdded={setIsAdded}
+              onFetching={setIsFetching}
+              setHasError={setHasError}
+            />
+          )}
         </div>
       )}
     </section>

@@ -3,8 +3,8 @@ import React from 'react';
 export const Fund: React.FC = () => {
   return (
     <section id="united24" className="section fund">
-      <div className="container fund-content">
-        <div className="container fund-ambassadors">
+      <div className="fund-content">
+        <div className="fund-ambassadors">
           <div className="fund-image"></div>
 
           <div className="text fund-text">

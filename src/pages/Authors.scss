@@ -9,7 +9,7 @@
   }
 
   &-container {
-    margin: 0 auto 30px;
+    margin: 0 auto 50px;
     padding: 0 120px;
     display: flex;
     flex-direction: column;
@@ -22,10 +22,18 @@
     gap: 30px;
   }
 
+  &-title {
+    margin-bottom: 50px !important;
+  }
+
   &-pagination {
     margin: 0 auto;
     padding: 0 116px;
     max-width: 100%;
+  }
+
+  &-link {
+    color: #4a4a4a;
   }
 
   &-card {
@@ -34,6 +42,10 @@
     &:hover {
       transform: scale(1.05);
       cursor: pointer;
+    }
+
+    &-image {
+      padding-top: 100% !important;
     }
   }
 }

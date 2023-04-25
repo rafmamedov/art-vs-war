@@ -16,7 +16,7 @@ export const AuthorList: React.FC<Props> = ({ authors }) => {
           />
       ))}
 
-      <div className="card authors-card">
+      {/* <div className="card authors-card">
         <div className="card-image">
           <figure className="image is-4by3">
             <img src="https://bulma.io/images/placeholders/1280x960.png" alt="placeholder" />
@@ -140,7 +140,7 @@ export const AuthorList: React.FC<Props> = ({ authors }) => {
             Phasellus nec iaculis mauris.
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

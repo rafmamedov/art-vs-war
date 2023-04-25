@@ -20,7 +20,7 @@ const styles = [
   'minimalism',
   'modern',
   'pop art',
-  'primitivism/native art',
+  'primitivism/naive art',
   'realism',
   'surrealism',
 ];
@@ -53,9 +53,10 @@ const supports = [
 
 type Props = {
   setFilters: React.Dispatch<SetStateAction<string>>;
+  setCurrentPage: React.Dispatch<SetStateAction<number>>;
 };
 
-export const Filters: React.FC<Props> = ({ setFilters }) => {
+export const Filters: React.FC<Props> = ({ setFilters, setCurrentPage }) => {
   const [price, setPrice] = useState<number[]>([0, 0]);
   const [maxPrice, setMaxPrice] = useState(0);
   const [minPrice, setMinPrice] = useState(0);
@@ -163,6 +164,7 @@ export const Filters: React.FC<Props> = ({ setFilters }) => {
     );
 
     setFilters(filterParams);
+    setCurrentPage(1);
   };
 
   const handleClearFilters = async () => {

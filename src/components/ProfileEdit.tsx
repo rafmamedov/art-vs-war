@@ -13,13 +13,13 @@ const UPDATEAUTHOR = 'https://www.albedosunrise.com/authors';
 const element = <FontAwesomeIcon className="far" icon={faArrowRight} />;
 const uploadIcon = <FontAwesomeIcon className="far" icon={faUpload} />;
 const icon = <FontAwesomeIcon className="fas" icon={faUser} />;
-// const uploadIcon = <FontAwesomeIcon className="far" icon={faUpload} />;
 const isNumber = /^\d+$/;
 
 type Props = {
   isAdded: boolean;
   hasError: boolean;
   author: Author | null;
+  onFetching: React.Dispatch<SetStateAction<boolean>>;
   setAuthor: React.Dispatch<SetStateAction<Author | null>>;
   setIsAdded: React.Dispatch<SetStateAction<boolean>>;
   setHasError: React.Dispatch<SetStateAction<boolean>>;
@@ -30,6 +30,7 @@ export const ProfileEdit: React.FC<Props> = ({
   isAdded,
   hasError,
   setAuthor,
+  onFetching,
   setIsAdded,
   setHasError,
 }) => {
@@ -86,7 +87,7 @@ export const ProfileEdit: React.FC<Props> = ({
 
   const handleInputChange = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    setState: React.Dispatch<SetStateAction<string>>
+    setState: React.Dispatch<SetStateAction<string>>,
   ) => {
     setErrors([]);
 
@@ -126,8 +127,6 @@ export const ProfileEdit: React.FC<Props> = ({
                   message: error.message,
                   field: error.field,
                 })));
-                console.log(error);
-                console.log(errors);
             });
           })
         .catch((error) => {
@@ -157,13 +156,11 @@ export const ProfileEdit: React.FC<Props> = ({
             message: error.message,
             field: error.field,
           })));
-          console.log(error);
-          console.log(errors);
-      });
+      })
     };
   };
 
-  const onUpdateInfo = async () => {
+  const updateInfo = async () => {
     const authorDataPut = {
       fullName: name,
       country,
@@ -183,8 +180,7 @@ export const ProfileEdit: React.FC<Props> = ({
           message: error.message,
           field: error.field,
         })));
-        console.log(error);
-    })
+    });
   };
 
   const onUpdateProfile = async () => {
@@ -208,17 +204,15 @@ export const ProfileEdit: React.FC<Props> = ({
 
             axios.put(UPDATEAUTHOR, authorDataPut, { headers })
             .then(response => {
-              console.log(response);
               setAuthor(response.data);
               setIsAdded(true);
             })
             .catch(error => {
               setIsAdded(false);
-              setErrors(error.response.data.errors
-                .map((error: Error) => ({
+              setErrors(error.response.data.errors.map((error: Error) => ({
                   message: error.message,
                   field: error.field,
-                })));
+                })))
             });
           })
           .catch((error) => {
@@ -229,8 +223,8 @@ export const ProfileEdit: React.FC<Props> = ({
         console.log(error);
       });
     } else {
-      onUpdateInfo();
-    };
+      updateInfo();
+    }
   };
 
   const onSubmit = () => {

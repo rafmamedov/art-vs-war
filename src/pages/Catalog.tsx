@@ -53,7 +53,7 @@ export const Catalog: React.FC = () => {
 
   const notificationNoPaintings = (
     <div className="notification is-warning catalog-notification">
-      There are no paintings on server!
+      There are no paintings in database!
     </div>
   );
 
@@ -64,7 +64,7 @@ export const Catalog: React.FC = () => {
       </div>
 
       <div className="catalog-info">
-        <Filters setFilters={setFilters} />
+        <Filters setFilters={setFilters} setCurrentPage={setCurrentPage} />
         <div className="container paintinglist">
           {isFetching
             ? <Loader />

@@ -13,7 +13,6 @@ const URL = 'https://www.albedosunrise.com/paintings';
 const UPLOAD = 'https://www.albedosunrise.com/images/getUrl?extension=';
 const element = <FontAwesomeIcon className="far" icon={faArrowRight} />;
 const uploadIcon = <FontAwesomeIcon className="far" icon={faUpload} />;
-
 const isNumber = /^\d+$/;
 
 export const CreatePainting: React.FC = () => {
@@ -107,6 +106,9 @@ export const CreatePainting: React.FC = () => {
                   message: error.message,
                   field: error.field,
                 })));
+            })
+            .finally(() => {
+              setSelectedImage(null);
             });
         })
         .catch((error) => {
@@ -143,8 +145,7 @@ export const CreatePainting: React.FC = () => {
             message: error.message,
             field: error.field,
           })));
-          console.log(error);
-      });
+      })
   }
 
   const onSubmit = () => {

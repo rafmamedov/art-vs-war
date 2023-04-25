@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 export const AboutUs: React.FC = () => {
   return (
     <section id="about" className="section about">
-      <div className="container about-items">
+      <div className="about-items">
         <div className="title">Art vs War</div>
 
         <div className="text description">

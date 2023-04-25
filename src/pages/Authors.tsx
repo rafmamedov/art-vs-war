@@ -6,7 +6,7 @@ import { Author } from '../types/painting';
 import './Authors.scss';
 import axios from 'axios';
 
-const GETALLAUTHORS = 'https://www.albedosunrise.com/authors';
+const GETALLAUTHORS = 'https://www.albedosunrise.com/authors?';
 
 export const Authors = () => {
   const [isFetching, setIsFetching] = useState(false);
@@ -22,8 +22,8 @@ export const Authors = () => {
     await axios.get(GETALLAUTHORS + defaultPerPage)
       .then((response) => {
         setAuthors(response.data.authors);
-        setAuthorsCount(authors.length);
         setPageCount(response.data.page.totalPages);
+        setAuthorsCount(response.data.page.totalElements)
       })
       .catch((error) => {
         console.log(error);
@@ -33,7 +33,7 @@ export const Authors = () => {
           setIsFetching(false);
         }, 300);
       })
-  }, [defaultPerPage, authors]);
+  }, [defaultPerPage]);
 
   useEffect(() => {
     getAllAuthorsFromServer();
