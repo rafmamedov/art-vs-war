@@ -2,12 +2,12 @@ import React from 'react';
 import '../styles.scss';
 import github from '../images/github.png';
 import linkedin from '../images/LI-In.png';
-import rafael from '../images/rafael.jpeg';
+import rafael from '../images/rafael.png';
 import serhiy from '../images/serhiy.png';
 import roman from '../images/roman.jpg';
 import iryna from '../images/iryna qa.jpg';
 import Flag_of_bravery from '../images/Flag_of_bravery.jpg';
-import colours from '../images/colours.jpeg';
+import colours from '../images/colours.png';
 
 import { Results } from '../components/Results';
 
@@ -54,7 +54,7 @@ export const About = () => (
             </p>
           </div>
 
-          <img className="about-image" src={colours} alt="Ukraine"/>
+          <img className="about-image" src={colours} alt="clours"/>
         </div>
 
         <div className="team">

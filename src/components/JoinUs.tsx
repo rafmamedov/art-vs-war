@@ -3,7 +3,7 @@ import '../styles.scss'
 import 'bulma/css/bulma.css';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import Flag_of_bravery from '../images/Flag_of_bravery.jpg';
-import colours from '../images/colours.jpeg';
+import colours from '../images/colours.png';
 
 type Props ={
   onAuthenticating: React.Dispatch<SetStateAction<boolean>>;
