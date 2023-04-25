@@ -1,44 +1,166 @@
 import React from 'react';
-import '../styles.scss'
+import '../styles.scss';
+import Flag_of_bravery from '../images/Flag_of_bravery.jpg';
+import fb from '../images/fb.png';
+import github from '../images/github.png';
+import linkedin from '../images/LI-In.png';
+import { Results } from '../components/Results';
 
 export const About = () => (
-  <div className="section">
-    <div className="container about-container">
+  <div className="section about-us">
+    <div className="about-container">
       <div className="content">
-        <h1 className="about-title">Meet Art vs War project</h1>
-        <h2 className="subtitle is-4">
-          Our project aims to support Ukraine's ongoing conflict by showcasing
-          the work of a displaced Ukrainian artist and providing a platform for fundraising and donations.
+        <h1 className="about-title title is-1">Meet Art vs War project</h1>
+        <h2 className="subtitle is-3 about-title about-subtitle">
+          Our project supports Ukraine in ongoing war by showcasing
+          the work of Ukrainian artist abroad and providing fundraising and donations for UA army.
         </h2>
-        <p>
-        Our mission at Art vs War is to create a platform where displaced artists can showcase
-        their work and receive support for their talents. The ongoing conflict in Ukraine has created
-        a challenging environment for many artists, and we are proud to provide a platform that allows them
-        to share their work with the world.
-        </p>
-        <p>
-        The paintings available on our site are not only beautiful works of art,
-        but they also tell a story. Each piece reflects the unique experiences and perspectives
-        of the artist, and purchasing one of these paintings is a way to own a piece of history
-        while contributing to a good cause.
-        </p>
-        <p>
-        We believe that art has the power to bring people together, and our site is a place where
-        individuals from all over the world can come together to support a common cause. By purchasing
-        a painting or making a donation, you can be a part of this community and make a difference in the lives
-        of those affected by the conflict in Ukraine.
-        </p>
-        <p>
-        At Art vs War, we are committed to transparency and accountability.
-        We provide regular updates on the funds generated from painting sales and donations,
-        as well as information on the organizations that we support. We believe that it is important
-        for our supporters to know exactly where their money is going and the impact that it is having.
-        </p>
-        <p>
-          We would like to extend a special thank you to our artists, who have shown incredible resilience
-          and creativity in the face of adversity. Their work is a testament to the power of art and the human spirit.
-          We are honored to be able to showcase their work and support their talents.
-        </p>
+        <div className="about-content-block">
+          <img className="about-image" src={Flag_of_bravery} alt="Ukraine"/>
+
+          <div className="about-text">
+          <p>
+            Our mission at Art vs War is to create a platform where displaced artists can showcase
+            their work and receive support for their talents. The ongoing conflict in Ukraine has created
+            a challenging environment for many artists, and we are proud to provide a platform that allows them
+            to share their work with the world.
+          </p>
+          <p>
+            The paintings available on our site are not only beautiful works of art,
+            but they also tell a story. Each piece reflects the unique experiences and perspectives
+            of the artist, and purchasing one of these paintings is a way to own a piece of history
+            while contributing to a good cause.
+          </p>
+          </div>
+        </div>
+
+        <div className="about-content-block">
+          <div className="about-text">
+            <p>
+              We believe that art has the power to bring people together, and our site is a place where
+              individuals from all over the world can come together to support a common cause. By purchasing
+              a painting or making a donation, you can be a part of this community and make a difference in the lives
+              of those affected by the conflict in Ukraine.
+            </p>
+            <p>
+              We provide regular updates on the funds generated from painting sales and donations. 
+              We believe that it is important for our supporters to know exactly where their money 
+              is going and the impact that it is having.
+            </p>
+          </div>
+
+          <img className="about-image" src={Flag_of_bravery} alt="Ukraine"/>
+        </div>
+
+        <div className="team">
+          <p className="title is-2 team-main-title">
+            Our Team
+          </p>
+
+          <div className="team-list">
+            <div className="card">
+              <div className="card-image">
+                <figure className="image is-4by3 team-image">
+                  <img src="https://bulma.io/images/placeholders/1280x960.png" alt="placeholder" />
+                </figure>
+              </div>
+              <div className="card-content">
+                <div className="media">
+                  <div className="media-content">
+                    <p className="title is-4 team-title">Sergiy Bezrukov</p>
+                    <p className="subtitle is-6 team-subtitle">Product owner</p>
+                  </div>
+                </div>
+
+                <div className="content">
+                  <p className="subtitle is-6 team-content">Backend java developer</p>
+                  <div className="social">
+                    <img src={github} alt="github" className="social-logo" />
+                    <img src={linkedin} alt="linkedin" className="social-logo" />
+                    <img src={fb} alt="facebook" className="social-logo" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="card">
+              <div className="card-image">
+                <figure className="image is-4by3 team-image">
+                  <img src="https://bulma.io/images/placeholders/1280x960.png" alt="placeholder" />
+                </figure>
+              </div>
+              <div className="card-content">
+                <div className="media">
+                  <div className="media-content">
+                    <p className="title is-4 team-title">Roman Novosad</p>
+                    <p className="subtitle is-6 team-subtitle">Team lead</p>
+                  </div>
+                </div>
+
+                <div className="content">
+                  <p className="subtitle is-6 team-content">Backend java developer</p>
+                  <div className="social">
+                    <img src={github} alt="github" className="social-logo" />
+                    <img src={linkedin} alt="linkedin" className="social-logo" />
+                    <img src={fb} alt="facebook" className="social-logo" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="card">
+              <div className="card-image">
+                <figure className="image is-4by3 team-image">
+                  <img src="https://bulma.io/images/placeholders/1280x960.png" alt="placeholder" />
+                </figure>
+              </div>
+              <div className="card-content">
+                <div className="media">
+                  <div className="media-content">
+                    <p className="title is-4 team-title">Rafael Mamedov</p>
+                    <p className="subtitle is-6 team-subtitle">Demo Presenter</p>
+                  </div>
+                </div>
+
+                <div className="content">
+                  <p className="subtitle is-6 team-content">Frontend react developer</p>
+                  <div className="social">
+                    <img src={linkedin} alt="linkedin" className="social-logo" />
+                    <img src={github} alt="github" className="social-logo" />
+                    <img src={fb} alt="facebook" className="social-logo" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="card">
+              <div className="card-image">
+                <figure className="image is-4by3 team-image">
+                  <img src="https://bulma.io/images/placeholders/1280x960.png" alt="placeholder" />
+                </figure>
+              </div>
+              <div className="card-content">
+                <div className="media">
+                  <div className="media-content">
+                    <p className="title is-4 team-title">Iryna Maslyuk</p>
+                    <p className="subtitle is-6 team-subtitle">Scrum master</p>
+                  </div>
+                </div>
+
+                <div className="content">
+                  <p className="subtitle is-6 team-content">QA</p>
+                  <div className="social">
+                    <img src={github} alt="github" className="social-logo" />
+                    <img src={linkedin} alt="linkedin" className="social-logo" />
+                    <img src={fb} alt="facebook" className="social-logo" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <Results />
       </div>
     </div>
   </div>

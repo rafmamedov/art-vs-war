@@ -25,7 +25,16 @@ body {
 }
 
 .about {
-  margin: 0 20px 120px;
+  margin: 0 auto 120px;
+
+  &-us {
+    margin: 0 auto;
+    padding: 30px 60px 0;
+
+    @media (min-width: 1400px) {
+      padding: 30px 120px 0;
+    }
+  }
 
   &-container {
     margin: 0 auto !important;
@@ -33,7 +42,83 @@ body {
 
   &-title {
     text-align: center;
+    margin-bottom: 50px !important;
   }
+
+  &-subtitle {
+    font-weight: 500 !important;
+  }
+
+  &-content-block {
+    padding: 10px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 50px;
+    margin-bottom: 60px;
+  }
+
+  &-image {
+    width: 560px;
+    height: 440px;
+    border-radius: 2%;
+  }
+
+  &-text {
+    font-size: 24px;
+    font-weight: 400;
+  }
+}
+
+.team {
+  margin-bottom: 140px;
+
+  &-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 20px
+  }
+
+  &-image {
+    padding-top: 90% !important;
+  }
+
+  &-main-title {
+    margin-bottom: 60px !important;
+  }
+
+  &-title {
+    text-align: left !important;
+    font-size: 24px;
+    margin-bottom: 40px !important;
+  }
+
+  &-subtitle {
+    font-size: 20px !important;
+  }
+
+  &-content {
+    font-size: 20px !important;
+    margin-bottom: 40px !important;
+  }
+}
+
+.social {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 30px;
+
+  &-logo {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+.content figure {
+  margin-left: 0;
+  margin-right: 0;
+  text-align: center;
 }
 
 .container {
@@ -132,7 +217,7 @@ body {
   }
 
   &-ua {
-    color: #eca72c
+    color: #eca72c !important;
   }
 
   &-br {
@@ -273,7 +358,7 @@ body {
 
     &:hover {
       border: none;
-      background-color: #4a4a4a;
+      background-color: #eca72c !important;
       color: #fff;
     }
   }
@@ -389,7 +474,6 @@ body {
 .join-us {
   margin: 0 auto;
   padding: 20px;
-  background-color: #e4e4e4;
   max-width: 100%;
 
   &-items {
@@ -417,20 +501,22 @@ body {
 
   &-img {
     &-1 {
-      width: 300px;
-      height: 300px;
+      width: 400px;
+      height: 400px;
       background-size: cover;
       background-position: center;
       background-image: url(./images/Flag_of_bravery.jpg);
+      border-radius: 3%;
     }
 
     &-2 {
-      width: 300px;
-      height: 150px;
+      width: 400px;
+      height: 200px;
       background-size: cover;
       background-position: center;
       transform: translate(20%, -50%);
-      background-image: url(./images/Bus.jpeg);
+      background-image: url(./images/23.jpeg);
+      border-radius: 3%;
     }
   }
 }

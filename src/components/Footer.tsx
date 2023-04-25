@@ -12,7 +12,7 @@ export const Footer: React.FC = () => (
       <div className="footer-navbar">
         <Link to="/gallery" className="navlink">Gallery</Link>
         <Link to="/authors" className="navlink">Authors</Link>
-        <a href="#united24" target="_blank" className="navlink">United24</a>
+        <a href="https://u24.gov.ua/" target="blank" className="navlink">United24</a>
         <Link to="/about" className="navlink">About</Link>
       </div>
     </div>

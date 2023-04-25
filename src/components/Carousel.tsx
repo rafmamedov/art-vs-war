@@ -9,7 +9,7 @@ import axios from 'axios';
 import { Loader } from './Loader';
 import { PaintingCard } from './PaintingCard';
 
-const URL = 'https://www.albedosunrise.com/paintings?page=0&pageSize=4';
+const URL = 'https://www.albedosunrise.com/paintings?page=0&pageSize=12';
 
 export const Carousel: React.FC = () => {
   const [paintings, setPaintings] = useState<Painting[]>([]);

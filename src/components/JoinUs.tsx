@@ -19,8 +19,8 @@ export const JoinUs: React.FC<Props> = ({ onAuthenticating }) => {
   }
 
   return (
-    <section id="authors" className="section join-us">
-      <div className="container join-us-items">
+    <section id="authors" className="hero is-dark is-large join-us">
+      <div className="join-us-items">
         <div className="join-us-item-1">
           <div className="subtitle is-3">
             Are you an artist? Join us!
@@ -31,7 +31,7 @@ export const JoinUs: React.FC<Props> = ({ onAuthenticating }) => {
           </div>
 
           <button
-            className="button is-dark button-collection"
+            className="button is-light button-collection button-get-all"
             onClick={handleAuthenticate}
           >
             Sign up
