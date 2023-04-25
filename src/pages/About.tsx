@@ -5,7 +5,7 @@ import linkedin from '../images/LI-In.png';
 import rafael from '../images/rafael.jpeg';
 import serhiy from '../images/serhiy.png';
 import roman from '../images/roman.jpg';
-import iryna from '../images/iryna.jpg';
+import iryna from '../images/iryna qa.jpg';
 import Flag_of_bravery from '../images/Flag_of_bravery.jpg';
 import colours from '../images/colours.jpeg';
 
@@ -73,12 +73,12 @@ export const About = () => (
                 <div className="media">
                   <div className="media-content">
                     <p className="title is-4 team-title">Sergiy Bezrukov</p>
-                    <p className="subtitle is-6 team-subtitle">Product owner</p>
+                    <p className="subtitle is-6 team-subtitle">Product Owner</p>
                   </div>
                 </div>
 
                 <div className="content">
-                  <p className="subtitle is-6 team-content">Backend Java developer</p>
+                  <p className="subtitle is-6 team-content">Backend Java Developer</p>
                   <div className="social">
                     <a href="https://github.com/finedefinition" target="_blank" rel="noreferrer">
                       <img src={github} alt="github" className="social-logo" />
@@ -101,12 +101,12 @@ export const About = () => (
                 <div className="media">
                   <div className="media-content">
                     <p className="title is-4 team-title">Roman Novosad</p>
-                    <p className="subtitle is-6 team-subtitle">Team lead</p>
+                    <p className="subtitle is-6 team-subtitle">Team Lead</p>
                   </div>
                 </div>
 
                 <div className="content">
-                  <p className="subtitle is-6 team-content">Backend Java developer</p>
+                  <p className="subtitle is-6 team-content">Backend Java Developer</p>
                   <div className="social">
                     <a href="https://github.com/romanovosad87" target="_blank" rel="noreferrer">
                       <img src={github} alt="github" className="social-logo" />
@@ -127,12 +127,12 @@ export const About = () => (
                 <div className="media">
                   <div className="media-content">
                     <p className="title is-4 team-title">Iryna Maslyuk</p>
-                    <p className="subtitle is-6 team-subtitle">Scrum master</p>
+                    <p className="subtitle is-6 team-subtitle">Scrum Master</p>
                   </div>
                 </div>
 
                 <div className="content">
-                  <p className="subtitle is-6 team-content">QA engineer</p>
+                  <p className="subtitle is-6 team-content">QA Engineer</p>
                   <div className="social">
                     <a href="https://www.linkedin.com/in/iryna-masliuk-b98573236/" target="_blank" rel="noreferrer">
                       <img src={github} alt="github" className="social-logo" />
@@ -160,7 +160,7 @@ export const About = () => (
                 </div>
 
                 <div className="content">
-                  <p className="subtitle is-6 team-content">Frontend developer</p>
+                  <p className="subtitle is-6 team-content">Frontend Developer</p>
                   <div className="social">
                     <a href="https://www.linkedin.com/in/rafael-mamedov-598a82a7/" target="_blank" rel="noreferrer">
                       <img src={linkedin} alt="linkedin" className="social-logo" />
