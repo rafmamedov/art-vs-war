@@ -72,8 +72,8 @@ export const About = () => (
               <div className="card-content">
                 <div className="media">
                   <div className="media-content">
-                    <p className="title is-4 team-title">Sergiy Bezrukov</p>
-                    <p className="subtitle is-6 team-subtitle">Product Owner</p>
+                    <p className="title is-4 team-title">Sergii Bezrukov</p>
+                    <p className="subtitle is-6 team-subtitle">Product Manager</p>
                   </div>
                 </div>
 
@@ -134,10 +134,10 @@ export const About = () => (
                 <div className="content">
                   <p className="subtitle is-6 team-content">QA Engineer</p>
                   <div className="social">
-                    <a href="https://www.linkedin.com/in/iryna-masliuk-b98573236/" target="_blank" rel="noreferrer">
+                    <a href="https://github.com/IrinaMaslyuk" target="_blank" rel="noreferrer">
                       <img src={github} alt="github" className="social-logo" />
                     </a>
-                    <a href="https://github.com/IrinaMaslyuk" target="_blank" rel="noreferrer">
+                    <a href="https://www.linkedin.com/in/iryna-masliuk-b98573236/" target="_blank" rel="noreferrer">
                       <img src={linkedin} alt="linkedin" className="social-logo" />
                     </a>
                   </div>
