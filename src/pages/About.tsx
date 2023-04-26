@@ -162,11 +162,11 @@ export const About = () => (
                 <div className="content">
                   <p className="subtitle is-6 team-content">Frontend Developer</p>
                   <div className="social">
-                    <a href="https://www.linkedin.com/in/rafael-mamedov-598a82a7/" target="_blank" rel="noreferrer">
-                      <img src={linkedin} alt="linkedin" className="social-logo" />
-                    </a>
                     <a href="https://github.com/rafmamedov/" target="_blank" rel="noreferrer">
                       <img src={github} alt="github" className="social-logo" />
+                    </a>
+                    <a href="https://www.linkedin.com/in/rafael-mamedov-598a82a7/" target="_blank" rel="noreferrer">
+                      <img src={linkedin} alt="linkedin" className="social-logo" />
                     </a>
                   </div>
                 </div>
