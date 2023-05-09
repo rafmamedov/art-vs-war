@@ -1,5 +1,6 @@
 import React, { ChangeEvent, SetStateAction, useEffect, useState } from 'react';
 import classNames from 'classnames';
+import jwt_decode from 'jwt-decode';
 import '../styles/Profile.scss'
 import { Error } from '../types/errors';
 import { Author } from '../types/painting';
@@ -41,8 +42,11 @@ export const ProfileEdit: React.FC<Props> = ({
 
   const { user, route } = useAuthenticator((context) => [context.route]);
   const accessToken = user.getSignInUserSession()?.getAccessToken().getJwtToken();
+  const idToken = user.getSignInUserSession()?.getIdToken().getJwtToken() || '';
   const isAuthenticated = route === 'authenticated';
-  const userEmail = user.attributes?.email;
+
+  const decoded: any = idToken && jwt_decode(idToken);
+  const userEmail = decoded.email;
 
   const headers = {
     'Authorization': `Bearer ${accessToken}`,
@@ -82,8 +86,6 @@ export const ProfileEdit: React.FC<Props> = ({
       setShortStory(author.aboutMe);
     }
   }, [author]);
-
-  console.log(user);
 
   const handleInputChange = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
