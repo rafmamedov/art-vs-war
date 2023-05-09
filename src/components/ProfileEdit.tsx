@@ -83,6 +83,7 @@ export const ProfileEdit: React.FC<Props> = ({
     }
   }, [author]);
 
+  console.log(user);
 
   const handleInputChange = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,

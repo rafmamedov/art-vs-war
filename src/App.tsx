@@ -65,11 +65,6 @@ export const App = () => {
               />
 
               <Route
-                path="author"
-                element={<AuthorPage />}
-              />
-
-              <Route
                 path="authors"
                 element={<Authors />}
               />

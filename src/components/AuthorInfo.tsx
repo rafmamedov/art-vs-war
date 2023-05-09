@@ -45,7 +45,7 @@ export const AuthorInfo: React.FC<Props> = ({ author}) => {
   const getAllPaintingsByAuthor = async () => {
     axios.get(GETALLPAINTINGS + author.id)
       .then(response => {
-        setPaintings(response.data.paintings);
+        setPaintings(response.data.entities);
       })
       .catch(error => console.log(error))
   };
