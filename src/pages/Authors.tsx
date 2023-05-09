@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Loader } from '../components/Loader';
 import { Pagination } from '../components/Pagination';
 import { AuthorList } from '../components/AuthorList';
 import { Author } from '../types/painting';
-import './Authors.scss';
+import '../styles/Authors.scss';
 import axios from 'axios';
 
 const GETALLAUTHORS = 'https://www.albedosunrise.com/authors?';
@@ -21,7 +21,7 @@ export const Authors = () => {
   const getAllAuthorsFromServer = useCallback(async () => {
     await axios.get(GETALLAUTHORS + defaultPerPage)
       .then((response) => {
-        setAuthors(response.data.authors);
+        setAuthors(response.data.entities);
         setPageCount(response.data.page.totalPages);
         setAuthorsCount(response.data.page.totalElements)
       })

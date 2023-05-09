@@ -2,7 +2,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { createRoot } from 'react-dom/client';
 
 import 'bulma/css/bulma.css';
-import './index.css';
+import './styles/index.scss';
 import '@aws-amplify/ui-react/styles.css'
 import { Authenticator } from '@aws-amplify/ui-react';
 import { App } from './App';

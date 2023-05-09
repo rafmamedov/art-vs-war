@@ -58,18 +58,3 @@ export interface Support {
     }
   }
 }
-
-export interface Picture {
-  id: number;
-  title: string;
-  price: number;
-  author: Author;
-  description: string;
-  style: Style;
-  medium: Medium;
-  support: Support;
-  height: number;
-  width: number;
-  imageUrl: string;
-  entityCreatedAt: string;
-}

@@ -1,5 +1,4 @@
-import React from 'react';
-import '../styles.scss';
+import '../styles/styles.scss';
 import github from '../images/github.png';
 import linkedin from '../images/LI-In.png';
 import rafael from '../images/rafael.png';

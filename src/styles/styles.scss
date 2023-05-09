@@ -511,7 +511,7 @@ body {
       height: 400px;
       background-size: cover;
       background-position: center;
-      background-image: url(./images/Flag_of_bravery.jpg);
+      background-image: url(../images/Flag_of_bravery.jpg);
       border-radius: 3%;
     }
 
@@ -521,7 +521,7 @@ body {
       background-size: cover;
       background-position: center;
       transform: translate(20%, -50%);
-      background-image: url(./images/colours.png);
+      background-image: url(../images/colours.png);
       border-radius: 3%;
     }
   }
@@ -685,7 +685,6 @@ body {
   }
 
   &-info {
-    // margin: 0 auto;
     padding: 10px;
     display: flex;
     flex-direction: column;

@@ -1,5 +1,5 @@
 import React, { SetStateAction } from 'react';
-import '../styles.scss'
+import '../styles/styles.scss'
 import 'bulma/css/bulma.css';
 import { Header } from '../components/Header';
 import { AboutUs } from '../components/AboutUs';
@@ -15,6 +15,7 @@ type Props ={
 
 export const MainPage: React.FC<Props> = ({ onAuthenticating }) => {
   const { route } = useAuthenticator((context) => [context.route]);
+
   return (
     <>
       <Header />
@@ -27,4 +28,4 @@ export const MainPage: React.FC<Props> = ({ onAuthenticating }) => {
       )}
     </>
   );
-}
+};

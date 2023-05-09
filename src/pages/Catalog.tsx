@@ -1,17 +1,17 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import './Catalog.scss';
+import { useCallback, useEffect, useState } from 'react';
+import '../styles/Catalog.scss';
 import 'bulma/css/bulma.css';
 import { Painting } from "../types/painting";
-import { Gallery } from "./Gallery";
 import { Pagination } from '../components/Pagination';
 import { Loader } from '../components/Loader';
 import { SortDropdown } from '../components/SortDropdown';
 import { Filters } from '../components/Filters';
 import axios from 'axios';
+import { PaintingList } from '../components/PaintingList';
 
 const SEARCH = 'https://www.albedosunrise.com/paintings/search?';
 
-export const Catalog: React.FC = () => {
+export const Catalog = () => {
   const [perPage, setPerPage] = useState(6);
   const [pageCount, setPageCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -28,8 +28,9 @@ export const Catalog: React.FC = () => {
 
     axios.get(SEARCH + filters + '&' + sortBy + '&' + defaultPerPage)
       .then((response) => {
+        console.log(response);
         setCountOfFiltered(response.data.page.totalElements);
-        setCurrentPaintings(response.data.paintings);
+        setCurrentPaintings(response.data.entities);
         setPageCount(response.data.page.totalPages);
         })
       .catch((error) => {
@@ -79,7 +80,7 @@ export const Catalog: React.FC = () => {
                   />
                   {!currentPaintings.length
                     ? notificationNoPaintings
-                    : <Gallery paintings={currentPaintings} />
+                    : <PaintingList paintings={currentPaintings} />
                   }
                 </div>
 

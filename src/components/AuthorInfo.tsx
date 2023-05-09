@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import 'bulma/css/bulma.css';
-import { faLocationDot, faPaintBrush, faPalette, faSquare, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Author, Painting } from '../types/painting';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import {
+  faLocationDot,
+  faPaintBrush,
+  faPalette,
+  faSquare,
+  faXmark,
+} from '@fortawesome/free-solid-svg-icons';
 
 const GETALLPAINTINGS = 'https://www.albedosunrise.com/paintings/by-author/'
 const supportsIcon = <FontAwesomeIcon className="" icon={faSquare} />;

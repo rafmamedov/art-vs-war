@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import './Profile.scss'
-import '../styles.scss'
+import '../styles/Profile.scss'
+import '../styles/styles.scss'
 import 'bulma/css/bulma.css';
-import { ProfileEdit } from '../components/ProfileEdit';
-import { MyPaintings } from './MyPaintings';
-import { CreatePainting } from '../components/CreatePainting';
-import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import axios from 'axios';
 import classNames from 'classnames';
 import { Author } from '../types/painting';
-import { useAuthenticator } from '@aws-amplify/ui-react';
-import axios from 'axios';
+import { MyPaintings } from './MyPaintings';
 import { Loader } from '../components/Loader';
+import { ProfileEdit } from '../components/ProfileEdit';
+import { CreatePainting } from '../components/CreatePainting';
+import { useAuthenticator } from '@aws-amplify/ui-react';
+import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const GETAUTHOR = 'https://www.albedosunrise.com/authors/';
 
@@ -134,7 +134,6 @@ export const Profile: React.FC = () => {
               hasError={hasError}
               setAuthor={setAuthor}
               setIsAdded={setIsAdded}
-              onFetching={setIsFetching}
               setHasError={setHasError}
             />
           )}

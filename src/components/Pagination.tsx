@@ -1,5 +1,5 @@
-import classNames from 'classnames';
 import React, { SetStateAction } from 'react';
+import classNames from 'classnames';
 
 type Props = {
   pageCount: number;
@@ -17,7 +17,7 @@ export const Pagination: React.FC<Props> = ({
   const getArrayFromNumber = (num: number) => {
     const result = [];
 
-    for (let i = 1; i <= pageCount; i++ ) {
+    for (let i = 1; i <= num; i++ ) {
       result.push(i);
     }
 

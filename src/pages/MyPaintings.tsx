@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { PaintingList } from '../components/PaintingList';
-import axios from 'axios';
 import { Pagination } from '../components/Pagination';
 import { Author } from '../types/painting';
 import { CreatePainting } from '../components/CreatePainting';
 import { Loader } from '../components/Loader';
+import axios from 'axios';
 
 const URL = 'https://www.albedosunrise.com/paintings/by-author/'
 
@@ -59,7 +59,7 @@ export const MyPaintings: React.FC<Props> = ({ author, isAuthor }) => {
   const getPaintingsFromServer = async () => {
     await axios.get(URL + author.id + '?' + defaultPerPage + '&' + sortBy)
     .then((response) => {
-      setPaintings(response.data.paintings);
+      setPaintings(response.data.entities);
       setPageCount(response.data.page.totalPages);
       })
       .catch((error) => {

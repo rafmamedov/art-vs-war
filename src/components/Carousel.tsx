@@ -5,9 +5,9 @@ import "swiper/scss/navigation";
 import { Painting } from '../types/painting';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { Loader } from './Loader';
 import { PaintingCard } from './PaintingCard';
+import axios from 'axios';
 
 const URL = 'https://www.albedosunrise.com/paintings?page=0&pageSize=12';
 
@@ -18,7 +18,7 @@ export const Carousel: React.FC = () => {
   const getAllPaintingsFromServer = async () => {
     axios.get(URL)
       .then((response) => {
-        setPaintings(response.data.paintings);
+        setPaintings(response.data.entities);
       })
       .catch((error) => {
         console.log(error);

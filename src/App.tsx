@@ -1,6 +1,6 @@
 import { NavBar } from './components/NavBar';
 import { MainPage } from './pages/MainPage';
-import './styles.scss'
+import './styles/styles.scss'
 import { Footer } from './components/Footer';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { Catalog } from './pages/Catalog';

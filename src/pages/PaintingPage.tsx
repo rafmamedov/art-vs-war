@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import '../styles.scss';
-import { faXmark } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import '../styles/styles.scss';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { Painting } from '../types/painting';
 import { Loader } from '../components/Loader';
+import axios from 'axios';
 
 const element = <FontAwesomeIcon className="icon-cross" icon={faXmark} size="xl" />;
 const URL = 'https://www.albedosunrise.com/paintings/';

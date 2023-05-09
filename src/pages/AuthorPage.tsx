@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AuthorInfo } from '../components/AuthorInfo';
 import { MyPaintings } from './MyPaintings';
-import axios from 'axios';
 import { Author } from '../types/painting';
 import { useLocation } from 'react-router-dom';
+import axios from 'axios';
 
 const GETAUTHOR = 'https://www.albedosunrise.com/authors/';
 

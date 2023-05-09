@@ -1,13 +1,13 @@
 import React, { ChangeEvent, SetStateAction, useEffect, useState } from 'react';
+import classNames from 'classnames';
 import 'bulma/css/bulma.css';
-import '../pages/Profile.scss'
+import '../styles/Profile.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowRight, faUpload } from '@fortawesome/free-solid-svg-icons';
-import axios from 'axios';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import { Checkbox } from './Checkbox';
-import classNames from 'classnames';
 import { Error } from '../types/errors';
+import axios from 'axios';
 
 const URL = 'https://www.albedosunrise.com/paintings';
 const UPLOAD = 'https://www.albedosunrise.com/images/getUrl?extension=';

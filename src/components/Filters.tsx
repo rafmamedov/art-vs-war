@@ -1,7 +1,7 @@
 import React, { SetStateAction, useEffect, useState } from "react";
 import RangeSlider from 'react-range-slider-input';
 import 'react-range-slider-input/dist/style.css';
-import '../pages/Catalog.scss';
+import '../styles/Catalog.scss';
 import axios from "axios";
 
 const MAXPRICE = 'https://www.albedosunrise.com/paintings/maxPrice';

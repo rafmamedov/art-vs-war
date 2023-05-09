@@ -1,12 +1,12 @@
 import React, { ChangeEvent, SetStateAction, useEffect, useState } from 'react';
-import '../pages/Profile.scss'
+import classNames from 'classnames';
+import '../styles/Profile.scss'
+import { Error } from '../types/errors';
+import { Author } from '../types/painting';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight, faUpload, faUser} from '@fortawesome/free-solid-svg-icons';
-import axios from 'axios';
-import { Author } from '../types/painting';
-import classNames from 'classnames';
 import { useAuthenticator } from '@aws-amplify/ui-react';
-import { Error } from '../types/errors';
+import axios from 'axios';
 
 const UPLOAD = 'https://www.albedosunrise.com/images/getUrl?extension=';
 const UPDATEAUTHOR = 'https://www.albedosunrise.com/authors';
@@ -19,7 +19,6 @@ type Props = {
   isAdded: boolean;
   hasError: boolean;
   author: Author | null;
-  onFetching: React.Dispatch<SetStateAction<boolean>>;
   setAuthor: React.Dispatch<SetStateAction<Author | null>>;
   setIsAdded: React.Dispatch<SetStateAction<boolean>>;
   setHasError: React.Dispatch<SetStateAction<boolean>>;
@@ -30,7 +29,6 @@ export const ProfileEdit: React.FC<Props> = ({
   isAdded,
   hasError,
   setAuthor,
-  onFetching,
   setIsAdded,
   setHasError,
 }) => {
@@ -44,6 +42,7 @@ export const ProfileEdit: React.FC<Props> = ({
   const { user, route } = useAuthenticator((context) => [context.route]);
   const accessToken = user.getSignInUserSession()?.getAccessToken().getJwtToken();
   const isAuthenticated = route === 'authenticated';
+  const userEmail = user.attributes?.email;
 
   const headers = {
     'Authorization': `Bearer ${accessToken}`,
@@ -113,6 +112,7 @@ export const ProfileEdit: React.FC<Props> = ({
             city,
             aboutMe: shortStory,
             imageFileName,
+            email: userEmail,
           };
 
             axios.post(UPDATEAUTHOR, authorDataPost, { headers })
@@ -142,6 +142,7 @@ export const ProfileEdit: React.FC<Props> = ({
         country,
         city,
         aboutMe: shortStory,
+        email: userEmail,
       };
 
       axios.post(UPDATEAUTHOR, authorDataPost, { headers })

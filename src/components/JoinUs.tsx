@@ -1,5 +1,5 @@
 import React, { SetStateAction } from 'react';
-import '../styles.scss'
+import '../styles/styles.scss'
 import 'bulma/css/bulma.css';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import Flag_of_bravery from '../images/Flag_of_bravery.jpg';

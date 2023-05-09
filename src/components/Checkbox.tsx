@@ -1,7 +1,7 @@
 import { SetStateAction, useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
-import axios from 'axios';
 import { Style } from '../types/painting';
+import axios from 'axios';
 
 const GETSTYLES = 'https://www.albedosunrise.com/';
 

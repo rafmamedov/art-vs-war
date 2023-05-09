@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Author, Painting } from '../types/painting';
 import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import axios from 'axios';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 type Props = {
   author: Author;
