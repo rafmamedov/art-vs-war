@@ -1,6 +1,6 @@
 import React, { ChangeEvent, SetStateAction, useEffect, useState } from 'react';
 import classNames from 'classnames';
-import jwt_decode from 'jwt-decode';
+import jwt_decode, { JwtPayload } from 'jwt-decode';
 import '../styles/Profile.scss'
 import { Error } from '../types/errors';
 import { Author } from '../types/painting';
@@ -15,6 +15,8 @@ const element = <FontAwesomeIcon className="far" icon={faArrowRight} />;
 const uploadIcon = <FontAwesomeIcon className="far" icon={faUpload} />;
 const icon = <FontAwesomeIcon className="fas" icon={faUser} />;
 const isNumber = /^\d+$/;
+
+type customJwtPayload = JwtPayload & { email: string };
 
 type Props = {
   isAdded: boolean;
@@ -42,11 +44,11 @@ export const ProfileEdit: React.FC<Props> = ({
 
   const { user, route } = useAuthenticator((context) => [context.route]);
   const accessToken = user.getSignInUserSession()?.getAccessToken().getJwtToken();
-  const idToken = user.getSignInUserSession()?.getIdToken().getJwtToken() || '';
+  const idToken = user.getSignInUserSession()?.getIdToken().getJwtToken();
   const isAuthenticated = route === 'authenticated';
 
-  const decoded: any = idToken && jwt_decode(idToken);
-  const userEmail = decoded.email;
+  const decoded = idToken ? (jwt_decode(idToken) as customJwtPayload) : '';
+  const userEmail = decoded && decoded.email;
 
   const headers = {
     'Authorization': `Bearer ${accessToken}`,
@@ -170,6 +172,7 @@ export const ProfileEdit: React.FC<Props> = ({
       country,
       city,
       aboutMe: shortStory,
+      email: userEmail,
     };
 
     axios.put(UPDATEAUTHOR, authorDataPut, { headers })
@@ -204,6 +207,7 @@ export const ProfileEdit: React.FC<Props> = ({
               city,
               aboutMe: shortStory,
               imageFileName,
+              email: userEmail,
             };
 
             axios.put(UPDATEAUTHOR, authorDataPut, { headers })
