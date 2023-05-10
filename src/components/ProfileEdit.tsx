@@ -8,12 +8,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight, faUpload, faUser} from '@fortawesome/free-solid-svg-icons';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import axios from 'axios';
-// import { Auth } from 'aws-amplify';
 
-const UPLOAD = 'https://www.albedosunrise.com/images/getUrl?extension=';
 const UPDATEAUTHOR = 'https://www.albedosunrise.com/authors';
-// const EXCHANGETOKENS = 'https://auth.artvswar.gallery/oauth2/token'
-const GETTOKEN = 'https://www.albedosunrise.com/authors/initAuth?refreshToken=';
+const SENDTOKEN = 'https://www.albedosunrise.com/authors/initAuth';
+const UPLOAD = 'https://www.albedosunrise.com/images/getUrl?extension=';
 
 const element = <FontAwesomeIcon className="far" icon={faArrowRight} />;
 const uploadIcon = <FontAwesomeIcon className="far" icon={faUpload} />;
@@ -50,7 +48,7 @@ export const ProfileEdit: React.FC<Props> = ({
 
   const accessToken = user.getSignInUserSession()?.getAccessToken().getJwtToken();
   const idToken = user.getSignInUserSession()?.getIdToken().getJwtToken();
-  const refreshToken = user.getSignInUserSession()?.getRefreshToken().getToken();
+  const refreshToken = user.getSignInUserSession()?.getRefreshToken();
   const isAuthenticated = route === 'authenticated';
 
   const decoded = idToken ? (jwt_decode(idToken) as customJwtPayload) : '';
@@ -59,22 +57,6 @@ export const ProfileEdit: React.FC<Props> = ({
   const headers = {
     'Authorization': `Bearer ${accessToken}`,
   };
-
-  // const reSignIn = async () => {
-  //   await Auth.currentAuthenticatedUser()
-  //     .then(user => {
-  //       Auth.signIn(user.username, user.password, { forceSignIn: 'true' })
-  //         .then(data => {
-  //           console.log('Successfully re-signed in:', data);
-  //         })
-  //         .catch(err => {
-  //           console.log('Error re-signing in:', err);
-  //         });
-  //     })
-  //     .catch(err => {
-  //       console.log('Error getting current authenticated user:', err);
-  //     });
-  // }
 
   const notificationSuccess = (
     <div className="notification is-success profile-item-about">
@@ -122,28 +104,24 @@ export const ProfileEdit: React.FC<Props> = ({
     }
   }
 
-  // const exchangeAccessToken = async () => {
-  //   const querystring = require('querystring');
+  const sendRefreshToken = async () => {
+    const querystring = require('querystring');
 
-  //   const exchangeDataPost = querystring.stringify({
-  //     grant_type: 'refresh_token',
-  //     client_id: '47pn7cv0415t605kff2lilahj',
-  //     refresh_token: refreshToken,
-  //   });
+    const refreshTokenDataPost = querystring.stringify({
+      refreshToken: refreshToken?.getToken(),
+    });
 
-  //   await axios.post(EXCHANGETOKENS, exchangeDataPost, {
-  //     headers: {
-  //       'Content-Type': 'application/x-www-form-urlencoded'
-  //     }
-  //   })
-  //     .then(response => {
-  //       reSignIn();
-  //       console.log(response);
-  //     })
-  //     .catch(error => {
-  //       console.log(error);
-  //     })
-  // };
+    await axios.post(SENDTOKEN, refreshTokenDataPost, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+    })
+    .then(response => {
+      if (refreshToken) {
+        user.refreshSession(refreshToken, (err, session) => {})
+      }
+    });
+  };
 
   const onCreateProfile = async () => {
     if (selectedImage) {
@@ -167,7 +145,7 @@ export const ProfileEdit: React.FC<Props> = ({
 
             axios.post(UPDATEAUTHOR, authorDataPost, { headers })
             .then(response => {
-              axios.get(GETTOKEN + refreshToken);
+              sendRefreshToken();
               setAuthor(response.data);
               setIsAdded(true);
             })
@@ -198,7 +176,7 @@ export const ProfileEdit: React.FC<Props> = ({
 
       axios.post(UPDATEAUTHOR, authorDataPost, { headers })
       .then(response => {
-        axios.get(GETTOKEN + refreshToken);
+        sendRefreshToken();
         setAuthor(response.data);
         setIsAdded(true);
       })
