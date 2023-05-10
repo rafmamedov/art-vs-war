@@ -11,6 +11,8 @@ import axios from 'axios';
 
 const UPLOAD = 'https://www.albedosunrise.com/images/getUrl?extension=';
 const UPDATEAUTHOR = 'https://www.albedosunrise.com/authors';
+const EXCHANGETOKENS = 'https://auth.artvswar.gallery/oauth2/token'
+
 const element = <FontAwesomeIcon className="far" icon={faArrowRight} />;
 const uploadIcon = <FontAwesomeIcon className="far" icon={faUpload} />;
 const icon = <FontAwesomeIcon className="fas" icon={faUser} />;
@@ -45,6 +47,7 @@ export const ProfileEdit: React.FC<Props> = ({
   const { user, route } = useAuthenticator((context) => [context.route]);
   const accessToken = user.getSignInUserSession()?.getAccessToken().getJwtToken();
   const idToken = user.getSignInUserSession()?.getIdToken().getJwtToken();
+  const refreshToken = user.getSignInUserSession()?.getRefreshToken().getToken();
   const isAuthenticated = route === 'authenticated';
 
   const decoded = idToken ? (jwt_decode(idToken) as customJwtPayload) : '';
@@ -100,6 +103,16 @@ export const ProfileEdit: React.FC<Props> = ({
     }
   }
 
+  const exchangeAccessToken = async () => {
+    const exchangeDataPost = {
+      grant_type: 'refresh_token',
+      client_id: '47pn7cv0415t605kff2lilahj',
+      refresh_token: refreshToken,
+    };
+
+    await axios.post(EXCHANGETOKENS, exchangeDataPost);
+  };
+
   const onCreateProfile = async () => {
     if (selectedImage) {
       await axios.get(UPLOAD + selectedImage.type.split('/')[1])
@@ -124,6 +137,7 @@ export const ProfileEdit: React.FC<Props> = ({
             .then(response => {
               setAuthor(response.data);
               setIsAdded(true);
+              exchangeAccessToken();
             })
             .catch(error => {
               setIsAdded(false);
@@ -154,6 +168,7 @@ export const ProfileEdit: React.FC<Props> = ({
       .then(response => {
         setAuthor(response.data);
         setIsAdded(true);
+        exchangeAccessToken();
       })
       .catch(error => {
         setIsAdded(false);
