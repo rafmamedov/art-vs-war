@@ -10,7 +10,6 @@ import { useAuthenticator } from '@aws-amplify/ui-react';
 import axios from 'axios';
 
 const UPDATEAUTHOR = 'https://www.albedosunrise.com/authors';
-const SENDTOKEN = 'https://www.albedosunrise.com/authors/initAuth';
 const UPLOAD = 'https://www.albedosunrise.com/images/getUrl?extension=';
 
 const element = <FontAwesomeIcon className="far" icon={faArrowRight} />;
@@ -104,23 +103,10 @@ export const ProfileEdit: React.FC<Props> = ({
     }
   }
 
-  const sendRefreshToken = async () => {
-    const querystring = require('querystring');
-
-    const refreshTokenDataPost = querystring.stringify({
-      refreshToken: refreshToken?.getToken(),
-    });
-
-    await axios.post(SENDTOKEN, refreshTokenDataPost, {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-    })
-    .then(response => {
-      if (refreshToken) {
-        user.refreshSession(refreshToken, (err, session) => {})
-      }
-    });
+  const refreshAccessToken = async () => {
+    if (refreshToken) {
+      user.refreshSession(refreshToken, (err, session) => {});
+    }
   };
 
   const onCreateProfile = async () => {
@@ -145,7 +131,7 @@ export const ProfileEdit: React.FC<Props> = ({
 
             axios.post(UPDATEAUTHOR, authorDataPost, { headers })
             .then(response => {
-              sendRefreshToken();
+              refreshAccessToken();
               setAuthor(response.data);
               setIsAdded(true);
             })
@@ -176,7 +162,7 @@ export const ProfileEdit: React.FC<Props> = ({
 
       axios.post(UPDATEAUTHOR, authorDataPost, { headers })
       .then(response => {
-        sendRefreshToken();
+        refreshAccessToken();
         setAuthor(response.data);
         setIsAdded(true);
       })
