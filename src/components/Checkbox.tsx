@@ -7,19 +7,22 @@ const GETSTYLES = 'https://www.albedosunrise.com/';
 
 type Props = {
   checkboxItem: string;
-  getErrors: (field: string) => JSX.Element | undefined;
+  selectedItem: string;
   onSelect: React.Dispatch<SetStateAction<number>>;
+  getErrors: (field: string) => JSX.Element | undefined;
+  setSelectedItem: React.Dispatch<SetStateAction<string>>;
 };
 
 export const Checkbox: React.FC<Props> = ({
-  checkboxItem,
   onSelect,
   getErrors,
+  checkboxItem,
+  selectedItem,
+  setSelectedItem,
 }) => {
-  const [isCheckboxActive, setIsCheckboxActive] = useState(false);
-  const [selectedItem, setSelectedItem] = useState('');
   const [items, setItems] = useState([]);
   const selectRef = useRef<any>(null);
+  const [isCheckboxActive, setIsCheckboxActive] = useState(false);
   const checkboxName = checkboxItem.slice(0, checkboxItem.length - 1) + 'Id';
 
   const handleClickOutside = (event: any) => {

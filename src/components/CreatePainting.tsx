@@ -27,6 +27,9 @@ export const CreatePainting: React.FC = () => {
   const [supportId, setSupportId] = useState(0);
   const [isAdded, setIsAdded] = useState(false);
   const [description, setDescription] = useState('');
+  const [selectedStyle, setSelectedStyle] = useState('');
+  const [selectedMedium, setSelectedMedium] = useState('');
+  const [selectedSupport, setSelectedSupport] = useState('');
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
 
   const { user, route } = useAuthenticator((context) => [context.route]);
@@ -159,17 +162,20 @@ export const CreatePainting: React.FC = () => {
   }
 
   const handleCancelEditing = () => {
-    setTitle('');
-    setDescription('');
     setYear('');
-    setHeight('');
+    setTitle('');
     setWidth('');
     setPrice('');
+    setHeight('');
+    setErrors([]);
+    setStyleId(0);
     setMediumId(0);
     setSupportId(0);
-    setStyleId(0);
+    setDescription('');
+    setSelectedStyle('');
+    setSelectedMedium('');
+    setSelectedSupport('');
     setSelectedImage(null);
-    setErrors([]);
   }
 
   const notificationSuccess = (
@@ -340,9 +346,29 @@ export const CreatePainting: React.FC = () => {
             </div>
 
             <div className="profile-info">
-              <Checkbox checkboxItem='styles' onSelect={setStyleId} getErrors={getErrors} />
-              <Checkbox checkboxItem='mediums' onSelect={setMediumId} getErrors={getErrors} />
-              <Checkbox checkboxItem='supports' onSelect={setSupportId} getErrors={getErrors} />
+              <Checkbox
+                checkboxItem='styles'
+                onSelect={setStyleId}
+                getErrors={getErrors}
+                selectedItem={selectedStyle}
+                setSelectedItem={setSelectedStyle}
+              />
+
+              <Checkbox
+                checkboxItem='mediums'
+                onSelect={setMediumId}
+                getErrors={getErrors}
+                selectedItem={selectedMedium}
+                setSelectedItem={setSelectedMedium}
+              />
+
+              <Checkbox
+                checkboxItem='supports'
+                onSelect={setSupportId}
+                getErrors={getErrors}
+                selectedItem={selectedSupport}
+                setSelectedItem={setSelectedSupport}
+              />
             </div>
 
             <div className="field profile-item-about">
