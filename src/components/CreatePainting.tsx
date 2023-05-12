@@ -5,7 +5,7 @@ import '../styles/Profile.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowRight, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { useAuthenticator } from '@aws-amplify/ui-react';
-import { Checkbox } from './Checkbox';
+import { Select } from './Select';
 import { Error } from '../types/errors';
 import axios from 'axios';
 
@@ -21,10 +21,10 @@ export const CreatePainting: React.FC = () => {
   const [price, setPrice] = useState('');
   const [width, setWidth] = useState('');
   const [height, setHeight] = useState('');
-  const [styleId, setStyleId] = useState(0);
   const [errors, setErrors] = useState<Error[]>([]);
-  const [mediumId, setMediumId] = useState(0);
-  const [supportId, setSupportId] = useState(0);
+  const [styleId, setStyleId] = useState<number | null>(null);
+  const [mediumId, setMediumId] = useState<number | null>(null);
+  const [supportId, setSupportId] = useState<number | null>(null);
   const [isAdded, setIsAdded] = useState(false);
   const [description, setDescription] = useState('');
   const [selectedStyle, setSelectedStyle] = useState('');
@@ -168,9 +168,9 @@ export const CreatePainting: React.FC = () => {
     setPrice('');
     setHeight('');
     setErrors([]);
-    setStyleId(0);
-    setMediumId(0);
-    setSupportId(0);
+    setStyleId(null);
+    setMediumId(null);
+    setSupportId(null);
     setDescription('');
     setSelectedStyle('');
     setSelectedMedium('');
@@ -346,7 +346,7 @@ export const CreatePainting: React.FC = () => {
             </div>
 
             <div className="profile-info">
-              <Checkbox
+              <Select
                 checkboxItem='styles'
                 onSelect={setStyleId}
                 getErrors={getErrors}
@@ -354,7 +354,7 @@ export const CreatePainting: React.FC = () => {
                 setSelectedItem={setSelectedStyle}
               />
 
-              <Checkbox
+              <Select
                 checkboxItem='mediums'
                 onSelect={setMediumId}
                 getErrors={getErrors}
@@ -362,7 +362,7 @@ export const CreatePainting: React.FC = () => {
                 setSelectedItem={setSelectedMedium}
               />
 
-              <Checkbox
+              <Select
                 checkboxItem='supports'
                 onSelect={setSupportId}
                 getErrors={getErrors}

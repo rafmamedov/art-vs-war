@@ -8,19 +8,19 @@ const GETSTYLES = 'https://www.albedosunrise.com/';
 type Props = {
   checkboxItem: string;
   selectedItem: string;
-  onSelect: React.Dispatch<SetStateAction<number>>;
+  onSelect: React.Dispatch<SetStateAction<number | null>>;
   getErrors: (field: string) => JSX.Element | undefined;
   setSelectedItem: React.Dispatch<SetStateAction<string>>;
 };
 
-export const Checkbox: React.FC<Props> = ({
+export const Select: React.FC<Props> = ({
   onSelect,
   getErrors,
   checkboxItem,
   selectedItem,
   setSelectedItem,
 }) => {
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState<string[]>([]);
   const selectRef = useRef<any>(null);
   const [isCheckboxActive, setIsCheckboxActive] = useState(false);
   const checkboxName = checkboxItem.slice(0, checkboxItem.length - 1) + 'Id';
@@ -101,6 +101,7 @@ export const Checkbox: React.FC<Props> = ({
                       type="radio"
                       value={item}
                       name={checkboxItem}
+                      checked={item === selectedItem}
                       onChange={() => handleSelectItem(item, index)}
                     />
                     {item}
